@@ -1,0 +1,19 @@
+server:
+  port: 8123
+
+spring:
+  datasource:
+    password: root
+    username: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/anju?serverTimezone=UTC&characterEncoding=utf8
+
+    sql-script-encoding: UTF-8
+
+
+  jpa:
+    hibernate:
+      naming:
+        # 将Java中的驼峰命名法转变为下划线命名法
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+      ddl-auto: validate
