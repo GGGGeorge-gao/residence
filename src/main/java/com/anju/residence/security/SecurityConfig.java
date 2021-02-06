@@ -145,12 +145,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     auth.authenticationProvider(daoAuthenticationProvider()).authenticationProvider(new JwtAuthenticationProvider(userService));
   }
 
-//  @Override
-//  public void configure(WebSecurity web) throws Exception {
-//    // TODO: 测试用，放行所有请求
-//    web.ignoring().antMatchers("/**");
-//  }
-
   @Bean
   public DaoAuthenticationProvider daoAuthenticationProvider() {
     DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
