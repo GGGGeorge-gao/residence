@@ -1,38 +1,95 @@
 package com.anju.residence.service;
 
-import com.anju.residence.dao.UserRepository;
+import com.anju.residence.dto.user.UserDTO;
 import com.anju.residence.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import com.anju.residence.security.model.UserDetailsImpl;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.util.Date;
+import java.util.Optional;
 
 /**
  * @author cygao
- * @date 2020/11/23 23:26
+ * @date 2020/11/25 20:55
  **/
-@Service
-public class UserService {
+public interface UserService extends UserDetailsService {
 
-  private final UserRepository userRepo;
+  /**
+   * 根据用户名查询用户实体类对象
+   *
+   * @param username 用户名
+   * @return 用户实体类的Optional对象
+   */
+  Optional<User> getUserByName(String username);
 
-  @Autowired
-  public UserService(UserRepository userRepo) {
-    this.userRepo = userRepo;
-  }
+  /**
+   * 查询是否存在该用户
+   *
+   * @param username 用户名
+   * @return 是否存在
+   */
+  boolean existsUserByUsername(String username);
 
-  @Transactional
-  public void save(User user) {
-    user.setUpdateTime(new Date());
-    userRepo.save(user);
-  }
+  /**
+   * 查询用户
+   *
+   * @param userId 用户id
+   * @return 用户
+   */
+  Optional<User> getUserById(Integer userId);
 
-  public User findUserByName(String username) {
-    return userRepo.findUserByUsername(username);
-  }
+  /**
+   * 查询是否存在该用户
+   *
+   * @param userId 用户id
+   * @return 是否存在
+   */
+  boolean existsById(Integer userId);
 
-  public User build(int userId) {
-    return User.builder().id(userId).build();
-  }
+  /**
+   * 添加用户
+   *
+   * @param user 用户实体类对象
+   * @return 是否添加成功
+   */
+  boolean addUser(User user);
+
+  /**
+   * 保存用户
+   *
+   * @param user 用户实体类对象
+   */
+  void save(User user);
+
+  /**
+   * 添加用户
+   *
+   * @param userDTO 用户dto对象
+   */
+  void addUser(UserDTO userDTO);
+
+  /**
+   * 修改用户信息
+   *
+   * @param userDTO 用户dto对象
+   * @param userId  用户id
+   */
+  void putUser(UserDTO userDTO, Integer userId);
+
+  /**
+   * 修改用户信息
+   *
+   * @param userDTO 用户dto对象
+   * @param userId  用户id
+   */
+  void patchUser(UserDTO userDTO, Integer userId);
+
+  /**
+   * Spring Security加载用户
+   * @param username 用户名
+   * @return {@link UserDetailsImpl}
+   * @throws UsernameNotFoundException 用户不存在
+   */
+  @Override
+  UserDetailsImpl loadUserByUsername(String username) throws UsernameNotFoundException;
 }

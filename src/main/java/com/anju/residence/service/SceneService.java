@@ -1,60 +1,88 @@
 package com.anju.residence.service;
 
-import com.anju.residence.dao.SceneRepository;
-import com.anju.residence.entity.Scene;
-import com.anju.residence.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
+import com.anju.residence.dto.ele.SceneDTO;
+import com.anju.residence.entity.ele.Scene;
 
-import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author cygao
- * @date 2020/11/24 14:58
+ * @date 2020/11/25 20:52
  **/
-@Service
-public class SceneService {
+public interface SceneService {
 
-  private final SceneRepository sceneRepo;
-  private final UserService userService;
+  /**
+   * 保存场景
+   * @param scene 场景实体类对象
+   */
+  void save(Scene scene);
 
-  @Autowired
-  public SceneService(SceneRepository sceneRepo, UserService userService) {
-    this.sceneRepo = sceneRepo;
-    this.userService = userService;
-  }
+  /**
+   * 添加一个场景
+   * @param sceneDTO 场景数据传输对象
+   */
+  void addScene(SceneDTO sceneDTO);
 
-  @Transactional
-  public void save(Scene scene) {
-    scene.setUpdateTime(new Date());
-    sceneRepo.save(scene);
-  }
+  /**
+   * PUT 修改场景
+   * @param sceneDTO 场景数据传输对象
+   */
+  void putScene(SceneDTO sceneDTO, Integer sceneId);
 
-  @Transactional
-  public List<Scene> findAllByUser(User user) {
-    return sceneRepo.findAllByUser(user);
-  }
+  /**
+   * DELETE 删除一个场景
+   * 删除过程:
+   * 1.将所有插座的场景ID置空
+   * 2.删除该场景的所有预警信息
+   * 3.在场景表中删除该场景
+   * @param sceneId 场景id
+   */
+  void deleteScene(Integer sceneId);
 
-  public List<Scene> findAllByUser(int userId) {
-    return sceneRepo.findAllByUser(userService.build(userId));
-  }
+  /**
+   * 更新一个场景的父场景
+   * @param sceneId 场景id
+   * @param parentId 父场景id
+   */
+  void updateParentId(Integer sceneId, Integer parentId);
 
-  @Transactional
-  public boolean deleteScene(User user, String name) {
-    if (user == null || StringUtils.hasLength(name)) {
-      return  false;
-    }
-    return sceneRepo.deleteSceneByUserAndName(user, name);
-  }
+  /**
+   * 校验场景是否属于该用户
+   * @param sceneId 设备ID
+   * @param userId   用户ID
+   * @return 是否属于
+   */
+  boolean matchSceneAndUser(Integer sceneId, Integer userId);
 
-  public boolean deleteScene(int userId, String name) {
-    return deleteScene(userService.build(userId), name);
-  }
+  /**
+   * 检验是否存在该场景
+   * @param sceneId 场景id
+   * @return 是否存在
+   */
+  boolean existsById(Integer sceneId);
 
+  /**
+   * 获得一个场景
+   *
+   * @param sceneId 场景ID
+   * @return 场景实体类对象
+   */
+  Optional<Scene> getById(Integer sceneId);
 
+  /**
+   * 获得用户的所有场景
+   *
+   * @param userId 用户ID
+   * @return 场景列表
+   */
+  List<Scene> listByUserId(Integer userId);
 
+  /**
+   * 获取用户的所有场景dto对象，并按照树的形式返回
+   * @param userId 用户id
+   * @return 场景dto对象
+   */
+  List<SceneDTO> listTreeByUserId(Integer userId);
 
 }

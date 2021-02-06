@@ -1,19 +1,114 @@
 server:
   port: 8123
 
-spring:
-  datasource:
-    password: root
-    username: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/anju?serverTimezone=UTC&characterEncoding=utf8
+#spring:
+#  datasource:
+#    password: root
+#    username: root
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/anju?serverTimezone=Asia/Shanghai&characterEncoding=utf8
+#
+#    sql-script-encoding: UTF-8
 
-    sql-script-encoding: UTF-8
+spring:
+  application:
+    name: residence
+
+  datasource:
+
+    druid:
+      username: root
+      password: rootroot
+      url: jdbc:mysql://127.0.0.1:3306/anju?serverTimezone=Asia/Shanghai&characterEncoding=utf8
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+      # 初始化大小，最小，最大
+      initial-size: 5
+      min-idle: 5
+      max-active: 10
+      max-wait: 15000
+
+      # 配置一个连接在池中最大最小生存的时间，单位是毫秒
+      min-evictable-idle-time-millis: 300000
+      max-evictable-idle-time-millis: 900000
+
+      # 是否缓存preparedStatement，也就是PSCache
+      pool-prepared-statements: false
+
+      validation-query: SELECT 'x'
+      validation-query-timeout: 1
+
+      test-while-idle: true
+      test-on-return: false
+      test-on-borrow: false
+
+      stat-view-servlet:
+        url-pattern: /druid/*
+        login-username: anju
+        login-password: root
+        enabled: true
+
+      filter:
+        stat:
+          log-slow-sql: true
+          enabled: true
+          slow-sql-millis: 1000
+
+        slf4j:
+          enabled: true
+          result-set-log-enabled: false
+          connection-log-enabled: false
+          statement-close-after-log-enabled: false
+          statement-prepare-after-log-enabled: false
+          statement-parameter-set-log-enabled: false
+          statement-parameter-clear-log-enable: false
+          statement-create-after-log-enabled: false
 
 
   jpa:
+    show-sql: true
     hibernate:
       naming:
         # 将Java中的驼峰命名法转变为下划线命名法
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
-      ddl-auto: validate
+      ddl-auto: update
+    open-in-view: false
+
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    timeout: 3000
+    database: 0
+    password:
+    jedis:
+      pool:
+        # 数据库最大连接数
+        max-active: 8
+        # 最大阻塞等待时间
+        max-wait: -1
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:DD
+    time-zone: GMT+8
+
+# swagger文档配置
+swagger:
+  enable: true
+  application-name: ${spring.application.name}
+  application-version: 1.0
+  application-description: 安居项目接口文档
+  try-host: http://localhost:${server.port}
+
+
+
+jwt:
+  # token前缀
+  token-start-with: Bearer
+  # Base64私钥
+  secret: 2AGL7I2OWm3YZQW89H1SDqWwE3289DISFNJ32SQxMZ27FDSB3G42AsX12CQrWQ10EJ20TvaWV6qO02CL9WI3BXP8HF23IE0FNQZ812SDA34HFZ183A3SWD61BSASF12G6AWC8ASD78
+  # 有效时长 单位毫秒
+  expiration: 14400000
+  # 验证header
+  token-header: Authorization
+  # 登陆url
+  login_url: /auth

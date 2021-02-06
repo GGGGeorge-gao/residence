@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
+ * 权限实体类
+ *
  * @author cygao
  * @date 2020/11/19 18:02
  **/
@@ -22,12 +25,18 @@ import javax.persistence.Table;
 @Entity
 @Builder
 @Table(name = "role")
-public class Role {
+public class Role implements GrantedAuthority {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
+  private Integer roleId;
 
   @Column(unique = true)
-  private String name;
+  private String roleName;
+
+
+  @Override
+  public String getAuthority() {
+    return roleName;
+  }
 }
