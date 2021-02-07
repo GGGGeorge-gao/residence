@@ -38,7 +38,7 @@ import java.util.Random;
  **/
 @Slf4j
 @SpringBootTest
-public class BuildDataTest {
+public class BuildDataByRepoTest {
 
   private final AlertNoticeRepository alertRepo;
   private final DeviceRepository deviceRepo;
@@ -61,7 +61,7 @@ public class BuildDataTest {
   private final int RANDOM_ELELOG_NUMBER = 10000;
 
   @Autowired
-  public BuildDataTest(AlertNoticeRepository alertRepo, DeviceRepository deviceRepo, JackRepository jackRepo, LoginInfoRepository loginRepo, ReceptacleRepository receptacleRepo, RoleRepository roleRepo, SceneRepository sceneRepo, UserRepository userRepo, ElectricLogRepository electricLogRepo, BehaviorLogRepository behaviorLogRepo) {
+  public BuildDataByRepoTest(AlertNoticeRepository alertRepo, DeviceRepository deviceRepo, JackRepository jackRepo, LoginInfoRepository loginRepo, ReceptacleRepository receptacleRepo, RoleRepository roleRepo, SceneRepository sceneRepo, UserRepository userRepo, ElectricLogRepository electricLogRepo, BehaviorLogRepository behaviorLogRepo) {
     this.alertRepo = alertRepo;
     this.deviceRepo = deviceRepo;
     this.jackRepo = jackRepo;

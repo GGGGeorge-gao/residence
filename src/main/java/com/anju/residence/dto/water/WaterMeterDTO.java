@@ -1,6 +1,7 @@
 package com.anju.residence.dto.water;
 
 import com.anju.residence.annotation.ExceptionCode;
+import com.anju.residence.entity.User;
 import com.anju.residence.entity.water.WaterMeter;
 import com.anju.residence.enums.ResultCode;
 import lombok.AllArgsConstructor;
@@ -37,14 +38,20 @@ public class WaterMeterDTO {
   @NotNull(message = "Water meter currentCount must not be null")
   private Double currentCount;
 
+  @ExceptionCode(resultCode = ResultCode.PRICE_PER_CUBIC_METER_IS_NULL)
+  @NotNull(message = "Water price per cubic meter is null")
+  private Double pricePerCubicMeter;
+
   private String description;
 
   public WaterMeter build() {
     return WaterMeter.builder()
             .id(id)
+            .user(User.builder().id(userId).build())
             .name(name)
             .status(status)
             .currentCount(currentCount)
+            .pricePerCubicMeter(pricePerCubicMeter)
             .description(description)
             .build();
   }
@@ -56,6 +63,7 @@ public class WaterMeterDTO {
             .status(waterMeter.getStatus())
             .userId(waterMeter.getUser().getId())
             .currentCount(waterMeter.getCurrentCount())
+            .pricePerCubicMeter(waterMeter.getPricePerCubicMeter())
             .description(waterMeter.getDescription())
             .build();
   }

@@ -13,6 +13,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.impl.DefaultClock;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
@@ -86,12 +88,24 @@ public class JwtTokenUtil implements Serializable {
       throw new AuthException(ResultCode.UNKNOWN_ERROR, e.getMessage());
     }
 
-    // 判断token是否过期
-//    if (claims.getIssuedAt().before(new Date())) {
-//      throw new JwtException("Expired token");
-//    }
-
     return claims;
+  }
+
+  /**
+   * 检验当前用户的Authentication与需要操作的用户id是否一致以保证安全性
+   *
+   * @param userId 用户id
+   * @return 是否一致
+   */
+  public static boolean checkUserAuthentication(int userId) {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+    if (auth instanceof JwtAuthenticationToken) {
+      log.info(((UserDetailsImpl) auth.getPrincipal()).getUserId().toString());
+      return auth.getPrincipal() != null && ((UserDetailsImpl) auth.getPrincipal()).getUserId().equals(userId);
+    }
+
+    return false;
   }
 
 

@@ -2,6 +2,7 @@ package com.anju.residence.dao.water;
 
 import com.anju.residence.entity.water.WaterMeter;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -24,4 +25,14 @@ public interface WaterMeterRepository extends JpaRepository<WaterMeter, Integer>
    */
   @Query(nativeQuery = true, value = "select * from water_meter as wm where wm.user_id = ?1")
   List<WaterMeter> findAllByUserId(Integer userId);
+
+  /**
+   * 更新水表读数
+   *
+   * @param waterMeterId 水表id
+   * @param currentCount 水表读数
+   */
+  @Modifying
+  @Query(nativeQuery = true, value = "update water_meter as wm set wm.current_count = wm.current_count + ?2 where wm.id = ?1")
+  void updateCount(Integer waterMeterId, Double currentCount);
 }

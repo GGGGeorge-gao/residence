@@ -47,16 +47,19 @@ public class WaterMeter {
 
   private Double currentCount;
 
+  private Double pricePerCubicMeter;
+
   @JSONField(format = "yyyy-MM-dd HH:mm:ss")
   private Date lastRecordTime;
 
   @JSONField(format = "yyyy-MM-dd HH:mm:ss")
   @LastModifiedDate
+  @Column(columnDefinition = "TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
   private Date updateTime;
 
   @JSONField(format = "yyyy-MM-dd HH:mm:ss")
   @CreatedDate
-  @Column(insertable = false, updatable = false)
+  @Column(insertable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
   private Date createTime;
 
   private String description;

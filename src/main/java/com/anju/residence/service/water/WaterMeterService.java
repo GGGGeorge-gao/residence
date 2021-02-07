@@ -65,4 +65,11 @@ public interface WaterMeterService {
    * @return 水表实体类
    */
   WaterMeter save(WaterMeter waterMeter);
+
+  /**
+   * 更新水表读数
+   * @param waterMeterId 水表id
+   * @param count 水表读数
+   */
+  void updateWaterMeterCount(Integer waterMeterId, Double count);
 }

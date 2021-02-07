@@ -31,9 +31,9 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
   }
 
   @Override
-  public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+  public Authentication authenticate(Authentication auth) throws AuthenticationException {
     log.info("进入{}了", "JwtAuthenticationProvider");
-    String rawToken = ((JwtAuthenticationToken) authentication).getJwtToken();
+    String rawToken = ((JwtAuthenticationToken) auth).getJwtToken();
     log.info(rawToken);
     // 判断是否是以Bearer开头的token
     String jwtToken = JwtTokenUtil.getJwtTokenByRawToken(rawToken);
@@ -48,7 +48,8 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
       throw new AuthException(ResultCode.USERNAME_NOT_EXISTS, "The username in token has been changed, please contact the administrator.");
     }
 
-    return new UsernamePasswordAuthenticationToken(userDetails.getUserId(), userDetails.getPassword(), userDetails.getAuthorities());
+    ((JwtAuthenticationToken) auth).setPrincipal(userDetails);
+    return auth;
   }
 
   @Override

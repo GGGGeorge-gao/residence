@@ -78,6 +78,7 @@ public class WaterRecordLogServiceImpl implements WaterRecordLogService {
     WaterRecordLog waterRecordLog = logDTO.build();
 
     save(waterRecordLog);
+    waterMeterService.updateWaterMeterCount(logDTO.getWaterMeterId(), logDTO.getCount());
   }
 
   @Transactional(rollbackFor = Exception.class)

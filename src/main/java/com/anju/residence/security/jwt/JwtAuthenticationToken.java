@@ -37,4 +37,8 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
   public Object getPrincipal() {
     return principal;
   }
+
+  public void setPrincipal(UserDetailsImpl principal) {
+    this.principal = principal;
+  }
 }

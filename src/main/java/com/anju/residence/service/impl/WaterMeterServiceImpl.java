@@ -5,10 +5,14 @@ import com.anju.residence.dto.water.WaterMeterDTO;
 import com.anju.residence.entity.water.WaterMeter;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.ApiException;
+import com.anju.residence.security.jwt.JwtAuthenticationToken;
+import com.anju.residence.security.jwt.JwtTokenUtil;
+import com.anju.residence.security.model.UserDetailsImpl;
 import com.anju.residence.service.UserService;
 import com.anju.residence.service.water.WaterMeterService;
 import com.anju.residence.service.water.WaterRecordLogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,6 +71,12 @@ public class WaterMeterServiceImpl implements WaterMeterService {
   @Transactional(rollbackFor = Exception.class)
   @Override
   public WaterMeter addWaterMeter(WaterMeterDTO waterMeterDTO) {
+    if (!JwtTokenUtil.checkUserAuthentication(waterMeterDTO.getUserId())) {
+      throw new ApiException(ResultCode.UNAUTHORIZED_REQUEST);
+    }
+    if (!userService.existsById(waterMeterDTO.getUserId())) {
+      throw new ApiException(ResultCode.USER_ID_NOT_EXISTS);
+    }
     WaterMeter waterMeter = waterMeterDTO.build();
 
     return save(waterMeter);
@@ -75,6 +85,9 @@ public class WaterMeterServiceImpl implements WaterMeterService {
   @Transactional(rollbackFor = Exception.class)
   @Override
   public void updateWaterMeter(WaterMeterDTO waterMeterDTO, Integer waterMeterId) {
+    if (!JwtTokenUtil.checkUserAuthentication(waterMeterDTO.getUserId())) {
+      throw new ApiException(ResultCode.UNAUTHORIZED_REQUEST);
+    }
     if (!userService.existsById(waterMeterDTO.getUserId())) {
       throw new ApiException(ResultCode.USER_ID_NOT_EXISTS);
     }
@@ -103,5 +116,11 @@ public class WaterMeterServiceImpl implements WaterMeterService {
   @Override
   public WaterMeter save(WaterMeter waterMeter) {
     return waterMeterRepo.save(waterMeter);
+  }
+
+  @Transactional(rollbackFor = Exception.class)
+  @Override
+  public void updateWaterMeterCount(Integer waterMeterId, Double count) {
+    waterMeterRepo.updateCount(waterMeterId, count);
   }
 }

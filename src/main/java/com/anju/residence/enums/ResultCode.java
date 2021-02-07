@@ -162,6 +162,8 @@ public enum ResultCode {
 
   WATER_METER_ID_NOT_EXISTS(5005, "Water meter does not exist"),
 
+  PRICE_PER_CUBIC_METER_IS_NULL(5006, "The price per cubic meter of water cannot be empty"),
+
 
   WATER_RECORD_LOG_ID_NOT_EXISTS(5100, "water record log does not exits"),
 
