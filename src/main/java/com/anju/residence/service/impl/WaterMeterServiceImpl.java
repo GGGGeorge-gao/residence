@@ -2,20 +2,20 @@ package com.anju.residence.service.impl;
 
 import com.anju.residence.dao.water.WaterMeterRepository;
 import com.anju.residence.dto.water.WaterMeterDTO;
+import com.anju.residence.dto.water.WaterRecordLogDTO;
 import com.anju.residence.entity.water.WaterMeter;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.ApiException;
-import com.anju.residence.security.jwt.JwtAuthenticationToken;
 import com.anju.residence.security.jwt.JwtTokenUtil;
-import com.anju.residence.security.model.UserDetailsImpl;
 import com.anju.residence.service.UserService;
 import com.anju.residence.service.water.WaterMeterService;
 import com.anju.residence.service.water.WaterRecordLogService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +23,7 @@ import java.util.Optional;
  * @author cygao
  * @date 2021/1/25 17:58
  **/
+@Slf4j
 @Service
 public class WaterMeterServiceImpl implements WaterMeterService {
 
@@ -120,7 +121,8 @@ public class WaterMeterServiceImpl implements WaterMeterService {
 
   @Transactional(rollbackFor = Exception.class)
   @Override
-  public void updateWaterMeterCount(Integer waterMeterId, Double count) {
-    waterMeterRepo.updateCount(waterMeterId, count);
+  public void updateWaterMeterCount(WaterRecordLogDTO logDTO) {
+    log.info(logDTO.toString());
+    waterMeterRepo.updateCount(logDTO.getWaterMeterId(), new BigDecimal(logDTO.getCount()), logDTO.getTime());
   }
 }

@@ -1,4 +1,4 @@
-package com.anju.residence.dto.user;
+package com.anju.residence.dto;
 
 import com.anju.residence.annotation.ExceptionCode;
 import com.anju.residence.entity.User;

@@ -13,6 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -42,7 +43,7 @@ public class WaterRecordLogDTO {
   @ApiModelProperty(value = "抄表计数", name = "count", required = true)
   @ExceptionCode(resultCode = ResultCode.WATER_METER_COUNT_IS_NULL)
   @NotNull(message = "count must not be null")
-  private Double count;
+  private String count;
 
   @ApiModelProperty(value = "其他信息", name = "others")
   private String others;
@@ -52,7 +53,7 @@ public class WaterRecordLogDTO {
             .waterMeter(WaterMeter.builder().id(waterMeterId).build())
             .id(id)
             .time(time)
-            .count(count)
+            .count(new BigDecimal(count))
             .others(others)
             .build();
   }
@@ -61,7 +62,7 @@ public class WaterRecordLogDTO {
     return WaterRecordLogDTO.builder()
             .id(recordLog.getId())
             .waterMeterId(recordLog.getWaterMeter().getId())
-            .count(recordLog.getCount())
+            .count(recordLog.getCount().toString())
             .time(recordLog.getTime())
             .others(recordLog.getOthers())
             .build();

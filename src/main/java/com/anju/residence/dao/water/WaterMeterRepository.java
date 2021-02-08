@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,8 +33,11 @@ public interface WaterMeterRepository extends JpaRepository<WaterMeter, Integer>
    *
    * @param waterMeterId 水表id
    * @param currentCount 水表读数
+   * @param time 抄表时间
    */
   @Modifying
-  @Query(nativeQuery = true, value = "update water_meter as wm set wm.current_count = wm.current_count + ?2 where wm.id = ?1")
-  void updateCount(Integer waterMeterId, Double currentCount);
+  @Query(nativeQuery = true, value = "update water_meter as wm " +
+          "set wm.current_count = (wm.current_count + ?2), " +
+          "wm.last_record_time = ?3 where wm.id = ?1")
+  void updateCount(Integer waterMeterId, BigDecimal currentCount, Date time);
 }

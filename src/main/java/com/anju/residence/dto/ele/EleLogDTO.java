@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -53,7 +54,12 @@ public class EleLogDTO {
   private String others;
 
   public ElectricLog createElectricLog() {
-    return ElectricLog.builder().time(time).power(power).consumption(consumption).build();
+    return ElectricLog.builder()
+            .time(time)
+            .power(power)
+            .consumption(consumption)
+            .others(others)
+            .build();
   }
 
   public static EleLogDTO build(ElectricLog log) {
@@ -63,12 +69,5 @@ public class EleLogDTO {
             .power(log.getPower())
             .consumption(log.getConsumption())
             .build();
-  }
-
-  public EleLogDTO(@NotNull(message = "time must not be null") Date time, @NotNull(message = "deviceId must not be null") Integer deviceId, @NotNull(message = "power must not be null") @PositiveOrZero(message = "power must be positive or zero") Integer power, @NotNull(message = "consumption must not be null") @PositiveOrZero(message = "consumption must be positive or zero") Integer consumption) {
-    this.time = time;
-    this.deviceId = deviceId;
-    this.power = power;
-    this.consumption = consumption;
   }
 }

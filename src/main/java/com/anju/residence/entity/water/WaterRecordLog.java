@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -41,7 +42,7 @@ public class WaterRecordLog {
   @JSONField(format = "yyyy-MM-dd HH:mm:ss")
   private Date time;
 
-  private Double count;
+  private BigDecimal count;
 
   private String others;
 }

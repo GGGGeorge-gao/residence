@@ -81,6 +81,10 @@ public enum ResultCode {
 
   USER_EMAIL_NOT_VALID(1140, "User email is not valid"),
 
+  USER_PRICE_ALREADY_EXISTS(1150, "This user's price list already exists"),
+
+  USER_PRICE_DOE_NOT_EXIST(1151, "This user's price list does not exists"),
+
 
   DEVICE_ID_NOT_EXISTS(1200, "Device id does not exist"),
 
@@ -162,7 +166,9 @@ public enum ResultCode {
 
   WATER_METER_ID_NOT_EXISTS(5005, "Water meter does not exist"),
 
-  PRICE_PER_CUBIC_METER_IS_NULL(5006, "The price per cubic meter of water cannot be empty"),
+  WATER_METER_STATUS_IS_NULL(5006, "Water meter status must not be null"),
+
+  WATER_METER_COLLECT_INTERVAL_IS_NULL(5007, "The collection interval cannot be null"),
 
 
   WATER_RECORD_LOG_ID_NOT_EXISTS(5100, "water record log does not exits"),

@@ -1,7 +1,7 @@
 package com.anju.residence.service.impl;
 
 import com.anju.residence.dao.UserRepository;
-import com.anju.residence.dto.user.UserDTO;
+import com.anju.residence.dto.UserDTO;
 import com.anju.residence.entity.User;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.ApiException;

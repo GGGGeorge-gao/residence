@@ -70,6 +70,6 @@ public class WaterMeterController {
   public ResultVO<String> putWaterMeter(@PathVariable Integer waterMeterId, @RequestBody @Valid WaterMeterDTO waterMeterDTO) {
     waterMeterService.updateWaterMeter(waterMeterDTO, waterMeterId);
 
-    return new ResultVO<>("susccess");
+    return new ResultVO<>("success");
   }
 }

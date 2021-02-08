@@ -1,6 +1,7 @@
 package com.anju.residence.service.water;
 
 import com.anju.residence.dto.water.WaterMeterDTO;
+import com.anju.residence.dto.water.WaterRecordLogDTO;
 import com.anju.residence.entity.water.WaterMeter;
 
 import java.util.List;
@@ -40,6 +41,7 @@ public interface WaterMeterService {
    * 添加一个水表
    *
    * @param waterMeterDTO 水表dto
+   * @return 包含id值的水表实体类对象
    */
   WaterMeter addWaterMeter(WaterMeterDTO waterMeterDTO);
 
@@ -68,8 +70,8 @@ public interface WaterMeterService {
 
   /**
    * 更新水表读数
-   * @param waterMeterId 水表id
-   * @param count 水表读数
+   *
+   * @param logDTO 抄表日志传输实体类对象
    */
-  void updateWaterMeterCount(Integer waterMeterId, Double count);
+  void updateWaterMeterCount(WaterRecordLogDTO logDTO);
 }

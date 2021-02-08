@@ -1,6 +1,6 @@
 package com.anju.residence.controller;
 
-import com.anju.residence.dto.user.UserDTO;
+import com.anju.residence.dto.UserDTO;
 import com.anju.residence.entity.User;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.ApiException;

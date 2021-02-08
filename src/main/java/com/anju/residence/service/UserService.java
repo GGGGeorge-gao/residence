@@ -1,6 +1,6 @@
 package com.anju.residence.service;
 
-import com.anju.residence.dto.user.UserDTO;
+import com.anju.residence.dto.UserDTO;
 import com.anju.residence.entity.User;
 import com.anju.residence.security.model.UserDetailsImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
