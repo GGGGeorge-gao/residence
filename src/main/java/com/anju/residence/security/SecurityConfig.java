@@ -5,6 +5,8 @@ import com.anju.residence.security.handler.JwtAuthenticationDeniedHandler;
 import com.anju.residence.security.handler.JwtAuthenticationEntryPoint;
 import com.anju.residence.security.filter.JwtAuthenticationFilter;
 import com.anju.residence.security.filter.JwtLoginFilter;
+import com.anju.residence.security.provider.JwtAuthenticationProvider;
+import com.anju.residence.service.LoginInfoService;
 import com.anju.residence.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,7 @@ import java.util.Set;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final UserService userService;
+  private final LoginInfoService loginInfoService;
   private final PasswordEncoder passwordEncoder;
   private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
   private final JwtAuthenticationDeniedHandler jwtAuthenticationDeniedHandler;
@@ -64,9 +67,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   };
 
   @Autowired
-  public SecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, UserService userService, PasswordEncoder passwordEncoder, JwtAuthenticationDeniedHandler jwtAuthenticationDeniedHandler) {
+  public SecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, UserService userService, LoginInfoService loginInfoService, PasswordEncoder passwordEncoder, JwtAuthenticationDeniedHandler jwtAuthenticationDeniedHandler) {
     this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     this.userService = userService;
+    this.loginInfoService = loginInfoService;
     this.passwordEncoder = passwordEncoder;
     this.jwtAuthenticationDeniedHandler = jwtAuthenticationDeniedHandler;
 
@@ -135,7 +139,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .anyRequest().authenticated()
 
             .and()
-            .addFilterBefore(new JwtLoginFilter(authenticationManager(), userService), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new JwtLoginFilter(authenticationManager(), userService, loginInfoService), UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(new JwtAuthenticationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
 
   }

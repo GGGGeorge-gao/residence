@@ -1,4 +1,4 @@
-package com.anju.residence.security;
+package com.anju.residence.security.provider;
 
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.AuthException;
