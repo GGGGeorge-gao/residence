@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 @Api(tags = "水表抄表日志API（智能水表）")
 @Slf4j
 @RestController
-@RequestMapping("/water/log")
+@RequestMapping("/api/v1/water/log")
 public class WaterRecordLogController {
 
   private final WaterRecordLogService waterRecordLogService;

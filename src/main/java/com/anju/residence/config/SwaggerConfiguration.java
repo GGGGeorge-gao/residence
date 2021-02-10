@@ -1,6 +1,7 @@
 package com.anju.residence.config;
 
 import com.anju.residence.enums.ResultCode;
+import com.anju.residence.security.jwt.JwtProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -25,11 +26,11 @@ import java.util.List;
  **/
 @EnableOpenApi
 @Configuration
-public class Swagger3Configuration {
+public class SwaggerConfiguration {
 
   private final SwaggerProperty swaggerProperty;
 
-  public Swagger3Configuration(SwaggerProperty swaggerProperty) {
+  public SwaggerConfiguration(SwaggerProperty swaggerProperty) {
     this.swaggerProperty = swaggerProperty;
   }
 
@@ -66,7 +67,10 @@ public class Swagger3Configuration {
   private ApiInfo apiInfo() {
     return new ApiInfoBuilder()
             .title("anju api docs")
-            .description("如有疑问请咨询开发者cygao")
+            .description("如有疑问请咨询开发者cygao\n \n" +
+                    " 权限认证url: /api/v1/auth POST请求 json body {\"username\":\"yourUsername\", \"password\":\"yourPassword\"}， \n" +
+                    " 认证通过后会在response header 的 " + JwtProperty.TOKEN_HEADER + " 中保存token， \n" +
+                    " 在每次请求的 header 中的 " + JwtProperty.TOKEN_HEADER + " 带上token即可通过权限认证")
             .version("1.0")
             .build();
   }

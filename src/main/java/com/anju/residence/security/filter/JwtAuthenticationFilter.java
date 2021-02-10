@@ -48,11 +48,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-    logger.info("进入JwtAuthenticationFilter了");
     String rawToken = request.getHeader(JwtProperty.TOKEN_HEADER);
 
     if (rawToken == null) {
-      logger.error("不需要进行验证：GOGO");
       filterChain.doFilter(request, response);
       return;
     }

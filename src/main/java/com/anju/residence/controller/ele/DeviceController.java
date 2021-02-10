@@ -29,7 +29,7 @@ import java.util.List;
 @Api(tags = "设备API（智能插座）")
 @Slf4j
 @RestController
-@RequestMapping("/device")
+@RequestMapping("/api/v1/device")
 public class DeviceController {
 
   private final DeviceService deviceService;

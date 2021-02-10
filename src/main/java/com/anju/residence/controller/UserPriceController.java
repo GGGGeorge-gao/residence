@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "用户价格api")
 @Slf4j
 @RestController
-@RequestMapping("/user/price")
+@RequestMapping("/api/v1/user/price")
 public class UserPriceController {
 
   private final PriceService priceService;

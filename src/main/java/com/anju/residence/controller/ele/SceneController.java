@@ -28,7 +28,7 @@ import java.util.List;
  * @date 2020/12/15 16:34
  **/
 @Api(tags = "场景API（智能插座）")
-@RequestMapping("/scene")
+@RequestMapping("/api/v1/scene")
 @RestController
 public class SceneController {
 

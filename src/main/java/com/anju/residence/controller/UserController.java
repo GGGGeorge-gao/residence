@@ -28,7 +28,7 @@ import javax.validation.Valid;
 @Api(tags = "用户API")
 @Slf4j
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/v1/user")
 public class UserController {
 
   private final UserService userService;

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @Api(tags = "druid数据库连接池监控API")
 @RestController
-@RequestMapping("/druid")
+@RequestMapping("/api/v1/druid")
 public class DruidStatController {
 
 //  @AnonymousAccess

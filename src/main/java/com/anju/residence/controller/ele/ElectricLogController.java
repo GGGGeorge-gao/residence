@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 @Api(tags = "耗电日志API（智能插座）")
 @Slf4j
 @RestController
-@RequestMapping("/ele_log")
+@RequestMapping("/api/v1/ele_log")
 public class ElectricLogController {
 
   private final ElectricLogService eleLogService;

@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  **/
 @Api(tags = "插座用电日志API（智能插座）")
 @Slf4j
-@RequestMapping("/receptacle_log")
+@RequestMapping("/api/v1/receptacle_log")
 @RestController
 public class ReceptacleLogController {
 

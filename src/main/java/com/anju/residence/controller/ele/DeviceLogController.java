@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @Api(tags = "设备用电日志API（智能插座）")
 @Slf4j
 @RestController
-@RequestMapping("/device_log")
+@RequestMapping("/api/v1/device_log")
 public class DeviceLogController {
 
   private final DeviceLogService deviceLogService;

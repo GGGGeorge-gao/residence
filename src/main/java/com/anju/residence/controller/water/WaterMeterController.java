@@ -29,7 +29,7 @@ import javax.validation.Valid;
 @Api(tags = "水表API（智能水表）")
 @Slf4j
 @RestController
-@RequestMapping("/water/meter")
+@RequestMapping("/api/v1/water/meter")
 public class WaterMeterController {
 
   private final WaterMeterService waterMeterService;

@@ -23,7 +23,7 @@ import javax.validation.Valid;
  * @date 2020/12/15 16:35
  **/
 @Api(tags = "插座API（智能插座）")
-@RequestMapping("/receptacle")
+@RequestMapping("/api/v1/receptacle")
 @RestController
 public class ReceptacleController {
 

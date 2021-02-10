@@ -106,9 +106,9 @@ jwt:
   token-start-with: Bearer
   # Base64私钥
   secret: 2AGL7I2OWm3YZQW89H1SDqWwE3289DISFNJ32SQxMZ27FDSB3G42AsX12CQrWQ10EJ20TvaWV6qO02CL9WI3BXP8HF23IE0FNQZ812SDA34HFZ183A3SWD61BSASF12G6AWC8ASD78
-  # 有效时长 单位毫秒
-  expiration: 14400000
+  # 有效时长 单位毫秒 五天
+  expiration: 432000000
   # 验证header
   token-header: Authorization
   # 登陆url
-  login_url: /auth
+  login_url: /api/v1/auth

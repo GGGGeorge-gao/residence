@@ -17,7 +17,7 @@ import java.util.Map;
 
 
 @RestController
-@RequestMapping("/wxUser")
+@RequestMapping("/api/v1/wxUser")
 public class WxUserController {
   private WxUserService wxUserService;
   private String result200;

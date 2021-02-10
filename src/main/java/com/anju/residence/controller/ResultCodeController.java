@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @Api(tags = "状态码含义查询API")
 @RestController
-@RequestMapping("/code")
+@RequestMapping("/api/v1/code")
 public class ResultCodeController {
 
   @GetMapping("/{code}")
