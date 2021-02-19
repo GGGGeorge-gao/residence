@@ -1,0 +1,1 @@
+insert into role (role_name) value ('ordinary'), ('vip'), ('wx_user');

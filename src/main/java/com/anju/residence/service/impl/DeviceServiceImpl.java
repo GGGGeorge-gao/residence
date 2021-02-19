@@ -106,7 +106,7 @@ public class DeviceServiceImpl implements DeviceService {
     if (userId == null) {
       throw new ApiException(ResultCode.USER_ID_IS_NULL);
     }
-    return deviceRepo.findByIdAndUser(deviceId, userId).isPresent();
+    return deviceRepo.findIdByIdAndUser(deviceId, userId).isPresent();
   }
 
   @Override

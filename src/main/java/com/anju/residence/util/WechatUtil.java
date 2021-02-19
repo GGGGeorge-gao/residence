@@ -1,77 +1,38 @@
 package com.anju.residence.util;
 
-import cn.hutool.core.codec.Base64;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import com.anju.residence.dto.wx.WxSessionResponse;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-import java.security.AlgorithmParameters;
-import java.security.Security;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @ClassName WechatUtil
- * @Description TODO
- * @Author Salvation Chou
- * @Date 9:44 2019/3/20
- * @Version 1.0
+ * @author cygao
+ * @date 2021/2/19 02:27 下午
  */
 public class WechatUtil {
-  public static JSONObject getSessionKeyOrOpenId(String code) {
-    String requestUrl = "https://api.weixin.qq.com/sns/jscode2session";
-    Map<String, Object> requestUrlParam = new HashMap<>();
-    // https://mp.weixin.qq.com/wxopen/devprofile?action=get_profile&token=164113089&lang=zh_CN
+
+  private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+  public static final String CODE_2_SESSION_URL = "https://api.weixin.qq.com/sns/jscode2session";
+
+  public static WxSessionResponse getSessionKeyOrOpenId(String code) {
+    Map<String, Object> requestUrlParam = new HashMap<>(4);
     //小程序appId
-    requestUrlParam.put("appid", Param.AppId);
+    requestUrlParam.put("appid", WechatParam.AppId);
     //小程序secret
-    requestUrlParam.put("secret", Param.AppSecret);
+    requestUrlParam.put("secret", WechatParam.AppSecret);
     //小程序端返回的code
     requestUrlParam.put("js_code", code);
     //默认参数
     requestUrlParam.put("grant_type", "authorization_code");
     //发送post请求读取调用微信接口获取openid用户唯一标识
-    return JSON.parseObject(HttpUtil.post(requestUrl, requestUrlParam));
+    return JSON.parseObject(HttpUtil.post(CODE_2_SESSION_URL, requestUrlParam), WxSessionResponse.class);
+//    return JSON.parseObject(HttpUtil.post(requestUrl, requestUrlParam));
   }
 
-  public static JSONObject getUserInfo(String encryptedData, String sessionKey, String iv) {
-    // 被加密的数据
-    byte[] dataByte = Base64.decode(encryptedData);
-    // 加密秘钥
-    byte[] keyByte = Base64.decode(sessionKey);
-    // 偏移量
-    byte[] ivByte = Base64.decode(iv);
-    try {
-      // 如果密钥不足16位，那么就补足.  这个if 中的内容很重要
-      int base = 16;
-      if (keyByte.length % base != 0) {
-        int groups = keyByte.length / base + (keyByte.length % base != 0 ? 1 : 0);
-        byte[] temp = new byte[groups * base];
-        Arrays.fill(temp, (byte) 0);
-        System.arraycopy(keyByte, 0, temp, 0, keyByte.length);
-        keyByte = temp;
-      }
-      // 初始化
-      Security.addProvider(new BouncyCastleProvider());
-      Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding", "BC");
-      SecretKeySpec spec = new SecretKeySpec(keyByte, "AES");
-      AlgorithmParameters parameters = AlgorithmParameters.getInstance("AES");
-      parameters.init(new IvParameterSpec(ivByte));
-      cipher.init(Cipher.DECRYPT_MODE, spec, parameters);// 初始化
-      byte[] resultByte = cipher.doFinal(dataByte);
-      if (null != resultByte && resultByte.length > 0) {
-        String result = new String(resultByte, "UTF-8");
-        return JSON.parseObject(result);
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
+
 }
 

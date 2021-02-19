@@ -6,7 +6,7 @@ import com.anju.residence.security.model.AccountCredentials;
 import com.anju.residence.security.model.UserDetailsImpl;
 import com.anju.residence.security.jwt.JwtProperty;
 import com.anju.residence.security.jwt.JwtTokenUtil;
-import com.anju.residence.service.LoginInfoService;
+import com.anju.residence.manager.LoginInfoManager;
 import com.anju.residence.service.UserService;
 import com.anju.residence.util.ResponseUtil;
 import com.anju.residence.vo.ResultVO;
@@ -20,7 +20,6 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -30,25 +29,25 @@ import java.io.IOException;
  * @date 2021/2/2 5:40 下午
  **/
 @Slf4j
-public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
+public class PasswordLoginFilter extends AbstractAuthenticationProcessingFilter {
 
   private final UserDetailsService userDetailsService;
-  private final LoginInfoService loginInfoService;
+  private final LoginInfoManager loginInfoManager;
 
-  public JwtLoginFilter(AuthenticationManager authManager, UserService userDetailsService, LoginInfoService loginInfoService) {
+  public PasswordLoginFilter(AuthenticationManager authManager, UserService userDetailsService, LoginInfoManager loginInfoManager) {
     // 对匹配的请求进行过滤
-    super(new AntPathRequestMatcher(JwtProperty.AUTH_URL, "POST"));
+    super(new AntPathRequestMatcher(JwtProperty.PASSWORD_LOGIN_URL, "POST"));
     this.userDetailsService = userDetailsService;
-    this.loginInfoService = loginInfoService;
+    this.loginInfoManager = loginInfoManager;
     setAuthenticationManager(authManager);
   }
 
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException {
-    logger.info("进入JwtLoginFilter了");
+    log.info("进入JwtLoginFilter了");
     AccountCredentials ac = JSON.parseObject(request.getInputStream(), AccountCredentials.class);
 
-    log.info("JwtLoginFilter attemptAuthentication get: " + ac.toString());
+    log.info("PasswordLoginFilter attemptAuthentication get: " + ac.toString());
     return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(ac.getUsername(), ac.getPassword()));
   }
 
@@ -62,7 +61,7 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 
     // 以json格式返回jwt token
     ResponseUtil.response(response, new ResultVO<>(ResultCode.SUCCESS, "login successfully"));
-    loginInfoService.addLoginInfo(userDetails.getUserId(), request);
+    loginInfoManager.addLoginInfo(userDetails.getUserId(), request);
   }
 
   @Override

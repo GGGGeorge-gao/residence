@@ -1,12 +1,14 @@
 package com.anju.residence.service.impl;
 
+import cn.hutool.core.util.RandomUtil;
 import com.anju.residence.dao.UserRepository;
 import com.anju.residence.dto.UserDTO;
+import com.anju.residence.dto.wx.WxUserDTO;
 import com.anju.residence.entity.User;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.ApiException;
 import com.anju.residence.security.model.UserDetailsImpl;
-import com.anju.residence.service.RoleService;
+import com.anju.residence.manager.RoleManager;
 import com.anju.residence.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,20 +32,39 @@ public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepo;
 
-  private final RoleService roleService;
+  private final RoleManager roleManager;
   private final PasswordEncoder passwordEncoder;
 
   @Autowired
-  public UserServiceImpl(UserRepository userRepo, RoleService roleService, PasswordEncoder passwordEncoder) {
+  public UserServiceImpl(UserRepository userRepo, RoleManager roleManager, PasswordEncoder passwordEncoder) {
     this.userRepo = userRepo;
-    this.roleService = roleService;
+    this.roleManager = roleManager;
     this.passwordEncoder = passwordEncoder;
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class, propagation = Propagation.MANDATORY)
-  public void save(User user) {
-    userRepo.save(user);
+  public User save(User user) {
+    return userRepo.save(user);
+  }
+
+  @Transactional(rollbackFor = Exception.class)
+  @Override
+  public User addByWxUser(WxUserDTO wxUserDTO) {
+    String username = wxUserDTO.getNickName();
+
+    // 防止用户名出现重复现象
+    String duplicateStr = "";
+    while (existsUserByUsername(username + duplicateStr)) {
+      duplicateStr = RandomUtil.randomNumbers(3);
+    }
+
+    username = username + duplicateStr;
+    User user = User.builder().username(username).build();
+    user.getRoles().add(roleManager.getByName("ordinary"));
+    user.getRoles().add(roleManager.getByName("wx_user"));
+
+    return save(user);
   }
 
   @Transactional(rollbackFor = Exception.class)
@@ -56,7 +77,7 @@ public class UserServiceImpl implements UserService {
 
     User newUser = userDTO.buildUser();
     newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-    newUser.setRoles(Collections.singletonList(roleService.getRoleByName("ORDINARY")));
+    newUser.setRoles(Collections.singletonList(roleManager.getByName("ORDINARY")));
     save(newUser);
   }
 

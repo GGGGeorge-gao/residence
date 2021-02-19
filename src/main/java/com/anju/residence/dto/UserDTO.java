@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 public class UserDTO {
 
   @ExceptionCode(resultCode = ResultCode.USERNAME_NOT_VALID)
-  @Size(min = 2, max = 16, message = "username length should be 2-16")
+  @Size(min = 2, max = 40, message = "username length should be 2-40")
   private String username;
 
   private String password;

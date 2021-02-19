@@ -1,9 +1,11 @@
 package com.anju.residence.security.jwt;
 
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.IdUtil;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.AuthException;
+import com.anju.residence.security.model.JwtAuthenticationToken;
 import com.anju.residence.security.model.UserDetailsImpl;
+import com.anju.residence.security.model.WxSession;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Clock;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -19,6 +21,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -33,31 +37,48 @@ public class JwtTokenUtil implements Serializable {
 
   private static final Clock CLOCK = DefaultClock.INSTANCE;
 
-  public static String generateToken(UserDetailsImpl userDetails) {
-    return generateToken(userDetails.getUsername(), String.valueOf(userDetails.getUserId()));
-  }
-
   /**
    * 生成token（包含Bearer前缀）
+   * payload 由四部分组成：userId、username、openId、skey
+   * 为了防止session_key被泄露，使用加密后的skey
    * @param username audience
    * @param userId subject
    * @return token字符串
    */
-  public static String generateToken(String username, String userId) {
+  public static String generateToken(int userId, String username, String openId, String skey, String unionId) {
     final Date createdDate = CLOCK.now();
     final Date expirationDate = new Date(System.currentTimeMillis() + JwtProperty.EXPIRATION);
 
-    log.info("subject: {}", userId);
+    Map<String, Object> payload = new HashMap<>();
+    payload.put("user_id", userId);
+    payload.put("username", username);
+
+    if (openId != null) {
+      payload.put("open_id", openId);
+      payload.put("skey", skey);
+      payload.put("union_id", unionId);
+    }
 
     return JwtProperty.TOKEN_START_WITH +
             Jwts.builder()
-                    .setId(UUID.randomUUID().toString())
-                    .setAudience(username)
-                    .setSubject(userId)
-                    .setIssuedAt(createdDate)
-                    .setExpiration(expirationDate)
-                    .signWith(SignatureAlgorithm.HS512, JwtProperty.SECRET)
-                    .compact();
+            .setId(IdUtil.randomUUID())
+            .setClaims(payload)
+            .setIssuedAt(createdDate)
+            .setExpiration(expirationDate)
+            .signWith(SignatureAlgorithm.HS512, JwtProperty.SECRET)
+            .compact();
+  }
+
+  public static String generateToken(UserDetailsImpl userDetails, WxSession wxSession) {
+    return generateToken(userDetails.getUserId(), userDetails.getUsername(), wxSession.getOpenId(), wxSession.getSkey(), wxSession.getUnionId());
+  }
+
+  public static String generateToken(UserDetailsImpl userDetails) {
+    return generateToken(userDetails.getUserId(), userDetails.getUsername(), null, null, null);
+  }
+
+  public static String generateToken(int userId, String username, WxSession wxSession) {
+    return generateToken(userId, username, wxSession.getOpenId(), wxSession.getSkey(), wxSession.getUnionId());
   }
 
   public static String getJwtTokenByRawToken(String rawToken) throws AuthException {
@@ -106,58 +127,6 @@ public class JwtTokenUtil implements Serializable {
     }
 
     return false;
-  }
-
-
-//  public boolean validateToken(String token, UserDetails userDetails) {
-//    final String username = getUsername(token);
-//    return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
-//  }
-
-  public String getUsername(String token) {
-    final Claims claims = getClaims(token);
-    return claims.getSubject();
-  }
-
-  public Claims getClaims(String token) throws SignatureException {
-    return Jwts.parser()
-            .setSigningKey(JwtProperty.SECRET)
-            .parseClaimsJws(token)
-            .getBody();
-  }
-
-  private Boolean isTokenExpired(String token) {
-    final Date expiration = getExpiration(token);
-    return expiration.before(CLOCK.now());
-  }
-
-  public Date getExpiration(String token) {
-    final Claims claims = getClaims(token);
-    return claims.getExpiration();
-  }
-
-  public String getUsername(Claims claims) {
-    return claims.getSubject();
-  }
-
-  public String getUserId(Claims claims) {
-    return claims.getAudience();
-  }
-
-  public boolean isExpired(Claims claims) {
-    return getExpiration(claims).before(CLOCK.now());
-  }
-
-  public Date getExpiration(Claims claims) {
-    return claims.getExpiration();
-  }
-
-  public Date getIssuedAt(Claims claims) {
-    return claims.getIssuedAt();
-  }
-
-  public boolean validateToken(Claims claims, UserDetailsImpl userDetails) {
-    return !isExpired(claims) && StrUtil.equals(getUserId(claims), String.valueOf(userDetails.getUserId()));
   }
 
 }

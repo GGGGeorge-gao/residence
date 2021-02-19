@@ -39,6 +39,8 @@ public enum ResultCode {
    * 4000-4999 权限认证状态码
    *
    * 5000-5099 水表状态码
+   *
+   * 6000-6099 微信用户状态码
    */
   SUCCESS(1000, "success"),
 
@@ -172,6 +174,31 @@ public enum ResultCode {
 
 
   WATER_RECORD_LOG_ID_NOT_EXISTS(5100, "water record log does not exits"),
+
+
+  NO_SESSION_KEY_EXISTS(6000, "该用户没有sessionKey存在"),
+
+  INVALID_SKEY(6001, "无效的skey"),
+
+  JS_CODE_NO_EXISTS(6002, "请在请求中添加code参数"),
+
+  LOGIN_FAIL(6003, "登录失败"),
+
+  CONNECTION_ERROR(6004, "连接出现问题"),
+
+  WECHAT_SERVER_BUSY(6005, "微信服务器繁忙"),
+
+  INVALID_JS_CODE(6006, "无效的js_code"),
+
+  REQUEST_TOO_FREQUENT(6007, "请求过于频繁"),
+
+  OPEN_ID_IS_NULL(6008, "open id不能为空"),
+
+  NICKNAME_IS_NULL(6009, "nickname 不能为空"),
+
+  OPEN_ID_ALREADY_EXISTS(6010, "该openid已经存在"),
+
+  OPEN_ID_NOT_EXISTS(6011, "openid 不存在"),
 
 
   UNKNOWN_ERROR(9999, "Unknown error");

@@ -1,6 +1,7 @@
 package com.anju.residence.service;
 
 import com.anju.residence.dto.UserDTO;
+import com.anju.residence.dto.wx.WxUserDTO;
 import com.anju.residence.entity.User;
 import com.anju.residence.security.model.UserDetailsImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -58,8 +59,16 @@ public interface UserService extends UserDetailsService {
    * 保存用户
    *
    * @param user 用户实体类对象
+   * @return 用户实体类
    */
-  void save(User user);
+  User save(User user);
+
+  /**
+   * 根据微信用户添加一个新用户
+   * @param wxUserDTO 微信用户实体传输类
+   * @return 用户实体类
+   */
+  User addByWxUser(WxUserDTO wxUserDTO);
 
   /**
    * 添加用户

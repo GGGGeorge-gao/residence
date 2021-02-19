@@ -1,4 +1,4 @@
-package com.anju.residence.service;
+package com.anju.residence.manager;
 
 import com.anju.residence.dao.LoginInfoRepository;
 import com.anju.residence.entity.LoginInfo;
@@ -14,14 +14,14 @@ import java.util.Date;
  * @date 2020/11/25 20:49
  **/
 @Service
-public class LoginInfoService {
+public class LoginInfoManager {
 
   private static final String UNKNOWN_IP = "unknown";
 
   private final LoginInfoRepository loginInfoRepo;
 
   @Autowired
-  public LoginInfoService(LoginInfoRepository loginInfoRepo) {
+  public LoginInfoManager(LoginInfoRepository loginInfoRepo) {
     this.loginInfoRepo = loginInfoRepo;
   }
 

@@ -48,7 +48,7 @@ public interface DeviceRepository extends JpaRepository<Device, Integer> {
    * @return 该设备id的Optional对象
    */
   @Query(nativeQuery = true, value = "select d.id from device as d where d.id = ?1 and d.user_id = ?2")
-  Optional<Integer> findByIdAndUser(Integer deviceId, Integer userId);
+  Optional<Integer> findIdByIdAndUser(Integer deviceId, Integer userId);
 
   /**
    * 删除某个插孔，将设备上的插孔字段置空
@@ -61,6 +61,7 @@ public interface DeviceRepository extends JpaRepository<Device, Integer> {
 
   /**
    * 删除该用户所有的设备
+   * @param userId 用户id
    */
   @Modifying
   @Query(nativeQuery = true, value = "delete from device as d where d.user_id = ?1")

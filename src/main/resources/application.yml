@@ -16,6 +16,7 @@ spring:
 
   datasource:
 
+
     druid:
       username: root
       password: rootroot
@@ -63,6 +64,10 @@ spring:
           statement-parameter-set-log-enabled: false
           statement-parameter-clear-log-enable: false
           statement-create-after-log-enabled: false
+
+    # 初始化数据
+    data: classpath:sql/data.sql
+    initialization-mode: embedded
 
 
   jpa:

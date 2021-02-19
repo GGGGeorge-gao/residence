@@ -23,7 +23,7 @@ public class ApiControllerAdvice {
   @ExceptionHandler(ApiException.class)
   public ResultVO<String> apiExceptionHandler(ApiException e) {
     log.warn("ExceptionCode: {}, ExceptionMessage: {}.", e.getCode(), e.getMsg());
-    return new ResultVO<>(e.getCode(), "bad request", e.getMsg());
+    return new ResultVO<>(e.getCode(), "failed", e.getMsg());
   }
 
   @ExceptionHandler(UsernameNotFoundException.class)
