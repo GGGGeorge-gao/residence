@@ -6,6 +6,7 @@ import com.anju.residence.entity.User;
 import com.anju.residence.entity.WxUser;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.ApiException;
+import com.anju.residence.manager.WechatManager;
 import com.anju.residence.security.model.WxSession;
 import com.anju.residence.service.UserService;
 import com.anju.residence.service.WxUserService;
@@ -17,6 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.Optional;
 
+/**
+ * @author cygao
+ * @date 2021/2/18 02:23 下午
+ */
 @Service
 public class WxUserServiceImpl implements WxUserService {
 
@@ -32,17 +37,33 @@ public class WxUserServiceImpl implements WxUserService {
 
   @Transactional(rollbackFor = Exception.class)
   @Override
-  public WxUser addWxUser(WxUserDTO wxUserDTO) {
-    if (existsByOpenid(wxUserDTO.getOpenId())) {
-      throw new ApiException(ResultCode.OPEN_ID_ALREADY_EXISTS);
-    }
-    WxUser wxUser = wxUserDTO.build();
+  public void addWxUser(WxUserDTO wxUserDTO) {
+    WxUser wxUser = wxUserDTO.buildWxUser();
     User user = userService.addByWxUser(wxUserDTO);
 
     wxUser.setUser(user);
     wxUser.setLastVisitTime(new Date());
     wxUser.setCreateTime(new Date());
-    return save(wxUser);
+    save(wxUser);
+  }
+
+  @Transactional(rollbackFor = Exception.class)
+  @Override
+  public void updateWxUser(WxUserDTO wxUserDTO) {
+    WxUser wxUser = getWxUserByOpenId(wxUserDTO.getOpenId()).orElseThrow(() -> new ApiException(ResultCode.OPEN_ID_NOT_EXISTS));
+    wxUserDTO.updateWxUser(wxUser);
+
+    save(wxUser);
+  }
+
+
+  @Override
+  public void login(WxUserDTO wxUserDTO) {
+    if (!existsByOpenid(wxUserDTO.getOpenId())) {
+      addWxUser(wxUserDTO);
+    } else {
+      updateWxUser(wxUserDTO);
+    }
   }
 
   @Override
@@ -56,6 +77,13 @@ public class WxUserServiceImpl implements WxUserService {
   @Override
   public Optional<WxUser> getWxUserByOpenId(String openId) {
     return wxUserRepo.findById(openId);
+  }
+
+  @Override
+  public Optional<WxUser> getWxUserByToken() {
+    WxSession wxSession = WechatManager.getWxSessionByToken();
+
+    return getWxUserByOpenId(wxSession.getOpenId());
   }
 
   @Override

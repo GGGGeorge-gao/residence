@@ -17,9 +17,20 @@ public interface WxUserService {
   /**
    * 添加一个微信用户
    * @param wxUserDTO 微信用户实体传输类
-   * @return 微信用户实体类对象
    */
-  WxUser addWxUser(WxUserDTO wxUserDTO);
+  void addWxUser(WxUserDTO wxUserDTO);
+
+  /**
+   * 更新微信用户
+   * @param wxUserDTO 微信用户实体传输类
+   */
+  void updateWxUser(WxUserDTO wxUserDTO);
+
+  /**
+   * 登录
+   * @param wxUserDTO 微信用户实体传输类
+   */
+  void login(WxUserDTO wxUserDTO);
 
   /**
    * 根据skey查询用户
@@ -34,6 +45,12 @@ public interface WxUserService {
    * @return 微信用户的Optional对象
    */
   Optional<WxUser> getWxUserByOpenId(String openId);
+
+  /**
+   * 根据当前token查询用户
+   * @return 微信用户的Optional对象
+   */
+  Optional<WxUser> getWxUserByToken();
 
   /**
    * 根据openid查询sessionKey

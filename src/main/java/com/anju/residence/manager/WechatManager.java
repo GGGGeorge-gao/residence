@@ -3,39 +3,50 @@ package com.anju.residence.manager;
 import com.anju.residence.dto.wx.WxSessionResponse;
 import com.anju.residence.entity.WxUser;
 import com.anju.residence.enums.ResultCode;
+import com.anju.residence.enums.WechatErrCode;
 import com.anju.residence.exception.ApiException;
 import com.anju.residence.security.jwt.JwtProperty;
 import com.anju.residence.security.jwt.JwtTokenUtil;
+import com.anju.residence.security.model.JwtAuthenticationToken;
 import com.anju.residence.security.model.WxSession;
-import com.anju.residence.service.UserService;
 import com.anju.residence.service.WxUserService;
 import com.anju.residence.util.WechatUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author cygao
  * @date 2021/2/19 10:38 下午
  **/
+@Slf4j
 @Service
 public class WechatManager {
 
   private final PasswordEncoder passwordEncoder;
-
-  private final UserService userService;
+  private final LoginInfoManager loginInfoManager;
   private final WxUserService wxUserService;
 
   @Autowired
-  public WechatManager(PasswordEncoder passwordEncoder, UserService userService, WxUserService wxUserService) {
+  public WechatManager(PasswordEncoder passwordEncoder, LoginInfoManager loginInfoManager, WxUserService wxUserService) {
     this.passwordEncoder = passwordEncoder;
-    this.userService = userService;
+    this.loginInfoManager = loginInfoManager;
     this.wxUserService = wxUserService;
   }
 
-  public void setToken(HttpServletResponse response, String code) {
+  /**
+   * 对前端对登录请求进行处理，获取WxSession并进行校验、保存、产生token并传输回前端
+   * @param request request
+   * @param response response
+   * @param code js_code
+   */
+  public WxSession setToken(HttpServletRequest request, HttpServletResponse response, String code) {
     if (code == null) {
       throw new ApiException(ResultCode.INVALID_JS_CODE);
     }
@@ -46,16 +57,16 @@ public class WechatManager {
     WxSession wxSession;
     if (errcode == null) {
       throw new ApiException(ResultCode.CONNECTION_ERROR);
-    } else if (errcode == 0) {
+    } else if (errcode == WechatErrCode.SUCCESS.getCode()) {
       wxSession = wxSessionResponse.buildSession();
-    } else if (errcode == 40029) {
+    } else if (errcode == WechatErrCode.INVALID_JS_CODE.getCode()) {
       throw new ApiException(ResultCode.INVALID_JS_CODE);
-    } else if (errcode == -1) {
-      throw new ApiException(ResultCode.WECHAT_SERVER_BUSY);
-    } else if (errcode == 45011) {
+    } else if (errcode == WechatErrCode.BUSY_WECHAT_SERVER.getCode()) {
+      throw new ApiException(ResultCode.BUSY_WECHAT_SERVER);
+    } else if (errcode == WechatErrCode.REQUEST_TOO_FREQUENT.getCode()) {
       throw new ApiException(ResultCode.REQUEST_TOO_FREQUENT);
     } else {
-      throw new ApiException(ResultCode.UNKNOWN_ERROR);
+      throw new ApiException(ResultCode.UNKNOWN_ERROR.getCode(), wxSessionResponse.toString());
     }
     String skey = passwordEncoder.encode(wxSession.getOpenId() + wxSession.getSessionKey());
     wxSession.setSkey(skey);
@@ -66,6 +77,36 @@ public class WechatManager {
     String token = JwtTokenUtil.generateToken(wxUser.getUser().getId(), wxUser.getUser().getUsername(), wxSession);
 
     response.setHeader(JwtProperty.TOKEN_HEADER, token);
+    loginInfoManager.addLoginInfo(wxUser.getUser().getId(), request);
+
+    return wxSession;
+  }
+
+  /**
+   * 通过SecurityContextHolder存储的Authentication获取WxSession
+   * @return {@link WxSession}
+   */
+  public static WxSession getWxSessionByToken() {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    if (!(auth instanceof JwtAuthenticationToken)) {
+      log.error("Wrong Authentication Class get: {}", auth.getClass().getName());
+      throw new ApiException(ResultCode.UNKNOWN_ERROR);
+    }
+    JwtAuthenticationToken authToken = (JwtAuthenticationToken) auth;
+
+    WxSession wxSession = authToken.getWxSession();
+    if (wxSession == null) {
+      throw new ApiException(ResultCode.NO_WX_SESSION_EXISTS);
+    }
+    return wxSession;
   }
 
 }
+
+
+
+
+
+
+
+

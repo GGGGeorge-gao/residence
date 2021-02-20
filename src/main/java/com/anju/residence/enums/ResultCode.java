@@ -186,7 +186,7 @@ public enum ResultCode {
 
   CONNECTION_ERROR(6004, "连接出现问题"),
 
-  WECHAT_SERVER_BUSY(6005, "微信服务器繁忙"),
+  BUSY_WECHAT_SERVER(6005, "微信服务器繁忙"),
 
   INVALID_JS_CODE(6006, "无效的js_code"),
 
@@ -199,6 +199,10 @@ public enum ResultCode {
   OPEN_ID_ALREADY_EXISTS(6010, "该openid已经存在"),
 
   OPEN_ID_NOT_EXISTS(6011, "openid 不存在"),
+
+  NO_WX_SESSION_EXISTS(6012, "token中无微信用户信息"),
+
+  INVALID_WECHAT_SIGNATURE(6013, "签名校验失败"),
 
 
   UNKNOWN_ERROR(9999, "Unknown error");

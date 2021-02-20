@@ -60,7 +60,7 @@ public class PasswordLoginFilter extends AbstractAuthenticationProcessingFilter 
     response.setHeader(JwtProperty.TOKEN_HEADER, jwtToken);
 
     // 以json格式返回jwt token
-    ResponseUtil.response(response, new ResultVO<>(ResultCode.SUCCESS, "login successfully"));
+    ResponseUtil.response(response, new ResultVO<>(ResultCode.SUCCESS, "success"));
     loginInfoManager.addLoginInfo(userDetails.getUserId(), request);
   }
 
