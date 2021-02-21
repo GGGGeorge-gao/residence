@@ -30,13 +30,13 @@ import javax.servlet.http.HttpServletResponse;
 public class WechatManager {
 
   private final PasswordEncoder passwordEncoder;
-  private final LoginInfoManager loginInfoManager;
+  private final UserLogManager userLogManager;
   private final WxUserService wxUserService;
 
   @Autowired
-  public WechatManager(PasswordEncoder passwordEncoder, LoginInfoManager loginInfoManager, WxUserService wxUserService) {
+  public WechatManager(PasswordEncoder passwordEncoder, UserLogManager userLogManager, WxUserService wxUserService) {
     this.passwordEncoder = passwordEncoder;
-    this.loginInfoManager = loginInfoManager;
+    this.userLogManager = userLogManager;
     this.wxUserService = wxUserService;
   }
 
@@ -77,7 +77,7 @@ public class WechatManager {
     String token = JwtTokenUtil.generateToken(wxUser.getUser().getId(), wxUser.getUser().getUsername(), wxSession);
 
     response.setHeader(JwtProperty.TOKEN_HEADER, token);
-    loginInfoManager.addLoginInfo(wxUser.getUser().getId(), request);
+    userLogManager.addUserLog(wxUser.getUser().getId(), request);
 
     return wxSession;
   }

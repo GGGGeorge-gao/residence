@@ -1,11 +1,12 @@
 package com.anju.residence.security;
 
 import com.anju.residence.annotation.AnonymousAccess;
+import com.anju.residence.security.filter.JwtAuthenticationProvider;
 import com.anju.residence.security.handler.JwtAuthenticationDeniedHandler;
 import com.anju.residence.security.handler.JwtAuthenticationEntryPoint;
 import com.anju.residence.security.filter.JwtAuthenticationFilter;
 import com.anju.residence.security.filter.PasswordLoginFilter;
-import com.anju.residence.manager.LoginInfoManager;
+import com.anju.residence.manager.UserLogManager;
 import com.anju.residence.service.UserService;
 import com.anju.residence.service.WxUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -52,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   private final UserService userService;
   private final WxUserService wxUserService;
 
-  private final LoginInfoManager loginInfoManager;
+  private final UserLogManager userLogManager;
   private final PasswordEncoder passwordEncoder;
   private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
   private final JwtAuthenticationDeniedHandler jwtAuthenticationDeniedHandler;
@@ -69,11 +70,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   };
 
   @Autowired
-  public SecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, UserService userService, WxUserService wxUserService, LoginInfoManager loginInfoManager, PasswordEncoder passwordEncoder, JwtAuthenticationDeniedHandler jwtAuthenticationDeniedHandler) {
+  public SecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, UserService userService, WxUserService wxUserService, UserLogManager userLogManager, PasswordEncoder passwordEncoder, JwtAuthenticationDeniedHandler jwtAuthenticationDeniedHandler) {
     this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     this.userService = userService;
     this.wxUserService = wxUserService;
-    this.loginInfoManager = loginInfoManager;
+    this.userLogManager = userLogManager;
     this.passwordEncoder = passwordEncoder;
     this.jwtAuthenticationDeniedHandler = jwtAuthenticationDeniedHandler;
 
@@ -142,14 +143,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .anyRequest().authenticated()
 
             .and()
-            .addFilterBefore(new PasswordLoginFilter(authenticationManager(), userService, loginInfoManager), UsernamePasswordAuthenticationFilter.class)
-            .addFilterBefore(new JwtAuthenticationFilter(userService, wxUserService, passwordEncoder, authenticationManager()), UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(new PasswordLoginFilter(authenticationManager(), userService, userLogManager), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new JwtAuthenticationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
 
   }
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.authenticationProvider(daoAuthenticationProvider());
+    auth.authenticationProvider(daoAuthenticationProvider()).authenticationProvider(jwtAuthenticationProvider());
   }
 
 //  @Override
@@ -164,6 +165,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
     daoAuthenticationProvider.setUserDetailsService(userService);
     return daoAuthenticationProvider;
+  }
+
+  @Bean
+  public JwtAuthenticationProvider jwtAuthenticationProvider() {
+    return new JwtAuthenticationProvider(userService, wxUserService, passwordEncoder);
   }
 
 }

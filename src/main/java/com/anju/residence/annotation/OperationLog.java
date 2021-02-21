@@ -1,5 +1,7 @@
 package com.anju.residence.annotation;
 
+import com.anju.residence.enums.OperationType;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -15,5 +17,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface OperationLog {
 
+  OperationType type();
+
+  String description();
 
 }

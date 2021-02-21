@@ -6,14 +6,13 @@ import com.anju.residence.dao.ele.DeviceLogRepository;
 import com.anju.residence.dao.ele.DeviceRepository;
 import com.anju.residence.dao.ele.ElectricLogRepository;
 import com.anju.residence.dao.ele.JackRepository;
-import com.anju.residence.dao.LoginInfoRepository;
+import com.anju.residence.dao.UserLogRepository;
 import com.anju.residence.dao.ele.ReceptacleRepository;
 import com.anju.residence.dao.RoleRepository;
 import com.anju.residence.dao.ele.SceneRepository;
 import com.anju.residence.dao.UserRepository;
 import com.anju.residence.entity.ele.AlertNotice;
 import com.anju.residence.entity.ele.Device;
-import com.anju.residence.entity.ele.DeviceLog;
 import com.anju.residence.entity.ele.ElectricLog;
 import com.anju.residence.entity.ele.Receptacle;
 import com.anju.residence.entity.Role;
@@ -28,7 +27,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -39,7 +37,7 @@ class RepositoryTests {
   private final AlertNoticeRepository alertRepo;
   private final DeviceRepository deviceRepo;
   private final JackRepository jackRepo;
-  private final LoginInfoRepository loginRepo;
+  private final UserLogRepository loginRepo;
   private final ReceptacleRepository receptacleRepo;
   private final RoleRepository roleRepo;
   private final SceneRepository sceneRepo;
@@ -58,7 +56,7 @@ class RepositoryTests {
   private final int RANDOM_ELELOG_NUMBER = 10000;
 
   @Autowired
-  public RepositoryTests(AlertNoticeRepository alertRepo, DeviceRepository deviceRepo, JackRepository jackRepo, LoginInfoRepository loginRepo, ReceptacleRepository receptacleRepo, RoleRepository roleRepo, SceneRepository sceneRepo, UserRepository userRepo, DeviceLogRepository deviceLogRepo, ElectricLogRepository electricLogRepo, BehaviorLogRepository behaviorLogRepo) {
+  public RepositoryTests(AlertNoticeRepository alertRepo, DeviceRepository deviceRepo, JackRepository jackRepo, UserLogRepository loginRepo, ReceptacleRepository receptacleRepo, RoleRepository roleRepo, SceneRepository sceneRepo, UserRepository userRepo, DeviceLogRepository deviceLogRepo, ElectricLogRepository electricLogRepo, BehaviorLogRepository behaviorLogRepo) {
     this.alertRepo = alertRepo;
     this.deviceRepo = deviceRepo;
     this.jackRepo = jackRepo;

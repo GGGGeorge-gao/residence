@@ -33,8 +33,7 @@ public class UserDetailsImpl implements UserDetails {
   }
 
   public UserDetailsImpl(User user) {
-    this(user.getId(), user.getUsername(), user.getPassword(),
-            user.getRoles() == null ? Collections.emptyList() : Collections.unmodifiableList(user.getRoles()));
+    this(user.getId(), user.getUsername(), user.getPassword(), user.getRoles() == null ? null : Collections.unmodifiableList(user.getRoles()));
   }
 
   @Override

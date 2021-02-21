@@ -29,9 +29,9 @@ public class RoleManager {
   private void initData() {
     Map<String, Role> map = new HashMap<String, Role>(3) {
       {
-        put("ordinary", roleRepo.save(new Role(null, "ordinary")));
-        put("vip", roleRepo.save(new Role(null, "vip")));
-        put("wx_user", roleRepo.save(new Role(null, "wx_user")));
+        put("ordinary", roleRepo.existsByRoleName("ordinary") ? roleRepo.findByRoleName("ordinary") : roleRepo.save(new Role(null, "ordinary")));
+        put("vip", roleRepo.existsByRoleName("vip") ? roleRepo.findByRoleName("vip") : roleRepo.save(new Role(null, "vip")));
+        put("wx_user", roleRepo.existsByRoleName("wx_user") ? roleRepo.findByRoleName("wx_user") : roleRepo.save(new Role(null, "wx_user")));
       }
     };
     roleMap = Collections.unmodifiableMap(map);
@@ -44,4 +44,6 @@ public class RoleManager {
     }
     return roleMap.get(roleName);
   }
+
+
 }

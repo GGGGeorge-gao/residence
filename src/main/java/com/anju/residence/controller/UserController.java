@@ -1,7 +1,10 @@
 package com.anju.residence.controller;
 
+import com.anju.residence.annotation.AnonymousAccess;
+import com.anju.residence.annotation.OperationLog;
 import com.anju.residence.dto.UserDTO;
 import com.anju.residence.entity.User;
+import com.anju.residence.enums.OperationType;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.ApiException;
 import com.anju.residence.service.UserService;
@@ -38,6 +41,8 @@ public class UserController {
     this.userService = userService;
   }
 
+  @OperationLog(type = OperationType.ADD, description = "新建用户")
+  @AnonymousAccess
   @ApiOperation(value = "添加用户")
   @PostMapping("/add")
   public ResultVO<String> addUser(@RequestBody @Valid UserDTO userDTO) {

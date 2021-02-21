@@ -6,7 +6,7 @@ import com.anju.residence.security.model.AccountCredentials;
 import com.anju.residence.security.model.UserDetailsImpl;
 import com.anju.residence.security.jwt.JwtProperty;
 import com.anju.residence.security.jwt.JwtTokenUtil;
-import com.anju.residence.manager.LoginInfoManager;
+import com.anju.residence.manager.UserLogManager;
 import com.anju.residence.service.UserService;
 import com.anju.residence.util.ResponseUtil;
 import com.anju.residence.vo.ResultVO;
@@ -32,13 +32,13 @@ import java.io.IOException;
 public class PasswordLoginFilter extends AbstractAuthenticationProcessingFilter {
 
   private final UserDetailsService userDetailsService;
-  private final LoginInfoManager loginInfoManager;
+  private final UserLogManager userLogManager;
 
-  public PasswordLoginFilter(AuthenticationManager authManager, UserService userDetailsService, LoginInfoManager loginInfoManager) {
+  public PasswordLoginFilter(AuthenticationManager authManager, UserService userDetailsService, UserLogManager userLogManager) {
     // 对匹配的请求进行过滤
     super(new AntPathRequestMatcher(JwtProperty.PASSWORD_LOGIN_URL, "POST"));
     this.userDetailsService = userDetailsService;
-    this.loginInfoManager = loginInfoManager;
+    this.userLogManager = userLogManager;
     setAuthenticationManager(authManager);
   }
 
@@ -61,7 +61,7 @@ public class PasswordLoginFilter extends AbstractAuthenticationProcessingFilter 
 
     // 以json格式返回jwt token
     ResponseUtil.response(response, new ResultVO<>(ResultCode.SUCCESS, "success"));
-    loginInfoManager.addLoginInfo(userDetails.getUserId(), request);
+    userLogManager.addUserLog(userDetails.getUserId(), request);
   }
 
   @Override

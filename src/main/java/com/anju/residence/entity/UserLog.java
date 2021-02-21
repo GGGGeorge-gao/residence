@@ -27,8 +27,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "login_info")
-public class LoginInfo {
+@Table(name = "user_log")
+public class UserLog {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,8 +38,12 @@ public class LoginInfo {
   @JoinColumn
   private User user;
 
+  private Integer type;
+
   @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-  private Date loginTime;
+  private Date time;
 
   private String ip;
+
+  private String description;
 }

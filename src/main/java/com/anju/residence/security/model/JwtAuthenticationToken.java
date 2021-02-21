@@ -2,8 +2,13 @@ package com.anju.residence.security.model;
 
 import lombok.Getter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.Collection;
 
 /**
+ * Authentication实现类，存储在SecurityContextHolder中，用于权限验证
+ *
  * @author cygao
  * @date 2021/2/3 12:30 上午
  **/
@@ -17,6 +22,11 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
   private WxSession wxSession;
 
   private boolean isWxUser = false;
+
+  public JwtAuthenticationToken(String jwtToken) {
+    super(null);
+    this.jwtToken = jwtToken;
+  }
 
   public JwtAuthenticationToken(UserDetailsImpl userDetails, String jwtToken) {
     super(userDetails.getAuthorities());
@@ -39,7 +49,6 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
   public void setUserDetails(UserDetailsImpl userDetails) {
     this.userDetails = userDetails;
-
   }
 
   @Override

@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -60,7 +61,7 @@ public class UserServiceImpl implements UserService {
     }
 
     username = username + duplicateStr;
-    User user = User.builder().username(username).build();
+    User user = User.builder().username(username).roles(new ArrayList<>()).build();
     user.getRoles().add(roleManager.getByName("ordinary"));
     user.getRoles().add(roleManager.getByName("wx_user"));
 
@@ -77,7 +78,7 @@ public class UserServiceImpl implements UserService {
 
     User newUser = userDTO.buildUser();
     newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-    newUser.setRoles(Collections.singletonList(roleManager.getByName("ORDINARY")));
+    newUser.setRoles(Collections.singletonList(roleManager.getByName("ordinary")));
     save(newUser);
   }
 

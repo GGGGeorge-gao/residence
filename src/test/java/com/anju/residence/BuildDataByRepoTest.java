@@ -1,7 +1,7 @@
 package com.anju.residence;
 
 import cn.hutool.core.util.RandomUtil;
-import com.anju.residence.dao.LoginInfoRepository;
+import com.anju.residence.dao.UserLogRepository;
 import com.anju.residence.dao.RoleRepository;
 import com.anju.residence.dao.UserRepository;
 import com.anju.residence.dao.ele.AlertNoticeRepository;
@@ -43,7 +43,7 @@ public class BuildDataByRepoTest {
   private final AlertNoticeRepository alertRepo;
   private final DeviceRepository deviceRepo;
   private final JackRepository jackRepo;
-  private final LoginInfoRepository loginRepo;
+  private final UserLogRepository loginRepo;
   private final ReceptacleRepository receptacleRepo;
   private final RoleRepository roleRepo;
   private final SceneRepository sceneRepo;
@@ -61,7 +61,7 @@ public class BuildDataByRepoTest {
   private final int RANDOM_ELELOG_NUMBER = 10000;
 
   @Autowired
-  public BuildDataByRepoTest(AlertNoticeRepository alertRepo, DeviceRepository deviceRepo, JackRepository jackRepo, LoginInfoRepository loginRepo, ReceptacleRepository receptacleRepo, RoleRepository roleRepo, SceneRepository sceneRepo, UserRepository userRepo, ElectricLogRepository electricLogRepo, BehaviorLogRepository behaviorLogRepo) {
+  public BuildDataByRepoTest(AlertNoticeRepository alertRepo, DeviceRepository deviceRepo, JackRepository jackRepo, UserLogRepository loginRepo, ReceptacleRepository receptacleRepo, RoleRepository roleRepo, SceneRepository sceneRepo, UserRepository userRepo, ElectricLogRepository electricLogRepo, BehaviorLogRepository behaviorLogRepo) {
     this.alertRepo = alertRepo;
     this.deviceRepo = deviceRepo;
     this.jackRepo = jackRepo;
