@@ -1,4 +1,4 @@
-package com.anju.residence.manager;
+package com.anju.residence.service;
 
 import com.anju.residence.dao.RoleRepository;
 import com.anju.residence.entity.Role;
@@ -14,7 +14,7 @@ import java.util.Map;
  * @date 2021/2/20 12:42 上午
  **/
 @Service
-public class RoleManager {
+public class RoleService {
 
   private final RoleRepository roleRepo;
   private Map<String, Role> roleMap;
@@ -22,7 +22,7 @@ public class RoleManager {
   private boolean isInit = false;
 
   @Autowired
-  public RoleManager(RoleRepository roleRepo) {
+  public RoleService(RoleRepository roleRepo) {
     this.roleRepo = roleRepo;
   }
 

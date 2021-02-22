@@ -8,7 +8,7 @@ import com.anju.residence.entity.User;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.ApiException;
 import com.anju.residence.security.model.UserDetailsImpl;
-import com.anju.residence.manager.RoleManager;
+import com.anju.residence.service.RoleService;
 import com.anju.residence.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +33,13 @@ public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepo;
 
-  private final RoleManager roleManager;
+  private final RoleService roleService;
   private final PasswordEncoder passwordEncoder;
 
   @Autowired
-  public UserServiceImpl(UserRepository userRepo, RoleManager roleManager, PasswordEncoder passwordEncoder) {
+  public UserServiceImpl(UserRepository userRepo, RoleService roleService, PasswordEncoder passwordEncoder) {
     this.userRepo = userRepo;
-    this.roleManager = roleManager;
+    this.roleService = roleService;
     this.passwordEncoder = passwordEncoder;
   }
 
@@ -62,8 +62,8 @@ public class UserServiceImpl implements UserService {
 
     username = username + duplicateStr;
     User user = User.builder().username(username).roles(new ArrayList<>()).build();
-    user.getRoles().add(roleManager.getByName("ordinary"));
-    user.getRoles().add(roleManager.getByName("wx_user"));
+    user.getRoles().add(roleService.getByName("ordinary"));
+    user.getRoles().add(roleService.getByName("wx_user"));
 
     return save(user);
   }
@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
 
     User newUser = userDTO.buildUser();
     newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-    newUser.setRoles(Collections.singletonList(roleManager.getByName("ordinary")));
+    newUser.setRoles(Collections.singletonList(roleService.getByName("ordinary")));
     save(newUser);
   }
 

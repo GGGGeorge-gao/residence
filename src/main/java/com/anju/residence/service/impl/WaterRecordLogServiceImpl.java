@@ -1,7 +1,11 @@
 package com.anju.residence.service.impl;
 
+import com.anju.residence.dao.OcrRepository;
 import com.anju.residence.dao.water.WaterRecordLogRepository;
+import com.anju.residence.dto.OcrResult;
 import com.anju.residence.dto.water.WaterRecordLogDTO;
+import com.anju.residence.entity.Ocr;
+import com.anju.residence.entity.water.WaterMeter;
 import com.anju.residence.entity.water.WaterRecordLog;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.ApiException;
@@ -12,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -24,12 +29,14 @@ import java.util.Optional;
 public class WaterRecordLogServiceImpl implements WaterRecordLogService {
 
   private final WaterRecordLogRepository waterRecordLogRepo;
+  private final OcrRepository ocrRepo;
 
   private WaterMeterService waterMeterService;
 
   @Autowired
-  public WaterRecordLogServiceImpl(WaterRecordLogRepository waterRecordLogRepo) {
+  public WaterRecordLogServiceImpl(WaterRecordLogRepository waterRecordLogRepo, OcrRepository ocrRepo) {
     this.waterRecordLogRepo = waterRecordLogRepo;
+    this.ocrRepo = ocrRepo;
   }
 
   @Autowired
@@ -67,6 +74,19 @@ public class WaterRecordLogServiceImpl implements WaterRecordLogService {
       throw new ApiException(ResultCode.WATER_RECORD_LOG_ID_NOT_EXISTS);
     }
     return waterRecordLogRepo.findAllByWaterMeterIdBetween(waterMeterId, from, to);
+  }
+
+  @Transactional(rollbackFor = Exception.class)
+  @Override
+  public void addOcrResult(OcrResult ocrResult, int waterMeterId) {
+    WaterRecordLog waterRecordLog = WaterRecordLog.builder()
+            .waterMeter(WaterMeter.builder().id(waterMeterId).build())
+            .time(new Date())
+            .count(BigDecimal.valueOf(ocrResult.getResult()[0]))
+            .build();
+
+    save(waterRecordLog);
+    ocrRepo.save(ocrResult.buildOcr(waterMeterId));
   }
 
   @Transactional(rollbackFor = Exception.class)

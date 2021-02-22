@@ -1,6 +1,8 @@
 package com.anju.residence.service.water;
 
+import com.anju.residence.dto.OcrResult;
 import com.anju.residence.dto.water.WaterRecordLogDTO;
+import com.anju.residence.entity.Ocr;
 import com.anju.residence.entity.water.WaterRecordLog;
 
 import java.util.Date;
@@ -46,6 +48,13 @@ public interface WaterRecordLogService {
    * @return 抄表实体类列表
    */
   List<WaterRecordLog> listByWaterMeterIdBetween(Integer waterMeterId, Date from, Date to);
+
+  /**
+   * 添加一条ocr
+   * @param ocr ocr
+   * @param waterMeterId 水表id
+   */
+  void addOcrResult(OcrResult ocrResult, int waterMeterId);
 
   /**
    * 添加一条抄表日志

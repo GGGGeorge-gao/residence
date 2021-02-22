@@ -41,6 +41,9 @@ public enum ResultCode {
    * 5000-5099 水表状态码
    *
    * 6000-6099 微信用户状态码
+   *
+   * 8000-8099 文件上传状态码
+   * 8100-8199 模型状态码
    */
   SUCCESS(1000, "success"),
 
@@ -203,6 +206,16 @@ public enum ResultCode {
   NO_WX_SESSION_EXISTS(6012, "token中无微信用户信息"),
 
   INVALID_WECHAT_SIGNATURE(6013, "签名校验失败"),
+
+
+  FILE_IS_NULL(8000, "上传的文件为空"),
+
+  FILE_NAME_IS_NULL(8001, "上传的文件名为空"),
+
+  TRANSFER_FAILED(8002, "传输失败！"),
+
+
+  OCR_ERROR(8100, "模型异常"),
 
 
   UNKNOWN_ERROR(9999, "Unknown error");
