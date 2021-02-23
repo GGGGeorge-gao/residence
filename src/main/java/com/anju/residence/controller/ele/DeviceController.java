@@ -1,7 +1,9 @@
 package com.anju.residence.controller.ele;
 
+import com.anju.residence.annotation.OperationLog;
 import com.anju.residence.dto.ele.DeviceDTO;
 import com.anju.residence.entity.ele.Device;
+import com.anju.residence.enums.OperationType;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.ApiException;
 import com.anju.residence.service.ele.DeviceService;
@@ -29,7 +31,7 @@ import java.util.List;
 @Api(tags = "设备API（智能插座）")
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/device")
+@RequestMapping("/device")
 public class DeviceController {
 
   private final DeviceService deviceService;
@@ -46,6 +48,7 @@ public class DeviceController {
     return new ResultVO<>(deviceService.getById(deviceId).orElseThrow(() -> new ApiException(ResultCode.DEVICE_ID_NOT_EXISTS)));
   }
 
+  @OperationLog(type = OperationType.ADD, description = "添加一个设备")
   @ApiOperation(value = "添加一个设备")
   @PostMapping("/add")
   public ResultVO<String> addDevice(@RequestBody @Valid DeviceDTO deviceDTO) {
@@ -54,6 +57,7 @@ public class DeviceController {
     return new ResultVO<>("success");
   }
 
+  @OperationLog(type = OperationType.DELETE, description = "删除一个设备")
   @ApiOperation(value = "删除一个设备")
   @DeleteMapping("/{deviceId}")
   public ResultVO<String> deleteDevice(@PathVariable Integer deviceId) {
@@ -64,6 +68,7 @@ public class DeviceController {
     return new ResultVO<>("success");
   }
 
+  @OperationLog(type = OperationType.UPDATE, description = "修改设备信息")
   @ApiOperation(value = "修改设备信息")
   @PutMapping("/{deviceId}")
   public ResultVO<String> putDevice(@RequestBody @Valid DeviceDTO deviceDTO, @PathVariable Integer deviceId) {

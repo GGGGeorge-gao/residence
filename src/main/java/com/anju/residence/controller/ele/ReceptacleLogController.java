@@ -1,7 +1,9 @@
 package com.anju.residence.controller.ele;
 
+import com.anju.residence.annotation.OperationLog;
 import com.anju.residence.dto.ele.RecLogDTO;
 import com.anju.residence.entity.ele.ReceptacleLog;
+import com.anju.residence.enums.OperationType;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.ApiException;
 import com.anju.residence.service.ele.ReceptacleLogService;
@@ -31,7 +33,7 @@ import java.util.stream.Collectors;
  **/
 @Api(tags = "插座用电日志API（智能插座）")
 @Slf4j
-@RequestMapping("/api/v1/receptacle_log")
+@RequestMapping("/receptacle_log")
 @RestController
 public class ReceptacleLogController {
 
@@ -73,6 +75,7 @@ public class ReceptacleLogController {
     return new ResultVO<>(res);
   }
 
+  @OperationLog(type = OperationType.DELETE, description = "删除一条日志")
   @ApiOperation(value = "删除一条日志", notes = "url路径参数为日志id")
   @DeleteMapping("/{logId}")
   public ResultVO<String> deleteById(@PathVariable Integer logId) {

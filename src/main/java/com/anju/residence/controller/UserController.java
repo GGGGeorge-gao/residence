@@ -31,7 +31,7 @@ import javax.validation.Valid;
 @Api(tags = "用户API")
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/user")
 public class UserController {
 
   private final UserService userService;
@@ -52,17 +52,11 @@ public class UserController {
     return new ResultVO<>("success");
   }
 
+  @OperationLog(type = OperationType.UPDATE, description = "修改用户信息")
   @ApiOperation(value = "修改用户信息")
   @PutMapping("/{userId}")
   public ResultVO<String> putUser(@RequestBody @Valid UserDTO userDTO, @PathVariable Integer userId) {
     userService.putUser(userDTO, userId);
-
-    return new ResultVO<>("success");
-  }
-
-  @PatchMapping("/{userId}")
-  public ResultVO<String> patchUser(@RequestBody @Valid UserDTO userDTO, @PathVariable Integer userId) {
-    userService.patchUser(userDTO, userId);
 
     return new ResultVO<>("success");
   }

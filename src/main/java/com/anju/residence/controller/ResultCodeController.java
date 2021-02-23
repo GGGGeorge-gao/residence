@@ -6,6 +6,7 @@ import com.anju.residence.enums.OperationType;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.vo.ResultVO;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @Api(tags = "状态码含义查询API")
 @RestController
-@RequestMapping("/api/v1/code")
+@RequestMapping("/code")
 public class ResultCodeController {
 
   @OperationLog(type = OperationType.OPERATION, description = "查询状态码")
@@ -32,6 +33,7 @@ public class ResultCodeController {
   }
 
   @AnonymousAccess
+  @ApiOperation(value = "测试后端服务有没有挂，是否可用")
   @OperationLog(type = OperationType.OPERATION, description = "test")
   @GetMapping("/test")
   public ResultVO<String> test() {

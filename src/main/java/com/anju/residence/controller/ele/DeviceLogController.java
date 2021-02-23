@@ -1,6 +1,8 @@
 package com.anju.residence.controller.ele;
 
+import com.anju.residence.annotation.OperationLog;
 import com.anju.residence.dto.ele.DeviceLogDTO;
+import com.anju.residence.enums.OperationType;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.ApiException;
 import com.anju.residence.service.ele.DeviceLogService;
@@ -31,7 +33,7 @@ import java.util.stream.Collectors;
 @Api(tags = "设备用电日志API（智能插座）")
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/device_log")
+@RequestMapping("/device_log")
 public class DeviceLogController {
 
   private final DeviceLogService deviceLogService;
@@ -58,6 +60,7 @@ public class DeviceLogController {
     return new ResultVO<>(deviceLogService.listLogByDeviceIdBetween(deviceId, from, to).stream().map(DeviceLogDTO::build).collect(Collectors.toList()));
   }
 
+  @OperationLog(type = OperationType.DELETE, description = "删除一条设备日志")
   @ApiOperation(value = "删除一条日志")
   @DeleteMapping("/{logId}")
   public ResultVO<String> deleteByLogId(@PathVariable Integer logId) {

@@ -3,8 +3,10 @@ package com.anju.residence.controller;
 import cn.hutool.crypto.digest.DigestUtil;
 import com.alibaba.fastjson.JSON;
 import com.anju.residence.annotation.AnonymousAccess;
+import com.anju.residence.annotation.OperationLog;
 import com.anju.residence.dto.wx.WxUserDTO;
 import com.anju.residence.entity.WxUser;
+import com.anju.residence.enums.OperationType;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.ApiException;
 import com.anju.residence.manager.WechatManager;
@@ -35,7 +37,7 @@ import javax.validation.Valid;
 @Api(tags = "微信API")
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/wx")
+@RequestMapping("/wx")
 public class WxUserController {
 
   private final WxUserService wxUserService;
@@ -47,7 +49,8 @@ public class WxUserController {
     this.wechatManager = wechatManager;
   }
 
-  @ApiOperation(value = "添加一个用户，并在header中返回token")
+  @ApiOperation(value = "添加一个用户，并在header中返回token", tags = "无需权限认证")
+  @OperationLog(type = OperationType.ADD, description = "/wx/add")
   @AnonymousAccess
   @GetMapping("/add")
   public ResultVO<String> addWxUser(@RequestBody @Valid WxUserDTO wxUserDTO, @RequestParam String code, HttpServletRequest request, HttpServletResponse response) {
@@ -57,7 +60,8 @@ public class WxUserController {
     return new ResultVO<>("success");
   }
 
-  @ApiOperation(value = "登录，可调用wx.getUserInfo，并在header中返回token", tags = "可通过此接口新建或修改用户")
+  @OperationLog(type = OperationType.ADD, description = "/wx/login")
+  @ApiOperation(value = "登录，可调用wx.getUserInfo，并在header中返回token（可通过此接口新建或修改用户）", tags = "无需权限认证")
   @AnonymousAccess
   @PostMapping("/login")
   public ResultVO<String> login(@RequestParam(value = "resultCode") String code,

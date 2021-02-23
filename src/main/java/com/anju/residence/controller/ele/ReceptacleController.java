@@ -1,6 +1,8 @@
 package com.anju.residence.controller.ele;
 
+import com.anju.residence.annotation.OperationLog;
 import com.anju.residence.dto.ele.ReceptacleDTO;
+import com.anju.residence.enums.OperationType;
 import com.anju.residence.service.ele.ReceptacleService;
 import com.anju.residence.vo.ResultVO;
 import io.swagger.annotations.Api;
@@ -23,7 +25,7 @@ import javax.validation.Valid;
  * @date 2020/12/15 16:35
  **/
 @Api(tags = "插座API（智能插座）")
-@RequestMapping("/api/v1/receptacle")
+@RequestMapping("/receptacle")
 @RestController
 public class ReceptacleController {
 
@@ -34,6 +36,7 @@ public class ReceptacleController {
     this.receptacleService = receptacleService;
   }
 
+  @OperationLog(type = OperationType.ADD, description = "新建一个插座")
   @ApiOperation(value = "新建一条插座")
   @PostMapping("add")
   public ResultVO<String> add(@RequestBody @Valid ReceptacleDTO receptacleDTO) {
@@ -42,6 +45,7 @@ public class ReceptacleController {
     return new ResultVO<>("success");
   }
 
+  @OperationLog(type = OperationType.UPDATE, description = "修改插座信息")
   @ApiOperation(value = "修改插座信息")
   @ApiImplicitParams({@ApiImplicitParam(name = "receptacleId", value = "插座id", paramType = "path", dataTypeClass = Integer.class, required = true),
                       @ApiImplicitParam(name = "receptacleDTO", value = "插座信息", paramType = "body", dataTypeClass = ReceptacleDTO.class, required = true)})
@@ -52,6 +56,7 @@ public class ReceptacleController {
     return new ResultVO<>("success");
   }
 
+  @OperationLog(type = OperationType.DELETE, description = "删除一个插座")
   @ApiOperation(value = "删除一个插座")
   @ApiImplicitParams({@ApiImplicitParam(name = "receptacleId", value = "插座id", paramType = "path", dataTypeClass = Integer.class, required = true)})
   @DeleteMapping("/{receptacleId}")

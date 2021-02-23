@@ -2,7 +2,10 @@ package com.anju.residence.controller.druid;
 
 import com.alibaba.druid.stat.DruidStatManagerFacade;
 import com.anju.residence.annotation.AnonymousAccess;
+import com.anju.residence.annotation.OperationLog;
+import com.anju.residence.enums.OperationType;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,10 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @Api(tags = "druid数据库连接池监控API")
 @RestController
-@RequestMapping("/api/v1/druid")
+@RequestMapping("/druid")
 public class DruidStatController {
 
-//  @AnonymousAccess
+  @ApiOperation(value = "进入druid", tags = "无需权限认证，druid账号为anju 密码为root")
+  @OperationLog(type = OperationType.OPERATION, description = "druid /stat")
   @GetMapping("/stat")
   public Object druidStat(){
     // DruidStatManagerFacade#getDataSourceStatDataList

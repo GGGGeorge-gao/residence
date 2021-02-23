@@ -93,17 +93,6 @@ public class UserServiceImpl implements UserService {
     save(old);
   }
 
-  @Transactional(rollbackFor = Exception.class)
-  @Override
-  public void patchUser(UserDTO userDTO, Integer userId) {
-    User old = getUserById(userId).orElseThrow(() -> new ApiException(ResultCode.USER_ID_NOT_EXISTS));
-    if (existsUserByUsername(userDTO.getUsername())) {
-      throw new ApiException(ResultCode.USERNAME_ALREADY_EXISTS);
-    }
-    userDTO.patchUser(old);
-    save(old);
-  }
-
   @Override
   public Optional<User> getUserByName(String username) {
     return userRepo.findUserByUsername(username);

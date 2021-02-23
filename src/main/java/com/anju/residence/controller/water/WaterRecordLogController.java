@@ -1,7 +1,9 @@
 package com.anju.residence.controller.water;
 
 import com.anju.residence.annotation.AnonymousAccess;
+import com.anju.residence.annotation.OperationLog;
 import com.anju.residence.dto.water.WaterRecordLogDTO;
+import com.anju.residence.enums.OperationType;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.ApiException;
 import com.anju.residence.service.water.WaterRecordLogService;
@@ -34,7 +36,7 @@ import java.util.stream.Collectors;
 @Api(tags = "水表抄表日志API（智能水表）")
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/water/log")
+@RequestMapping("/water/log")
 public class WaterRecordLogController {
 
   private final WaterRecordLogService waterRecordLogService;
@@ -67,6 +69,7 @@ public class WaterRecordLogController {
   }
 
   @AnonymousAccess
+  @OperationLog(type = OperationType.ADD, description = "添加一条抄表日志")
   @ApiOperation(value = "添加一条抄表日志")
   @ApiImplicitParam(name = "waterRecordLogDTO", value = "抄表日志传输实体类", dataTypeClass = WaterRecordLogDTO.class, paramType = "body", required = true)
   @PostMapping("/add")
@@ -84,6 +87,7 @@ public class WaterRecordLogController {
             .orElseThrow(() -> new ApiException(ResultCode.WATER_METER_ID_NOT_EXISTS))));
   }
 
+  @OperationLog(type = OperationType.DELETE, description = "删除一条抄表日志")
   @ApiOperation(value = "删除某一条抄表日志", notes = "url路径参数为抄表日志id")
   @ApiImplicitParam(name = "recordLogId", value = "日志id", paramType = "path", dataTypeClass = Integer.class, required = true)
   @DeleteMapping("/{recordLogId}")

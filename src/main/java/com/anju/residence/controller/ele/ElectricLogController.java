@@ -1,9 +1,11 @@
 package com.anju.residence.controller.ele;
 
 import com.anju.residence.annotation.AnonymousAccess;
+import com.anju.residence.annotation.OperationLog;
 import com.anju.residence.dto.ele.EleLogDTO;
 import com.anju.residence.entity.ele.Device;
 import com.anju.residence.entity.ele.ElectricLog;
+import com.anju.residence.enums.OperationType;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.ApiException;
 import com.anju.residence.service.ele.DeviceService;
@@ -34,7 +36,7 @@ import java.util.stream.Collectors;
 @Api(tags = "耗电日志API（智能插座）")
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/ele_log")
+@RequestMapping("/ele_log")
 public class ElectricLogController {
 
   private final ElectricLogService eleLogService;
@@ -47,7 +49,8 @@ public class ElectricLogController {
   }
 
   @AnonymousAccess
-  @ApiOperation(value = "添加一条耗电日志")
+  @OperationLog(type = OperationType.ADD, description = "添加一条耗电日志")
+  @ApiOperation(value = "添加一条耗电日志", tags = "无需权限认证")
   @ApiImplicitParams({@ApiImplicitParam(name = "eleLogDTO", value = "耗电日志传输实体类", dataTypeClass = EleLogDTO.class, paramType = "body", required = true)})
   @PostMapping("/add")
   public ResultVO<String> addElectricLog(@RequestBody @Valid EleLogDTO eleLogDTO) {

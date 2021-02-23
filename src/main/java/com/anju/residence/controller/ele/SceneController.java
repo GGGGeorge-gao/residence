@@ -1,7 +1,9 @@
 package com.anju.residence.controller.ele;
 
+import com.anju.residence.annotation.OperationLog;
 import com.anju.residence.dto.ele.SceneDTO;
 import com.anju.residence.entity.ele.Scene;
+import com.anju.residence.enums.OperationType;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.ApiException;
 import com.anju.residence.service.SceneService;
@@ -28,7 +30,7 @@ import java.util.List;
  * @date 2020/12/15 16:34
  **/
 @Api(tags = "场景API（智能插座）")
-@RequestMapping("/api/v1/scene")
+@RequestMapping("/scene")
 @RestController
 public class SceneController {
 
@@ -45,6 +47,7 @@ public class SceneController {
     return new ResultVO<>(sceneService.getById(sceneId).orElseThrow(() -> new ApiException(ResultCode.SCENE_ID_NOT_EXISTS)));
   }
 
+  @OperationLog(type = OperationType.ADD, description = "添加一个场景")
   @ApiOperation(value = "添加一个场景")
   @PostMapping("/add")
   public ResultVO<String> add(@RequestBody @Valid SceneDTO sceneDTO) {
@@ -53,6 +56,7 @@ public class SceneController {
     return new ResultVO<>("success");
   }
 
+  @OperationLog(type = OperationType.UPDATE, description = "修改场景信息")
   @ApiOperation(value = "修改场景信息")
   @PutMapping("/{sceneId}")
   public ResultVO<String> put(@RequestBody @Valid SceneDTO sceneDTO, @PathVariable Integer sceneId) {
@@ -61,6 +65,7 @@ public class SceneController {
     return new ResultVO<>("success");
   }
 
+  @OperationLog(type = OperationType.DELETE, description = "删除一个场景")
   @ApiOperation(value = "删除一个场景")
   @DeleteMapping("/{sceneId}")
   public ResultVO<String> delete(@PathVariable Integer sceneId) {

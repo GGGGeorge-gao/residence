@@ -1,7 +1,9 @@
 package com.anju.residence.controller;
 
+import com.anju.residence.annotation.OperationLog;
 import com.anju.residence.dto.UserPriceDTO;
 import com.anju.residence.entity.UserPrice;
+import com.anju.residence.enums.OperationType;
 import com.anju.residence.service.PriceService;
 import com.anju.residence.vo.ResultVO;
 import io.swagger.annotations.Api;
@@ -20,10 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
  * @author cygao
  * @date 2021/2/8 10:59 上午
  **/
-@Api(tags = "用户价格api")
+@Api(tags = "用户价格API")
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/user/price")
+@RequestMapping("/user/price")
 public class UserPriceController {
 
   private final PriceService priceService;
@@ -33,6 +35,7 @@ public class UserPriceController {
     this.priceService = priceService;
   }
 
+  @OperationLog(type = OperationType.ADD, description = "添加一个用户价格")
   @ApiOperation(value = "添加用户价格表")
   @PostMapping(value = "/add")
   public ResultVO<String> addPrice(@RequestBody UserPriceDTO userPriceDTO) {
@@ -40,6 +43,7 @@ public class UserPriceController {
     return new ResultVO<>("success");
   }
 
+  @OperationLog(type = OperationType.UPDATE, description = "修改用户价格")
   @ApiOperation(value = "修改用户价格表")
   @PutMapping(value = "/{userId}")
   public ResultVO<String> putPrice(@PathVariable Integer userId, @RequestBody UserPriceDTO userPriceDTO) {

@@ -15,7 +15,7 @@ public class SwaggerProperty {
   /**
    * 是否开启swagger，生产环境一般关闭，所以这里定义一个变量
    */
-  public static boolean enable;
+  public static boolean enable = true;
 
   /**
    * 项目应用名

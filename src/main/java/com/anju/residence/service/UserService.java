@@ -86,14 +86,6 @@ public interface UserService extends UserDetailsService {
   void putUser(UserDTO userDTO, Integer userId);
 
   /**
-   * 修改用户信息
-   *
-   * @param userDTO 用户dto对象
-   * @param userId  用户id
-   */
-  void patchUser(UserDTO userDTO, Integer userId);
-
-  /**
    * Spring Security加载用户
    * @param username 用户名
    * @return {@link UserDetailsImpl}

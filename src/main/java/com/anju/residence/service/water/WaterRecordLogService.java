@@ -51,7 +51,7 @@ public interface WaterRecordLogService {
 
   /**
    * 添加一条ocr
-   * @param ocr ocr
+   * @param ocrResult ocr
    * @param waterMeterId 水表id
    */
   void addOcrResult(OcrResult ocrResult, int waterMeterId);

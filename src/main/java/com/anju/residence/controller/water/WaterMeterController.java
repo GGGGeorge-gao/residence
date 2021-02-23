@@ -1,8 +1,10 @@
 package com.anju.residence.controller.water;
 
 import com.anju.residence.annotation.AnonymousAccess;
+import com.anju.residence.annotation.OperationLog;
 import com.anju.residence.dto.water.WaterMeterDTO;
 import com.anju.residence.entity.water.WaterMeter;
+import com.anju.residence.enums.OperationType;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.ApiException;
 import com.anju.residence.service.water.WaterMeterService;
@@ -29,7 +31,7 @@ import javax.validation.Valid;
 @Api(tags = "水表API（智能水表）")
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/water/meter")
+@RequestMapping("/water/meter")
 public class WaterMeterController {
 
   private final WaterMeterService waterMeterService;
@@ -39,6 +41,7 @@ public class WaterMeterController {
     this.waterMeterService = waterMeterService;
   }
 
+  @OperationLog(type = OperationType.ADD, description = "添加一个水表")
   @ApiOperation(value = "添加一个水表")
   @PostMapping("/add")
   public ResultVO<Integer> addWaterMeter(@RequestBody @Valid WaterMeterDTO waterMeterDTO) {
@@ -57,6 +60,7 @@ public class WaterMeterController {
     return new ResultVO<>(waterMeterService.getById(waterMeterId).orElseThrow(() -> new ApiException(ResultCode.WATER_METER_ID_NOT_EXISTS)));
   }
 
+  @OperationLog(type = OperationType.DELETE, description = "删除一个水表")
   @ApiOperation(value = "删除一个水表", notes = "url路径参数为该水表的id")
   @DeleteMapping("/{waterMeterId}")
   public ResultVO<String> deleteWaterMeter(@PathVariable Integer waterMeterId) {
@@ -65,6 +69,7 @@ public class WaterMeterController {
     return new ResultVO<>("success");
   }
 
+  @OperationLog(type = OperationType.UPDATE, description = "修改水表信息")
   @ApiOperation(value = "修改水表信息", notes = "url路径参数为该水表的id")
   @PutMapping("/{waterMeterId}")
   public ResultVO<String> putWaterMeter(@PathVariable Integer waterMeterId, @RequestBody @Valid WaterMeterDTO waterMeterDTO) {

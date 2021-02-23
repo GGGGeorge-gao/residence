@@ -107,6 +107,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             // 禁用csrf
             .csrf().disable()
             .formLogin().disable()
+            .logout().disable()
 
             // 防止iframe 造成跨域请求
 //            .headers()
@@ -143,6 +144,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .anyRequest().authenticated()
 
             .and()
+
             .addFilterBefore(new PasswordLoginFilter(authenticationManager(), userService, userLogManager), UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(new JwtAuthenticationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
 

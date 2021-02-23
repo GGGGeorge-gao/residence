@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  **/
 @Api(tags = "用户操作日志API（智能插座）")
 @RestController
-@RequestMapping("/api/v1/behavior")
+@RequestMapping("/behavior")
 public class BehaviorController {
 
   private final BehaviorLogService behaviorLogService;

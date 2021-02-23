@@ -35,7 +35,9 @@ public class Ocr {
 
   private String saveFilePath;
 
-  private String result;
+  private String resultAlpha;
+
+  private String resultNum;
 
   private String useDetect;
 

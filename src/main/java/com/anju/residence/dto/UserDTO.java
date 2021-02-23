@@ -40,27 +40,6 @@ public class UserDTO {
     user.setAddress(address);
   }
 
-  public void patchUser(User user) {
-    if (username != null) {
-      user.setUsername(username);
-    }
-    if (password != null) {
-      user.setPassword(password);
-    }
-    if (gender != null) {
-      user.setGender(gender);
-    }
-    if (phone != null) {
-      user.setPhone(phone);
-    }
-    if (email != null) {
-      user.setEmail(email);
-    }
-    if (address != null) {
-      user.setAddress(address);
-    }
-  }
-
   public User buildUser() {
     return User.builder()
             .username(username)

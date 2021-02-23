@@ -82,7 +82,7 @@ public class WaterRecordLogServiceImpl implements WaterRecordLogService {
     WaterRecordLog waterRecordLog = WaterRecordLog.builder()
             .waterMeter(WaterMeter.builder().id(waterMeterId).build())
             .time(new Date())
-            .count(BigDecimal.valueOf(ocrResult.getResult()[0]))
+            .count(new BigDecimal(ocrResult.getResultNum()[0]))
             .build();
 
     save(waterRecordLog);

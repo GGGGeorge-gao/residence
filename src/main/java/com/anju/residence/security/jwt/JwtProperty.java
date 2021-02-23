@@ -14,7 +14,7 @@ public class JwtProperty {
 
   public static final String TOKEN_HEADER = "Authorization";
 
-  public static final String PASSWORD_LOGIN_URL = "/api/v1/login";
+  public static final String PASSWORD_LOGIN_URL = "/login";
 
   public static final String WECHAT_LOGIN_URL = "/wx_auth";
 }

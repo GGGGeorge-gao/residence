@@ -26,7 +26,12 @@ public class OcrResult {
   /**
    * 数据列表，水表最终识别读数
    */
-  private Double[] result;
+  private String[] resultNum;
+
+  /**
+   * 带字母读数
+   */
+  private String[] resultAlpha;
 
   /**
    * 检测模型是否检测到数字区域目标，示例：True or False
@@ -36,7 +41,7 @@ public class OcrResult {
   /**
    * 模型预测置信度
    */
-  private Double[] scores;
+  private String[] scores;
 
   /**
    * 原始图片存储参数
@@ -47,7 +52,8 @@ public class OcrResult {
     return Ocr.builder()
             .findCircle(findCircle)
             .saveFilePath(saveFilePath)
-            .result(Arrays.toString(result))
+            .resultAlpha(Arrays.toString(resultAlpha))
+            .resultNum(Arrays.toString(resultNum))
             .useDetect(useDetect)
             .scores(Arrays.toString(scores))
             .originalPath(originalPath)
