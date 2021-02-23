@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/druid")
 public class DruidStatController {
 
-  @ApiOperation(value = "进入druid", tags = "无需权限认证，druid账号为anju 密码为root")
+  @ApiOperation(value = "浏览器访问进入druid控制台，无需权限认证，druid账号为anju 密码为root")
   @OperationLog(type = OperationType.OPERATION, description = "druid /stat")
   @GetMapping("/stat")
   public Object druidStat(){

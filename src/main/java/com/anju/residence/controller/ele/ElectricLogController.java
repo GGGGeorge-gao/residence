@@ -50,7 +50,7 @@ public class ElectricLogController {
 
   @AnonymousAccess
   @OperationLog(type = OperationType.ADD, description = "添加一条耗电日志")
-  @ApiOperation(value = "添加一条耗电日志", tags = "无需权限认证")
+  @ApiOperation(value = "添加一条耗电日志 无需权限认证")
   @ApiImplicitParams({@ApiImplicitParam(name = "eleLogDTO", value = "耗电日志传输实体类", dataTypeClass = EleLogDTO.class, paramType = "body", required = true)})
   @PostMapping("/add")
   public ResultVO<String> addElectricLog(@RequestBody @Valid EleLogDTO eleLogDTO) {

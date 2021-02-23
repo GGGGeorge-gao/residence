@@ -49,7 +49,7 @@ public class WxUserController {
     this.wechatManager = wechatManager;
   }
 
-  @ApiOperation(value = "添加一个用户，并在header中返回token", tags = "无需权限认证")
+  @ApiOperation(value = "添加一个用户，并在header中返回token，无需权限认证")
   @OperationLog(type = OperationType.ADD, description = "/wx/add")
   @AnonymousAccess
   @GetMapping("/add")
@@ -61,7 +61,7 @@ public class WxUserController {
   }
 
   @OperationLog(type = OperationType.ADD, description = "/wx/login")
-  @ApiOperation(value = "登录，可调用wx.getUserInfo，并在header中返回token（可通过此接口新建或修改用户）", tags = "无需权限认证")
+  @ApiOperation(value = "登录，可调用wx.getUserInfo，并在header中返回token（可通过此接口新建或修改用户），无需权限认证")
   @AnonymousAccess
   @PostMapping("/login")
   public ResultVO<String> login(@RequestParam(value = "resultCode") String code,

@@ -24,13 +24,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.ConnectException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,7 +56,7 @@ public class UploadController {
 
   @AnonymousAccess
   @OperationLog(type = OperationType.ADD, description = "上传水表照片")
-  @ApiOperation(value = "上传水表照片", tags = "无需权限认证")
+  @ApiOperation(value = "上传水表照片,无需权限认证")
   @PostMapping(value = "/image/{waterMeterId}")
   public ResultVO<String> uploadImage(@RequestParam(value = "file", required = false) MultipartFile file,
                                       @PathVariable Integer waterMeterId) {

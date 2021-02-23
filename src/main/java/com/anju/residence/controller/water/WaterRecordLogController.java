@@ -70,7 +70,7 @@ public class WaterRecordLogController {
 
   @AnonymousAccess
   @OperationLog(type = OperationType.ADD, description = "添加一条抄表日志")
-  @ApiOperation(value = "添加一条抄表日志")
+  @ApiOperation(value = "添加一条抄表日志，无需权限认证")
   @ApiImplicitParam(name = "waterRecordLogDTO", value = "抄表日志传输实体类", dataTypeClass = WaterRecordLogDTO.class, paramType = "body", required = true)
   @PostMapping("/add")
   public ResultVO<String> addWaterRecordLog(@RequestBody @Valid WaterRecordLogDTO waterRecordLogDTO) {

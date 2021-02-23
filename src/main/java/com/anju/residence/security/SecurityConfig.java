@@ -138,7 +138,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             // 放行swagger
             .antMatchers(SWAGGER_WHITELIST).permitAll()
 
-            .antMatchers(anonymousUrls.toArray(new String[0])).anonymous()
+            .antMatchers(anonymousUrls.toArray(new String[0])).permitAll()
 
             // 所有请求都需要认证
             .anyRequest().authenticated()
