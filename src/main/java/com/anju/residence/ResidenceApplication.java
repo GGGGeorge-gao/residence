@@ -4,10 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.anju.residence.dto.wx.WxUserDTO;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +19,7 @@ import springfox.documentation.oas.annotations.EnableOpenApi;
 
 import java.util.Arrays;
 
+@EnableCaching
 @EnableOpenApi
 @ServletComponentScan
 @EnableJpaAuditing

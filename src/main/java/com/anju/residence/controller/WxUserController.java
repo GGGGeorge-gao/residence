@@ -20,14 +20,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 
 /**
@@ -49,19 +47,8 @@ public class WxUserController {
     this.wechatManager = wechatManager;
   }
 
-  @ApiOperation(value = "添加一个用户，并在header中返回token，无需权限认证")
-  @OperationLog(type = OperationType.ADD, description = "/wx/add")
-  @AnonymousAccess
-  @GetMapping("/add")
-  public ResultVO<String> addWxUser(@RequestBody @Valid WxUserDTO wxUserDTO, @RequestParam String code, HttpServletRequest request, HttpServletResponse response) {
-    wxUserService.addWxUser(wxUserDTO);
-    wechatManager.setToken(request, response, code);
-
-    return new ResultVO<>("success");
-  }
-
   @OperationLog(type = OperationType.ADD, description = "/wx/login")
-  @ApiOperation(value = "登录，可调用wx.getUserInfo，并在header中返回token（可通过此接口新建或修改用户），无需权限认证")
+  @ApiOperation(value = "登录，可调用wx.getUserInfo，并在header中返回token，无需权限认证")
   @AnonymousAccess
   @PostMapping("/login")
   public ResultVO<String> login(@RequestParam(value = "resultCode") String code,
@@ -69,13 +56,21 @@ public class WxUserController {
                                 @RequestParam(value = "signature", required = false) String signature,
                                 @RequestParam(value = "encryptedData", required = false) String encryptedData,
                                 @RequestParam(value = "iv", required = false) String iv,
-                                HttpServletRequest request, HttpServletResponse response) {
+                                HttpServletResponse response) {
     log.info(code);
     log.info(rawData);
     log.info(signature);
     log.info(encryptedData);
     log.info(iv);
-    WxSession wxSession = wechatManager.setToken(request, response, code);
+
+    WxUserDTO wxUserDTO;
+    try {
+      wxUserDTO = JSON.parseObject(rawData, WxUserDTO.class);
+    } catch (Exception e) {
+      throw new ApiException(ResultCode.INVALID_ARGUMENT);
+    }
+
+    WxSession wxSession = wechatManager.getWxSession(response, code, wxUserDTO);
 
     if (rawData != null && signature != null && encryptedData != null) {
       // 校验签名
@@ -83,11 +78,6 @@ public class WxUserController {
       if (!trueSignature.equals(signature)) {
         throw new ApiException(ResultCode.INVALID_WECHAT_SIGNATURE);
       }
-      WxUserDTO wxUserDTO = JSON.parseObject(rawData, WxUserDTO.class);
-      wxUserDTO.setOpenId(wxSession.getOpenId());
-      wxUserDTO.setSkey(wxSession.getSkey());
-
-      wxUserService.login(wxUserDTO);
     }
 
     return new ResultVO<>("success");

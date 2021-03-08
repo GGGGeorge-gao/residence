@@ -27,12 +27,6 @@ public interface WxUserService {
   void updateWxUser(WxUserDTO wxUserDTO);
 
   /**
-   * 登录
-   * @param wxUserDTO 微信用户实体传输类
-   */
-  void login(WxUserDTO wxUserDTO);
-
-  /**
    * 根据skey查询用户
    * @param skey skey
    * @return 微信用户的Optional对象
@@ -62,8 +56,9 @@ public interface WxUserService {
   /**
    * 根据{@link WxSession}更新或注册微信用户
    * @param wxSession wxSession
+   * @return 微信用户
    */
-  void updateByWxSession(WxSession wxSession);
+  WxUser updateByWxSession(WxUserDTO wxUserDTO, WxSession wxSession);
 
   /**
    * 查询该用户是否存在

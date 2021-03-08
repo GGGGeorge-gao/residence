@@ -1,28 +1,29 @@
 package com.anju.residence;
 
+import com.anju.residence.dao.RoleRepository;
+import com.anju.residence.dao.UserLogRepository;
+import com.anju.residence.dao.UserRepository;
 import com.anju.residence.dao.ele.AlertNoticeRepository;
 import com.anju.residence.dao.ele.BehaviorLogRepository;
 import com.anju.residence.dao.ele.DeviceLogRepository;
 import com.anju.residence.dao.ele.DeviceRepository;
 import com.anju.residence.dao.ele.ElectricLogRepository;
 import com.anju.residence.dao.ele.JackRepository;
-import com.anju.residence.dao.UserLogRepository;
 import com.anju.residence.dao.ele.ReceptacleRepository;
-import com.anju.residence.dao.RoleRepository;
 import com.anju.residence.dao.ele.SceneRepository;
-import com.anju.residence.dao.UserRepository;
+import com.anju.residence.entity.Role;
+import com.anju.residence.entity.User;
 import com.anju.residence.entity.ele.AlertNotice;
 import com.anju.residence.entity.ele.Device;
 import com.anju.residence.entity.ele.ElectricLog;
 import com.anju.residence.entity.ele.Receptacle;
-import com.anju.residence.entity.Role;
 import com.anju.residence.entity.ele.Scene;
-import com.anju.residence.entity.User;
 import com.anju.residence.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -206,6 +207,7 @@ class RepositoryTests {
 
   @Test
   void saveTest() {
+    userRepo.getOne(10);
   }
 
 

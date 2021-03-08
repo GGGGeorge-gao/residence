@@ -29,7 +29,7 @@ public class WechatUtil {
     //默认参数
     requestUrlParam.put("grant_type", "authorization_code");
     //发送post请求读取调用微信接口获取openid用户唯一标识
-    return JSON.parseObject(HttpUtil.post(CODE_2_SESSION_URL, requestUrlParam), WxSessionResponse.class);
+    return JSON.parseObject(HttpUtil.get(CODE_2_SESSION_URL, requestUrlParam), WxSessionResponse.class);
 //    return JSON.parseObject(HttpUtil.post(requestUrl, requestUrlParam));
   }
 

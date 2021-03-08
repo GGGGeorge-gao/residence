@@ -8,8 +8,8 @@ public class FileUtil {
   /**
    * 本地测试地址
    */
-  public static final String WATER_IMAGE_LOCATION = "/Users/cygao/images/water";
-//  public static final String WATER_IMAGE_LOCATION = "/usr/develop/images/water";
+//  public static final String WATER_IMAGE_LOCATION = "/Users/cygao/images/water";
+  public static final String WATER_IMAGE_LOCATION = "/usr/develop/images/water";
 
   public static final String WATER_IMAGE_URL = "api/v1/upload/image";
 

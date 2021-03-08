@@ -60,7 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final Set<String> anonymousUrls = new HashSet<>();
 
-  public static final String[] SWAGGER_WHITELIST = {
+  public static final String[] SWAGGER_WHITE_LIST = {
           "/swagger-ui.html",
           "/swagger-ui/*",
           "/swagger-resources/**",
@@ -136,7 +136,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //            .antMatchers(HttpMethod.POST, "/**").permitAll()
 
             // 放行swagger
-            .antMatchers(SWAGGER_WHITELIST).permitAll()
+            .antMatchers(SWAGGER_WHITE_LIST).permitAll()
 
             .antMatchers(anonymousUrls.toArray(new String[0])).permitAll()
 

@@ -1,6 +1,8 @@
 package com.anju.residence.manager;
 
 import com.anju.residence.dto.wx.WxSessionResponse;
+import com.anju.residence.dto.wx.WxUserDTO;
+import com.anju.residence.entity.User;
 import com.anju.residence.entity.WxUser;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.enums.WechatErrCode;
@@ -30,56 +32,58 @@ import javax.servlet.http.HttpServletResponse;
 public class WechatManager {
 
   private final PasswordEncoder passwordEncoder;
-  private final UserLogManager userLogManager;
   private final WxUserService wxUserService;
 
   @Autowired
   public WechatManager(PasswordEncoder passwordEncoder, UserLogManager userLogManager, WxUserService wxUserService) {
     this.passwordEncoder = passwordEncoder;
-    this.userLogManager = userLogManager;
     this.wxUserService = wxUserService;
   }
 
   /**
    * 对前端对登录请求进行处理，获取WxSession并进行校验、保存、产生token并传输回前端
-   * @param request request
    * @param response response
    * @param code js_code
    */
-  public WxSession setToken(HttpServletRequest request, HttpServletResponse response, String code) {
-    if (code == null) {
+  public WxSession getWxSession(HttpServletResponse response, String code, WxUserDTO wxUserDTO) {
+    if (code == null || wxUserDTO == null) {
       throw new ApiException(ResultCode.INVALID_JS_CODE);
     }
     WxSessionResponse wxSessionResponse = WechatUtil.getSessionKeyOrOpenId(code);
 
     Integer errcode = wxSessionResponse.getErrcode();
-
+    log.info("Wechat response: " + wxSessionResponse.toString());
     WxSession wxSession;
-    if (errcode == null) {
-      throw new ApiException(ResultCode.CONNECTION_ERROR);
-    } else if (errcode == WechatErrCode.SUCCESS.getCode()) {
+
+    if (errcode == null || errcode.equals(WechatErrCode.SUCCESS.getCode())) {
       wxSession = wxSessionResponse.buildSession();
-    } else if (errcode == WechatErrCode.INVALID_JS_CODE.getCode()) {
-      throw new ApiException(ResultCode.INVALID_JS_CODE);
-    } else if (errcode == WechatErrCode.BUSY_WECHAT_SERVER.getCode()) {
-      throw new ApiException(ResultCode.BUSY_WECHAT_SERVER);
-    } else if (errcode == WechatErrCode.REQUEST_TOO_FREQUENT.getCode()) {
-      throw new ApiException(ResultCode.REQUEST_TOO_FREQUENT);
     } else {
-      throw new ApiException(ResultCode.UNKNOWN_ERROR.getCode(), wxSessionResponse.toString());
+      if (WechatErrCode.INVALID_JS_CODE.getCode().equals(errcode)) {
+        throw new ApiException(ResultCode.INVALID_JS_CODE);
+      } else if (WechatErrCode.BUSY_WECHAT_SERVER.getCode().equals(errcode)) {
+        throw new ApiException(ResultCode.BUSY_WECHAT_SERVER);
+      } else if (WechatErrCode.REQUEST_TOO_FREQUENT.getCode().equals(errcode)) {
+        throw new ApiException(ResultCode.REQUEST_TOO_FREQUENT);
+      } else {
+        throw new ApiException(ResultCode.CONNECTION_ERROR.getCode(), ResultCode.CONNECTION_ERROR.getMsg() + errcode);
+      }
     }
+
     String skey = passwordEncoder.encode(wxSession.getOpenId() + wxSession.getSessionKey());
     wxSession.setSkey(skey);
+    log.info(wxSession.toString());
 
-    WxUser wxUser = wxUserService.getWxUserByOpenId(wxSession.getOpenId()).orElseThrow(() -> new ApiException(ResultCode.OPEN_ID_NOT_EXISTS));
-    wxUserService.updateByWxSession(wxSession);
+    WxUser wxUser = wxUserService.updateByWxSession(wxUserDTO, wxSession);
 
-    String token = JwtTokenUtil.generateToken(wxUser.getUser().getId(), wxUser.getUser().getUsername(), wxSession);
-
-    response.setHeader(JwtProperty.TOKEN_HEADER, token);
-    userLogManager.addUserLog(wxUser.getUser().getId(), request);
+    setToken(wxUser, wxSession, response);
 
     return wxSession;
+  }
+
+  public void setToken(WxUser wxUser, WxSession wxSession, HttpServletResponse response) {
+    String token = JwtTokenUtil.generateToken(wxUser.getUser().getId(), wxUser.getUser().getUsername(), wxSession);
+    log.info(token);
+    response.setHeader(JwtProperty.TOKEN_HEADER, token);
   }
 
   /**

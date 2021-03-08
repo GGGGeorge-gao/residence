@@ -1,6 +1,7 @@
 package com.anju.residence.service.impl;
 
 import cn.hutool.core.util.RandomUtil;
+import com.anju.residence.config.RedisConfig;
 import com.anju.residence.dao.UserRepository;
 import com.anju.residence.dto.UserDTO;
 import com.anju.residence.dto.wx.WxUserDTO;
@@ -12,6 +13,8 @@ import com.anju.residence.service.RoleService;
 import com.anju.residence.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -82,6 +85,7 @@ public class UserServiceImpl implements UserService {
     save(newUser);
   }
 
+  @CacheEvict(value = RedisConfig.REDIS_KEY_DATABASE, key = "'user:' + #userId")
   @Transactional(rollbackFor = Exception.class)
   @Override
   public void putUser(UserDTO userDTO, Integer userId) {
@@ -103,6 +107,7 @@ public class UserServiceImpl implements UserService {
     return StringUtils.hasLength(username) && userRepo.existsByUsername(username);
   }
 
+  @Cacheable(value = RedisConfig.REDIS_KEY_DATABASE, key = "'user:' + #userId")
   @Override
   public Optional<User> getUserById(Integer userId) {
     return userId == null ? Optional.empty() : userRepo.findById(userId);

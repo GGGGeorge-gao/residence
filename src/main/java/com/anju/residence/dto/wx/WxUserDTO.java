@@ -41,7 +41,6 @@ public class WxUserDTO {
   public WxUser buildWxUser() {
     return WxUser.builder()
             .openId(openId)
-            .skey(skey)
             .country(country)
             .city(city)
             .province(province)
@@ -57,7 +56,5 @@ public class WxUserDTO {
     wxUser.setGender(gender);
     wxUser.setAvatarUrl(avatarUrl);
 
-    wxUser.setSkey(skey);
-    wxUser.setSessionKey(sessionKey);
   }
 }

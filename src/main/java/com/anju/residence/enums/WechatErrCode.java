@@ -17,13 +17,13 @@ public enum WechatErrCode {
 
   REQUEST_TOO_FREQUENT(45011);
 
-  private final int code;
+  private final Integer code;
 
   WechatErrCode(int code) {
     this.code = code;
   }
 
-  public int getCode() {
+  public Integer getCode() {
     return code;
   }
 }

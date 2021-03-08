@@ -56,16 +56,6 @@ public class WxUserServiceImpl implements WxUserService {
     save(wxUser);
   }
 
-
-  @Override
-  public void login(WxUserDTO wxUserDTO) {
-    if (!existsByOpenid(wxUserDTO.getOpenId())) {
-      addWxUser(wxUserDTO);
-    } else {
-      updateWxUser(wxUserDTO);
-    }
-  }
-
   @Override
   public Optional<WxUser> getWxUserBySkey(String skey) {
     WxUser user = new WxUser();
@@ -92,15 +82,23 @@ public class WxUserServiceImpl implements WxUserService {
   }
 
   @Override
-  public void updateByWxSession(WxSession wxSession) {
+  public WxUser updateByWxSession(WxUserDTO wxUserDTO, WxSession wxSession) {
     String openId = wxSession.getOpenId();
-    WxUser wxUser = getWxUserByOpenId(openId).orElseThrow(() -> new ApiException(ResultCode.OPEN_ID_NOT_EXISTS));
+    WxUser wxUser;
+
+    if (existsByOpenid(wxUserDTO.getOpenId())) {
+      wxUser = getWxUserByOpenId(openId).orElseThrow(() -> new ApiException(ResultCode.OPEN_ID_NOT_EXISTS));
+      wxUserDTO.updateWxUser(wxUser);
+    } else {
+      wxUser = wxUserDTO.buildWxUser();
+      wxUser.setOpenId(wxSession.getOpenId());
+    }
 
     wxUser.setSkey(wxSession.getSkey());
     wxUser.setSessionKey(wxSession.getSessionKey());
     wxUser.setLastVisitTime(new Date());
 
-    save(wxUser);
+    return save(wxUser);
   }
 
   @Override

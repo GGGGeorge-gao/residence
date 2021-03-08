@@ -17,15 +17,18 @@ import java.util.Map;
 public class RoleService {
 
   private final RoleRepository roleRepo;
-  private Map<String, Role> roleMap;
+  private static Map<String, Role> roleMap;
 
-  private boolean isInit = false;
+  private static boolean isInit = false;
 
   @Autowired
   public RoleService(RoleRepository roleRepo) {
     this.roleRepo = roleRepo;
   }
 
+  /**
+   * 懒加载数据
+   */
   private void initData() {
     Map<String, Role> map = new HashMap<String, Role>(3) {
       {
@@ -39,7 +42,9 @@ public class RoleService {
 
   public Role getByName(String roleName) {
     if (!isInit) {
-      isInit = true;
+      synchronized (this) {
+        isInit = true;
+      }
       initData();
     }
     return roleMap.get(roleName);
