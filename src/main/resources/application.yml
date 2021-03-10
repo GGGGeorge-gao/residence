@@ -24,7 +24,7 @@ spring:
 
       username: root
       password: ROOT_root123
-      url: jdbc:mysql://127.0.0.1:3306/anju?serverTimezone=Asia/Shanghai&characterEncoding=utf8
+      url: jdbc:mysql://47.93.224.217:3306/anju?serverTimezone=Asia/Shanghai&characterEncoding=utf8
       driver-class-name: com.mysql.cj.jdbc.Driver
 
       # 初始化大小，最小，最大
@@ -61,7 +61,7 @@ spring:
 
         slf4j:
           enabled: true
-          result-set-log-enabled: false
+          result-set-log-enabled: true
           connection-log-enabled: false
           statement-close-after-log-enabled: false
           statement-prepare-after-log-enabled: false
@@ -83,7 +83,7 @@ spring:
     open-in-view: false
 
   redis:
-    host: 127.0.0.1
+    host: 47.93.224.217
     port: 6379
     timeout: 1000
     database: 1

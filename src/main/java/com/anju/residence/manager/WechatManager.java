@@ -75,13 +75,13 @@ public class WechatManager {
 
     WxUser wxUser = wxUserService.updateByWxSession(wxUserDTO, wxSession);
 
-    setToken(wxUser, wxSession, response);
+    setToken(wxSession, response);
 
     return wxSession;
   }
 
-  public void setToken(WxUser wxUser, WxSession wxSession, HttpServletResponse response) {
-    String token = JwtTokenUtil.generateToken(wxUser.getUser().getId(), wxUser.getUser().getUsername(), wxSession);
+  public void setToken(WxSession wxSession, HttpServletResponse response) {
+    String token = JwtTokenUtil.generateToken(wxSession);
     log.info(token);
     response.setHeader(JwtProperty.TOKEN_HEADER, token);
   }

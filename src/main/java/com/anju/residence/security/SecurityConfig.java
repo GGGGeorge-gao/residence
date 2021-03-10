@@ -147,7 +147,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             .addFilterBefore(new PasswordLoginFilter(authenticationManager(), userService, userLogManager), UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(new JwtAuthenticationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
-
   }
 
   @Override

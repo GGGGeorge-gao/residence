@@ -28,10 +28,6 @@ import java.util.Date;
 public class WxUser {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
-
-  @Column(unique = true)
   private String openId;
 
   private String skey;

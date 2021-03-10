@@ -86,7 +86,7 @@ public class WxUserServiceImpl implements WxUserService {
     String openId = wxSession.getOpenId();
     WxUser wxUser;
 
-    if (existsByOpenid(wxUserDTO.getOpenId())) {
+    if (existsByOpenid(openId)) {
       wxUser = getWxUserByOpenId(openId).orElseThrow(() -> new ApiException(ResultCode.OPEN_ID_NOT_EXISTS));
       wxUserDTO.updateWxUser(wxUser);
     } else {
@@ -96,8 +96,6 @@ public class WxUserServiceImpl implements WxUserService {
 
     wxUser.setSkey(wxSession.getSkey());
     wxUser.setSessionKey(wxSession.getSessionKey());
-    wxUser.setLastVisitTime(new Date());
-
     return save(wxUser);
   }
 

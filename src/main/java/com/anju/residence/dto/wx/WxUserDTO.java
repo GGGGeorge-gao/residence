@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * @author cygao
@@ -46,6 +47,9 @@ public class WxUserDTO {
             .province(province)
             .avatarUrl(avatarUrl)
             .gender(gender)
+            .nickName(nickName)
+            .createTime(new Date())
+            .lastVisitTime(new Date())
             .build();
   }
 
@@ -55,6 +59,8 @@ public class WxUserDTO {
     wxUser.setProvince(province);
     wxUser.setGender(gender);
     wxUser.setAvatarUrl(avatarUrl);
+    wxUser.setNickName(nickName);
+    wxUser.setLastVisitTime(new Date());
 
   }
 }
