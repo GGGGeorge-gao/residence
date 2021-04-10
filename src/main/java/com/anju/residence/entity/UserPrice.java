@@ -16,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -30,7 +31,9 @@ import java.util.Date;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "user_price")
-public class UserPrice {
+public class UserPrice implements Serializable {
+
+  private static final long serialVersionUID = 624553328423572508L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

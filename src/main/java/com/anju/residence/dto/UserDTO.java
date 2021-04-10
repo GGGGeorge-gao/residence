@@ -15,8 +15,8 @@ import javax.validation.constraints.Size;
 @Data
 public class UserDTO {
 
-  @ExceptionCode(resultCode = ResultCode.USERNAME_NOT_VALID)
-  @Size(min = 2, max = 40, message = "username length should be 2-40")
+  @ExceptionCode(resultCode = ResultCode.USER_ERROR)
+  @Size(min = 2, max = 40, message = "无效的用户名")
   private String username;
 
   private String password;
@@ -25,8 +25,8 @@ public class UserDTO {
 
   private String phone;
 
-  @ExceptionCode(resultCode = ResultCode.USER_EMAIL_NOT_VALID)
-  @Email(message = "incorrect email format")
+  @ExceptionCode(resultCode = ResultCode.USER_ERROR)
+  @Email(message = "错误的Email格式")
   private String email;
 
   private String address;

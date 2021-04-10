@@ -51,7 +51,7 @@ public class ReceptacleLogController {
   @GetMapping("/consumption/today/{userId}")
   public ResultVO<Integer> getTodayAllConsumptionByUserId(@PathVariable Integer userId) {
     if (!userService.existsById(userId)) {
-      throw new ApiException(ResultCode.USER_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.USER_ERROR, "用户id不存在");
     }
     return new ResultVO<>(receptacleLogService.getTodayTotalConsumption(userId));
   }
@@ -65,7 +65,7 @@ public class ReceptacleLogController {
                                               @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date from,
                                               @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date to) {
     if (from == null || to == null || from.after(to)) {
-      throw new ApiException(ResultCode.INVALID_DATE);
+      throw new ApiException(ResultCode.INVALID_ARGUMENT, "无效的日期参数");
     }
 
     List<ReceptacleLog> logs = receptacleLogService.listByReceptacleIdBetween(receptacleId, from, to);

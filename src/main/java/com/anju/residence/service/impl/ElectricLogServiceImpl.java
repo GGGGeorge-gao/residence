@@ -77,7 +77,7 @@ public class ElectricLogServiceImpl implements ElectricLogService {
   @Override
   public int getRealTimePower(Integer userId) {
     if (userId == null || !userService.existsById(userId)) {
-      throw new ApiException(ResultCode.USER_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.USER_ERROR, "用户id不存在");
     }
     List<Integer> devices = deviceService.listDeviceIdByUserId(userId);
     if (devices.size() == 0) {
@@ -106,7 +106,7 @@ public class ElectricLogServiceImpl implements ElectricLogService {
   @Override
   public boolean addLog(ElectricLog eleLog) {
     if (!deviceService.existsById(eleLog.getDevice().getId())) {
-      throw new ApiException(ResultCode.DEVICE_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.DEVICE_ERROR, "设备id不存在");
     }
 
     eleLogRepo.save(eleLog);

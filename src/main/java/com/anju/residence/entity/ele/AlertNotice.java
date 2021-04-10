@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * 预警通知信息实体类
@@ -28,7 +29,9 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Entity
 @Table(name = "alert_notice")
-public class AlertNotice {
+public class AlertNotice implements Serializable {
+
+  private static final long serialVersionUID = -7095459225407327321L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

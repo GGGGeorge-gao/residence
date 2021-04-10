@@ -1,10 +1,10 @@
-package com.anju.residence.util;
+package com.anju.residence.params;
 
 /**
  * @author cygao
  * @date 2021/2/22 1:19 下午
  **/
-public class FileUtil {
+public class FileParams {
   /**
    * 本地测试地址
    */

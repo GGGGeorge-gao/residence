@@ -1,10 +1,10 @@
-package com.anju.residence.security.jwt;
+package com.anju.residence.params;
 
 /**
  * @author cygao
  * @date 2021/1/3 16:28
  **/
-public class JwtProperty {
+public class JwtParams {
 
   public static final String TOKEN_START_WITH = "Bearer ";
 

@@ -17,7 +17,7 @@ import java.util.Date;
 @Data
 public class WxUserDTO {
 
-  @ExceptionCode(resultCode = ResultCode.OPEN_ID_IS_NULL)
+  @ExceptionCode(resultCode = ResultCode.WECHAT_ERROR)
   @NotNull(message = "openId不能为空")
   private String openId;
 
@@ -35,7 +35,7 @@ public class WxUserDTO {
 
   private String sessionKey;
 
-  @ExceptionCode(resultCode = ResultCode.NICKNAME_IS_NULL)
+  @ExceptionCode(resultCode = ResultCode.WECHAT_ERROR)
   @NotNull(message = "用户名称不能为空")
   private String nickName;
 

@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
   public void addUser(UserDTO userDTO) {
     log.info(userDTO.toString());
     if (existsUserByUsername(userDTO.getUsername())) {
-      throw new ApiException(ResultCode.USERNAME_ALREADY_EXISTS);
+      throw new ApiException(ResultCode.USER_ERROR, "用户名已存在");
     }
 
     User newUser = userDTO.buildUser();
@@ -89,9 +89,9 @@ public class UserServiceImpl implements UserService {
   @Transactional(rollbackFor = Exception.class)
   @Override
   public void putUser(UserDTO userDTO, Integer userId) {
-    User old = getUserById(userId).orElseThrow(() -> new ApiException(ResultCode.USER_ID_NOT_EXISTS));
+    User old = getUserById(userId).orElseThrow(() -> new ApiException(ResultCode.USER_ERROR, "用户id不存在"));
     if (existsUserByUsername(userDTO.getUsername())) {
-      throw new ApiException(ResultCode.USERNAME_ALREADY_EXISTS);
+      throw new ApiException(ResultCode.USER_ERROR, "用户名已存在");
     }
     userDTO.putUser(old);
     save(old);

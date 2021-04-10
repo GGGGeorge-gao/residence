@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -30,7 +31,9 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "water_record_log", indexes = {@Index(columnList = "time")})
-public class WaterRecordLog {
+public class WaterRecordLog implements Serializable {
+
+  private static final long serialVersionUID = 917585539019960027L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

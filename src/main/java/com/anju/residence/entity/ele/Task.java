@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -27,8 +28,9 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "task")
-public class Task {
+public class Task implements Serializable {
 
+  private static final long serialVersionUID = 1327308759627394175L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;

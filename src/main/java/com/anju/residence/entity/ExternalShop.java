@@ -1,4 +1,4 @@
-package com.anju.residence.entity.ele;
+package com.anju.residence.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,29 +11,37 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
- * 标签实体类
- *
  * @author cygao
- * @date 2020/11/27 17:16
+ * @date 2021/3/15
  **/
 @Data
+@Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "tags")
-public class Tags implements Serializable {
+@Table(name = "external_shop")
+public class ExternalShop implements Serializable {
 
-  private static final long serialVersionUID = -1376836152734939920L;
+  private static final long serialVersionUID = 3768971136575600161L;
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  private String name;
+  private String title;
 
-  private String location;
+  private Integer type;
+
+  private BigDecimal price;
+
+  private String summary;
+
+  private String picUrl;
+
+  private String linkUrl;
 
   private String others;
 }

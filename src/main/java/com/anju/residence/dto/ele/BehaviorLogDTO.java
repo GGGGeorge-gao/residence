@@ -32,18 +32,18 @@ public class BehaviorLogDTO {
   private Integer id;
 
   @ApiModelProperty(value = "用户id", name = "userId", required = true)
-  @ExceptionCode(resultCode = ResultCode.USER_ID_IS_NULL)
+  @ExceptionCode(resultCode = ResultCode.USER_ERROR)
   @NotNull(message = " must not be null")
   private Integer userId;
 
   @ApiModelProperty(value = "插孔id", name = "jackId", required = true)
-  @ExceptionCode(resultCode = ResultCode.JACK_ID_IS_NULL)
-  @NotNull(message = " must not be null")
+  @ExceptionCode(resultCode = ResultCode.JACK_ERROR)
+  @NotNull(message = "插孔id不能为空")
   private Integer jackId;
 
   @ApiModelProperty(value = "插孔状态", name = "jackStatus", notes = "0为关，1为开", required = true)
-  @ExceptionCode(resultCode = ResultCode.JACK_STATUS_IS_NULL)
-  @NotNull(message = " must not be null")
+  @ExceptionCode(resultCode = ResultCode.JACK_ERROR)
+  @NotNull(message = "插孔状态不能为空")
   private Integer jackStatus;
 
   @ApiModelProperty(value = "设备id", name = "deviceId")
@@ -54,8 +54,8 @@ public class BehaviorLogDTO {
 
   @ApiModelProperty(value = "时间", name = "time", required = true)
   @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-  @ExceptionCode(resultCode = ResultCode.DATE_IS_NULL)
-  @NotNull(message = "time must not be null")
+  @ExceptionCode(resultCode = ResultCode.INVALID_ARGUMENT)
+  @NotNull(message = "时间不能为空")
   private Date time;
 
   public BehaviorLog build() {

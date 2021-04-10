@@ -14,6 +14,7 @@ import com.anju.residence.service.ele.ElectricLogService;
 import com.anju.residence.service.ele.JackService;
 import com.anju.residence.service.ele.TaskService;
 import com.anju.residence.service.UserService;
+import com.anju.residence.vo.DeviceVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -70,17 +71,17 @@ public class DeviceServiceImpl implements DeviceService {
   @Override
   public List<Integer> listDeviceIdByUserId(Integer userId) {
     if (userId == null) {
-      throw new ApiException(ResultCode.USER_ID_IS_NULL);
+      throw new ApiException(ResultCode.USER_ERROR, "用户id为空");
     }
     return deviceRepo.findAllDeviceIdByUserId(userId);
   }
 
   @Override
-  public List<Device> listDeviceByUserId(Integer userId) {
+  public List<DeviceVO> listVoByUserId(Integer userId) {
     if (userId == null) {
-      throw new ApiException(ResultCode.USER_ID_IS_NULL);
+      throw new ApiException(ResultCode.USER_ERROR, "用户id为空");
     }
-    return userId < 0 ? new ArrayList<>() : deviceRepo.findAllDeviceByUserId(userId);
+    return userId < 0 ? new ArrayList<>() : deviceRepo.findAllVoByUserId(userId);
   }
 
   @Override
@@ -99,12 +100,12 @@ public class DeviceServiceImpl implements DeviceService {
   }
 
   @Override
-  public boolean matchDeviceAndUser(Integer deviceId, Integer userId) {
+  public boolean checkPermission(Integer deviceId, Integer userId) {
     if (deviceId == null) {
-      throw new ApiException(ResultCode.DEVICE_ID_IS_NULL);
+      throw new ApiException(ResultCode.DEVICE_ERROR, "设备id不能为空");
     }
     if (userId == null) {
-      throw new ApiException(ResultCode.USER_ID_IS_NULL);
+      throw new ApiException(ResultCode.USER_ERROR, "用户id不能为空");
     }
     return deviceRepo.findIdByIdAndUser(deviceId, userId).isPresent();
   }
@@ -117,10 +118,10 @@ public class DeviceServiceImpl implements DeviceService {
   @Transactional(rollbackFor = Exception.class)
   @Override
   public void putDevice(DeviceDTO deviceDTO, Integer deviceId) {
-    if (!matchDeviceAndUser(deviceDTO.getUserId(), deviceId)) {
-      throw new ApiException(ResultCode.DEVICE_USER_MISMATCH);
+    if (!checkPermission(deviceDTO.getUserId(), deviceId)) {
+      throw new ApiException(ResultCode.DEVICE_ERROR, "设备不属于该用户");
     }
-    Device device = getById(deviceId).orElseThrow(() -> new ApiException(ResultCode.DEVICE_ID_NOT_EXISTS));
+    Device device = getById(deviceId).orElseThrow(() -> new ApiException(ResultCode.DEVICE_ERROR, "设备id不存在"));
 
     deviceDTO.putDevice(device);
     device.setJack(jackService.getById(deviceDTO.getJackId()).orElse(null));
@@ -132,16 +133,16 @@ public class DeviceServiceImpl implements DeviceService {
   @Override
   public void addDevice(DeviceDTO deviceDTO) {
     if (!userService.existsById(deviceDTO.getUserId())) {
-      throw new ApiException(ResultCode.USER_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.USER_ERROR, "用户id不存在");
     }
     if (!jackService.existsByJackId(deviceDTO.getJackId())) {
-      throw new ApiException(ResultCode.JACK_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.JACK_ERROR, "插孔id不存在");
     }
     if (!jackService.existsJackIdByUserId(deviceDTO.getJackId(), deviceDTO.getUserId())) {
-      throw new ApiException(ResultCode.JACK_USER_MISMATCH);
+      throw new ApiException(ResultCode.JACK_ERROR, "插孔不属于该用户");
     }
 
-    Jack jack = jackService.getById(deviceDTO.getJackId()).orElseThrow(() -> new ApiException(ResultCode.JACK_ID_NOT_EXISTS));
+    Jack jack = jackService.getById(deviceDTO.getJackId()).orElseThrow(() -> new ApiException(ResultCode.JACK_ERROR, "插孔id不存在"));
 
     Device device = deviceDTO.buildDevice();
     device.setStatus(0);
@@ -157,7 +158,7 @@ public class DeviceServiceImpl implements DeviceService {
   @Override
   public void deleteDevice(Integer deviceId) {
     if (!existsById(deviceId)) {
-      throw new ApiException(ResultCode.DEVICE_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.DEVICE_ERROR, "设备id不存在");
     }
     alertInfoService.deleteByDeviceId(deviceId);
     taskService.deleteByDeviceId(deviceId);
@@ -171,7 +172,7 @@ public class DeviceServiceImpl implements DeviceService {
   @Override
   public void updateStatus(int deviceId, int status) {
     if (!deviceRepo.existsById(deviceId)) {
-      throw new ApiException(ResultCode.DEVICE_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.DEVICE_ERROR, "设备id不存在");
     }
     deviceRepo.updateStatus(deviceId, status);
   }

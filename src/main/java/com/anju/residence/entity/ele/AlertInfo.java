@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -30,7 +31,9 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "alert_info")
-public class AlertInfo {
+public class AlertInfo implements Serializable {
+
+  private static final long serialVersionUID = 915253072509587603L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -3,6 +3,7 @@ package com.anju.residence.util;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.anju.residence.dto.wx.WxSessionResponse;
+import com.anju.residence.params.WechatParams;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -21,9 +22,9 @@ public class WechatUtil {
   public static WxSessionResponse getSessionKeyOrOpenId(String code) {
     Map<String, Object> requestUrlParam = new HashMap<>(4);
     //小程序appId
-    requestUrlParam.put("appid", WechatParam.AppId);
+    requestUrlParam.put("appid", WechatParams.AppId);
     //小程序secret
-    requestUrlParam.put("secret", WechatParam.AppSecret);
+    requestUrlParam.put("secret", WechatParams.AppSecret);
     //小程序端返回的code
     requestUrlParam.put("js_code", code);
     //默认参数

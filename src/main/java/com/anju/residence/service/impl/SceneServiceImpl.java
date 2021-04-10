@@ -53,13 +53,13 @@ public class SceneServiceImpl implements SceneService {
   @Override
   public void addScene(SceneDTO sceneDTO) {
     if (!userService.existsById(sceneDTO.getUserId())) {
-      throw new ApiException(ResultCode.USER_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.USER_ERROR, "用户id不存在");
     }
     if (sceneRepo.findIdByUserIdAndName(sceneDTO.getId(), sceneDTO.getName()).isPresent()) {
-      throw new ApiException(ResultCode.SCENE_NAME_ALREADY_EXISTS);
+      throw new ApiException(ResultCode.SCENE_ERROR, "该用户已经拥有相同名称的场景");
     }
     Scene newScene = SceneDTO.buildScene(sceneDTO);
-    newScene.setUser(userService.getUserById(sceneDTO.getUserId()).orElseThrow(() -> new ApiException(ResultCode.USER_ID_NOT_EXISTS)));
+    newScene.setUser(userService.getUserById(sceneDTO.getUserId()).orElseThrow(() -> new ApiException(ResultCode.USER_ERROR, "用户id不存在")));
 
     sceneRepo.save(newScene);
   }
@@ -68,9 +68,9 @@ public class SceneServiceImpl implements SceneService {
   @Override
   public void putScene(SceneDTO sceneDTO, Integer sceneId) {
     if (!matchSceneAndUser(sceneDTO.getUserId(), sceneId)) {
-      throw new ApiException(ResultCode.SCENE_USER_MISMATCH);
+      throw new ApiException(ResultCode.SCENE_ERROR, "场景不属于该用户");
     }
-    Scene scene = getById(sceneId).orElseThrow(() -> new ApiException(ResultCode.SCENE_ID_NOT_EXISTS));
+    Scene scene = getById(sceneId).orElseThrow(() -> new ApiException(ResultCode.SCENE_ERROR, "场景id不存在"));
 
     sceneDTO.putScene(scene);
 
@@ -81,7 +81,7 @@ public class SceneServiceImpl implements SceneService {
   @Override
   public void deleteScene(Integer sceneId) {
     if (!existsById(sceneId)) {
-      throw new ApiException(ResultCode.SCENE_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.SCENE_ERROR, "场景id不存在");
     }
     receptacleService.clearScene(sceneId);
     alertInfoService.deleteBySceneId(sceneId);
@@ -93,10 +93,10 @@ public class SceneServiceImpl implements SceneService {
   @Override
   public void updateParentId(Integer sceneId, Integer parentId) {
     if (parentId == null || parentId < 0) {
-      throw new ApiException(ResultCode.INVALID_PARENT_SCENE_ID);
+      throw new ApiException(ResultCode.SCENE_ERROR, "无效的父场景id");
     }
     if (!existsById(sceneId)) {
-      throw new ApiException(ResultCode.SCENE_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.SCENE_ERROR, "场景id不存在");
     }
     sceneRepo.updateParentId(sceneId, parentId);
   }
@@ -104,10 +104,10 @@ public class SceneServiceImpl implements SceneService {
   @Override
   public boolean matchSceneAndUser(Integer sceneId, Integer userId) {
     if (sceneId == null) {
-      throw new ApiException(ResultCode.SCENE_ID_IS_NULL);
+      throw new ApiException(ResultCode.SCENE_ERROR, "场景id不能为空");
     }
     if (userId == null) {
-      throw new ApiException(ResultCode.USER_ID_IS_NULL);
+      throw new ApiException(ResultCode.USER_ERROR, "用户id为空");
     }
     return sceneRepo.findByIdAndUser(sceneId, userId).isPresent();
   }
@@ -125,7 +125,7 @@ public class SceneServiceImpl implements SceneService {
   @Override
   public List<Scene> listByUserId(Integer userId) {
     if (userId == null || !userService.existsById(userId)) {
-      throw new ApiException(ResultCode.USER_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.USER_ERROR, "用户id不存在");
     }
     return sceneRepo.findAllByUserId(userId);
   }

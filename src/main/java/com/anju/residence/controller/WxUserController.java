@@ -76,7 +76,7 @@ public class WxUserController {
       // 校验签名
       String trueSignature = DigestUtil.sha1Hex(rawData + wxSession.getSessionKey());
       if (!trueSignature.equals(signature)) {
-        throw new ApiException(ResultCode.INVALID_WECHAT_SIGNATURE);
+        throw new ApiException(ResultCode.WECHAT_ERROR, "无效的签名！");
       }
     }
 
@@ -87,7 +87,7 @@ public class WxUserController {
   @PreAuthorize("hasRole('wx_user')")
   @GetMapping("/info")
   public ResultVO<WxUser> fetch() {
-    return new ResultVO<>(wxUserService.getWxUserByToken().orElseThrow(() -> new ApiException(ResultCode.OPEN_ID_NOT_EXISTS)));
+    return new ResultVO<>(wxUserService.getWxUserByToken().orElseThrow(() -> new ApiException(ResultCode.WECHAT_ERROR, "openid 不存在")));
   }
 }
 

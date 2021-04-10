@@ -19,6 +19,7 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -33,7 +34,9 @@ import java.util.Date;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "water_meter", indexes = {@Index(columnList = "lastRecordTime")})
-public class WaterMeter {
+public class WaterMeter implements Serializable {
+
+  private static final long serialVersionUID = 5109071627623593032L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,6 +55,9 @@ public class WaterMeter {
   @JSONField(format = "yyyy-MM-dd HH:mm:ss")
   private Date lastRecordTime;
 
+  /**
+   * 设置的采集间隔时间
+   */
   private Integer collectIntervalMin;
 
   @JSONField(format = "yyyy-MM-dd HH:mm:ss")

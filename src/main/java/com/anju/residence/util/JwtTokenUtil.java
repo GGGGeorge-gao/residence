@@ -1,8 +1,9 @@
-package com.anju.residence.security.jwt;
+package com.anju.residence.util;
 
 import cn.hutool.core.util.IdUtil;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.AuthException;
+import com.anju.residence.params.JwtParams;
 import com.anju.residence.security.model.JwtAuthenticationToken;
 import com.anju.residence.security.model.UserDetailsImpl;
 import com.anju.residence.security.model.WxSession;
@@ -23,7 +24,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * @author cygao
@@ -48,7 +48,7 @@ public class JwtTokenUtil implements Serializable {
      */
     public static String generateToken(int userId, String username, String openId, String skey, String unionId) {
         final Date createdDate = CLOCK.now();
-        final Date expirationDate = new Date(System.currentTimeMillis() + JwtProperty.EXPIRATION);
+        final Date expirationDate = new Date(System.currentTimeMillis() + JwtParams.EXPIRATION);
 
         Map<String, Object> payload = new HashMap<>();
         payload.put("user_id", userId);
@@ -60,13 +60,13 @@ public class JwtTokenUtil implements Serializable {
             payload.put("union_id", unionId);
         }
 
-        return JwtProperty.TOKEN_START_WITH +
+        return JwtParams.TOKEN_START_WITH +
                 Jwts.builder()
                         .setId(IdUtil.randomUUID())
                         .setClaims(payload)
                         .setIssuedAt(createdDate)
                         .setExpiration(expirationDate)
-                        .signWith(SignatureAlgorithm.HS512, JwtProperty.SECRET)
+                        .signWith(SignatureAlgorithm.HS512, JwtParams.SECRET)
                         .compact();
     }
 
@@ -81,20 +81,20 @@ public class JwtTokenUtil implements Serializable {
      */
     public static String generateToken(String openId, String skey) {
         final Date createdDate = CLOCK.now();
-        final Date expirationDate = new Date(System.currentTimeMillis() + JwtProperty.EXPIRATION);
+        final Date expirationDate = new Date(System.currentTimeMillis() + JwtParams.EXPIRATION);
 
         Map<String, Object> payload = new HashMap<>();
 
         payload.put("open_id", openId);
         payload.put("skey", skey);
 
-        return JwtProperty.TOKEN_START_WITH +
+        return JwtParams.TOKEN_START_WITH +
                 Jwts.builder()
                         .setId(IdUtil.randomUUID())
                         .setClaims(payload)
                         .setIssuedAt(createdDate)
                         .setExpiration(expirationDate)
-                        .signWith(SignatureAlgorithm.HS512, JwtProperty.SECRET)
+                        .signWith(SignatureAlgorithm.HS512, JwtParams.SECRET)
                         .compact();
     }
 
@@ -111,11 +111,11 @@ public class JwtTokenUtil implements Serializable {
     }
 
     public static String getJwtTokenByRawToken(String rawToken) throws AuthException {
-        if (!rawToken.startsWith(JwtProperty.TOKEN_START_WITH)) {
+        if (!rawToken.startsWith(JwtParams.TOKEN_START_WITH)) {
             log.error("无效的token开头: {}", rawToken);
-            throw new AuthException(ResultCode.INVALID_TOKEN_START_WITH);
+            throw new AuthException(ResultCode.TOKEN_ERROR, "token的前缀应为" + JwtParams.TOKEN_START_WITH + " ");
         }
-        return rawToken.substring(JwtProperty.TOKEN_START_WITH.length());
+        return rawToken.substring(JwtParams.TOKEN_START_WITH.length());
     }
 
     public static Claims validateAndParse(String jwtToken) throws AuthException {
@@ -123,16 +123,16 @@ public class JwtTokenUtil implements Serializable {
         Claims claims;
 
         try {
-            claims = Jwts.parser().setSigningKey(JwtProperty.SECRET).parseClaimsJws(jwtToken).getBody();
+            claims = Jwts.parser().setSigningKey(JwtParams.SECRET).parseClaimsJws(jwtToken).getBody();
         } catch (MalformedJwtException e) {
             // token格式不正确
-            throw new AuthException(ResultCode.INVALID_TOKEN_FORMAT, "Invalid token format");
+            throw new AuthException(ResultCode.TOKEN_ERROR, "错误的token格式");
         } catch (SignatureException e) {
             // token签名错误
-            throw new AuthException(ResultCode.INVALID_TOKEN_SIGNATURE, "Invalid token signature");
+            throw new AuthException(ResultCode.TOKEN_ERROR, "无效的JWT签名");
         } catch (ExpiredJwtException e) {
             // token已过期
-            throw new AuthException(ResultCode.EXPIRED_TOKEN, "The token is expired, please login again");
+            throw new AuthException(ResultCode.TOKEN_ERROR, "token已过期");
         } catch (Exception e) {
             // 未知异常
             throw new AuthException(ResultCode.UNKNOWN_ERROR, e.getMessage());

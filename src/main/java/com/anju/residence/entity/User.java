@@ -27,6 +27,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,20 +43,22 @@ import java.util.List;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "user")
-public class User {
+public class User implements Serializable {
 
+  private static final long serialVersionUID = -6143310119493720487L;
+  
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  @NotNull(message = "username is required")
-  @Size(min = 2, max = 16, message = "username length should be 2-16")
+  @NotNull(message = "用户名不能为空")
+  @Size(min = 2, max = 16, message = "无效的用户名")
   @Column(unique = true)
-  @ExceptionCode(resultCode = ResultCode.USERNAME_NOT_VALID)
+  @ExceptionCode(resultCode = ResultCode.USER_ERROR)
   private String username;
 
-  @NotNull(message = "password is required")
-  @ExceptionCode(resultCode = ResultCode.USER_PASSWORD_IS_NULL)
+  @NotNull(message = "密码不能为空")
+  @ExceptionCode(resultCode = ResultCode.USER_ERROR)
   private String password;
 
   /**
@@ -65,8 +68,8 @@ public class User {
 
   private String phone;
 
-  @Email(message = "incorrect email format")
-  @ExceptionCode(resultCode = ResultCode.USER_EMAIL_NOT_VALID)
+  @ExceptionCode(resultCode = ResultCode.USER_ERROR)
+  @Email(message = "错误的Email格式")
   private String email;
 
   private String address;

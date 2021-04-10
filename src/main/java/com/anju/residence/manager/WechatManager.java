@@ -2,13 +2,12 @@ package com.anju.residence.manager;
 
 import com.anju.residence.dto.wx.WxSessionResponse;
 import com.anju.residence.dto.wx.WxUserDTO;
-import com.anju.residence.entity.User;
 import com.anju.residence.entity.WxUser;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.enums.WechatErrCode;
 import com.anju.residence.exception.ApiException;
-import com.anju.residence.security.jwt.JwtProperty;
-import com.anju.residence.security.jwt.JwtTokenUtil;
+import com.anju.residence.params.JwtParams;
+import com.anju.residence.util.JwtTokenUtil;
 import com.anju.residence.security.model.JwtAuthenticationToken;
 import com.anju.residence.security.model.WxSession;
 import com.anju.residence.service.WxUserService;
@@ -20,7 +19,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -47,7 +45,7 @@ public class WechatManager {
    */
   public WxSession getWxSession(HttpServletResponse response, String code, WxUserDTO wxUserDTO) {
     if (code == null || wxUserDTO == null) {
-      throw new ApiException(ResultCode.INVALID_JS_CODE);
+      throw new ApiException(ResultCode.WECHAT_ERROR, "无效的js_code");
     }
     WxSessionResponse wxSessionResponse = WechatUtil.getSessionKeyOrOpenId(code);
 
@@ -59,13 +57,13 @@ public class WechatManager {
       wxSession = wxSessionResponse.buildSession();
     } else {
       if (WechatErrCode.INVALID_JS_CODE.getCode().equals(errcode)) {
-        throw new ApiException(ResultCode.INVALID_JS_CODE);
+        throw new ApiException(ResultCode.WECHAT_ERROR, "无效的js_code");
       } else if (WechatErrCode.BUSY_WECHAT_SERVER.getCode().equals(errcode)) {
-        throw new ApiException(ResultCode.BUSY_WECHAT_SERVER);
+        throw new ApiException(ResultCode.WECHAT_ERROR, "微信服务器繁忙");
       } else if (WechatErrCode.REQUEST_TOO_FREQUENT.getCode().equals(errcode)) {
-        throw new ApiException(ResultCode.REQUEST_TOO_FREQUENT);
+        throw new ApiException(ResultCode.WECHAT_ERROR, "请求过于频繁");
       } else {
-        throw new ApiException(ResultCode.CONNECTION_ERROR.getCode(), ResultCode.CONNECTION_ERROR.getMsg() + errcode);
+        throw new ApiException(ResultCode.WECHAT_ERROR.getCode(), "连接出现问题");
       }
     }
 
@@ -83,7 +81,7 @@ public class WechatManager {
   public void setToken(WxSession wxSession, HttpServletResponse response) {
     String token = JwtTokenUtil.generateToken(wxSession);
     log.info(token);
-    response.setHeader(JwtProperty.TOKEN_HEADER, token);
+    response.setHeader(JwtParams.TOKEN_HEADER, token);
   }
 
   /**
@@ -100,7 +98,7 @@ public class WechatManager {
 
     WxSession wxSession = authToken.getWxSession();
     if (wxSession == null) {
-      throw new ApiException(ResultCode.NO_WX_SESSION_EXISTS);
+      throw new ApiException(ResultCode.WECHAT_ERROR, "token中无微信用户信息");
     }
     return wxSession;
   }

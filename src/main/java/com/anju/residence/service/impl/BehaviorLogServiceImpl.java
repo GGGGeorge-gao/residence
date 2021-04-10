@@ -66,10 +66,10 @@ public class BehaviorLogServiceImpl implements BehaviorLogService {
   @Override
   public List<BehaviorLog> listByDeviceIdBetween(Integer deviceId, Date from, Date to) {
     if (from == null || to == null || from.after(to)) {
-      throw new ApiException(ResultCode.INVALID_DATE);
+      throw new ApiException(ResultCode.INVALID_ARGUMENT, "无效的日期参数");
     }
     if (!deviceService.existsById(deviceId)) {
-      throw new ApiException(ResultCode.DEVICE_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.DEVICE_ERROR, "设备id不存在");
     }
     return logRepo.findAllByDeviceIdBetween(deviceId, from, to);
   }

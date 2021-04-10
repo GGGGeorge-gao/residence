@@ -1,11 +1,10 @@
 package com.anju.residence.config;
 
 import com.anju.residence.enums.ResultCode;
-import com.anju.residence.security.jwt.JwtProperty;
+import com.anju.residence.params.JwtParams;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -64,11 +63,11 @@ public class SwaggerConfiguration {
             .description("如有疑问请询问开发者 高诚裕\n \n" +
                     "请求的url为 https://ahapocket.cn/anju_api + $api文档中标注的url$ \n \n" +
                     "登录请求分为两种：1.账号密码  2.微信登录 \n \n" +
-                    "1.账号密码登录\n  url:https://ahapocket.cn/anju_api" + JwtProperty.PASSWORD_LOGIN_URL +
+                    "1.账号密码登录\n  url:https://ahapocket.cn/anju_api" + JwtParams.PASSWORD_LOGIN_URL +
                     "   POST请求 json body {\"username\":\"yourUsername\", \"password\":\"yourPassword\"}， \n \n" +
                     "2.微信登录 请详见微信API \n \n" +
-                    "以上两种登录认证通过都后会在response的header中" + JwtProperty.TOKEN_HEADER + "字段中保存token， \n" +
-                    "请在每次请求的 header 中附加" + JwtProperty.TOKEN_HEADER + "字段带上token即可通过权限认证（api文档中有特殊标注则无需附带token）")
+                    "以上两种登录认证通过都后会在response的header中" + JwtParams.TOKEN_HEADER + "字段中保存token， \n" +
+                    "请在每次请求的 header 中附加" + JwtParams.TOKEN_HEADER + "字段带上token即可通过权限认证（api文档中有特殊标注则无需附带token）")
             .version("1.0")
             .build();
   }

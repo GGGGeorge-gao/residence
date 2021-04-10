@@ -54,7 +54,7 @@ public class DeviceLogController {
                                                     @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date from,
                                                     @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date to) {
     if (from == null || to == null || from.after(to)) {
-      throw new ApiException(ResultCode.INVALID_DATE);
+      throw new ApiException(ResultCode.INVALID_ARGUMENT, "无效的日期参数");
     }
 
     return new ResultVO<>(deviceLogService.listLogByDeviceIdBetween(deviceId, from, to).stream().map(DeviceLogDTO::build).collect(Collectors.toList()));

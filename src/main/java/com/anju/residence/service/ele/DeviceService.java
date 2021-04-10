@@ -2,6 +2,7 @@ package com.anju.residence.service.ele;
 
 import com.anju.residence.dto.ele.DeviceDTO;
 import com.anju.residence.entity.ele.Device;
+import com.anju.residence.vo.DeviceVO;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +27,7 @@ public interface DeviceService {
    * @param userId 用户id
    * @return 设备列表
    */
-  List<Device> listDeviceByUserId(Integer userId);
+  List<DeviceVO> listVoByUserId(Integer userId);
 
   /**
    * 根据设备id查找该设备
@@ -55,13 +56,13 @@ public interface DeviceService {
   boolean existsById(Integer deviceId);
 
   /**
-   * 校验设备id是否属于该用户
+   * 校验该用户是否可以修改该设备的信息
    *
    * @param deviceId 设备ID
    * @param userId   用户ID
    * @return 是否属于
    */
-  boolean matchDeviceAndUser(Integer deviceId, Integer userId);
+  boolean checkPermission(Integer deviceId, Integer userId);
 
   /**
    * 保存设备实体

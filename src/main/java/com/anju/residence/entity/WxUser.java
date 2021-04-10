@@ -17,6 +17,7 @@ import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
@@ -25,7 +26,9 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "wx_user", indexes = {@Index(columnList = "skey")})
-public class WxUser {
+public class WxUser implements Serializable {
+
+  private static final long serialVersionUID = 2986707362315812829L;
 
   @Id
   private String openId;

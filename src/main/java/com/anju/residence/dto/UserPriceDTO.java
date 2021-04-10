@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 public class UserPriceDTO {
 
   @ApiModelProperty(value = "用户id", name = "userId", required = true)
-  @ExceptionCode(resultCode = ResultCode.USER_ID_IS_NULL)
+  @ExceptionCode(resultCode = ResultCode.USER_ERROR)
   @NotNull(message = "user id must not be null")
   private Integer userId;
 

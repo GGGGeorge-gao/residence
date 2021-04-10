@@ -67,7 +67,7 @@ public class JackServiceImpl implements JackService {
   @Transactional(rollbackFor = Exception.class, propagation = Propagation.MANDATORY)
   @Override
   public void addJacks(List<JackDTO> jacks, Integer receptacleId) {
-    Receptacle receptacle = receptacleService.getById(receptacleId).orElseThrow(() -> new ApiException(ResultCode.RECEPTACLE_ID_NOT_EXISTS));
+    Receptacle receptacle = receptacleService.getById(receptacleId).orElseThrow(() -> new ApiException(ResultCode.RECEPTACLE_ERROR, "插座id不存在"));
     jackRepo.saveAll(jacks.stream().map(j -> j.build(receptacle)).collect(Collectors.toList()));
   }
 
@@ -75,7 +75,7 @@ public class JackServiceImpl implements JackService {
   @Override
   public void deleteJack(Integer jackId) {
     if (!jackRepo.existsById(jackId)) {
-      throw new ApiException(ResultCode.JACK_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.JACK_ERROR, "插孔id不存在");
     }
     deviceService.clearJack(jackId);
     behaviorLogService.deleteByJackId(jackId);
@@ -131,7 +131,7 @@ public class JackServiceImpl implements JackService {
   @Override
   public void updateStatus(int jackId, int status) {
     if (jackRepo.existsById(jackId)) {
-      throw new ApiException(ResultCode.JACK_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.JACK_ERROR, "插孔id不存在");
     }
     jackRepo.updateStatus(jackId, status);
   }

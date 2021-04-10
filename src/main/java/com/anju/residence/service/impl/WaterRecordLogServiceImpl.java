@@ -4,7 +4,6 @@ import com.anju.residence.dao.OcrRepository;
 import com.anju.residence.dao.water.WaterRecordLogRepository;
 import com.anju.residence.dto.OcrResult;
 import com.anju.residence.dto.water.WaterRecordLogDTO;
-import com.anju.residence.entity.Ocr;
 import com.anju.residence.entity.water.WaterMeter;
 import com.anju.residence.entity.water.WaterRecordLog;
 import com.anju.residence.enums.ResultCode;
@@ -47,7 +46,7 @@ public class WaterRecordLogServiceImpl implements WaterRecordLogService {
   @Override
   public Optional<WaterRecordLog> getById(Integer logId) {
     if (!exitsById(logId)) {
-      throw new ApiException(ResultCode.WATER_RECORD_LOG_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.WATER_RECORD_LOG_ERROR, "水表抄表日志不存在");
     }
     return waterRecordLogRepo.findById(logId);
   }
@@ -55,7 +54,7 @@ public class WaterRecordLogServiceImpl implements WaterRecordLogService {
   @Override
   public List<WaterRecordLog> listByWaterMeterId(Integer waterMeterId) {
     if (!exitsById(waterMeterId)) {
-      throw new ApiException(ResultCode.WATER_RECORD_LOG_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.WATER_RECORD_LOG_ERROR, "水表抄表日志不存在");
     }
     return waterRecordLogRepo.findAllByWaterMeterId(waterMeterId);
   }
@@ -68,10 +67,10 @@ public class WaterRecordLogServiceImpl implements WaterRecordLogService {
   @Override
   public List<WaterRecordLog> listByWaterMeterIdBetween(Integer waterMeterId, Date from, Date to) {
     if (from == null || to == null || from.after(to)) {
-      throw new ApiException(ResultCode.INVALID_DATE);
+      throw new ApiException(ResultCode.INVALID_ARGUMENT, "无效的日期参数");
     }
     if (!exitsById(waterMeterId)) {
-      throw new ApiException(ResultCode.WATER_RECORD_LOG_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.WATER_RECORD_LOG_ERROR, "水表抄表日志不存在");
     }
     return waterRecordLogRepo.findAllByWaterMeterIdBetween(waterMeterId, from, to);
   }
@@ -93,7 +92,7 @@ public class WaterRecordLogServiceImpl implements WaterRecordLogService {
   @Override
   public void addWaterRecordLog(WaterRecordLogDTO logDTO) {
     if (!waterMeterService.exitsById(logDTO.getWaterMeterId())) {
-      throw new ApiException(ResultCode.WATER_METER_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.WATER_METER_ERROR, "水表id不存在");
     }
     WaterRecordLog waterRecordLog = logDTO.build();
 
@@ -105,7 +104,7 @@ public class WaterRecordLogServiceImpl implements WaterRecordLogService {
   @Override
   public void deleteById(Integer logId) {
     if (!exitsById(logId)) {
-      throw new ApiException(ResultCode.WATER_RECORD_LOG_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.WATER_RECORD_LOG_ERROR, "水表抄表日志不存在");
     }
     waterRecordLogRepo.deleteById(logId);
   }
@@ -114,7 +113,7 @@ public class WaterRecordLogServiceImpl implements WaterRecordLogService {
   @Override
   public void deleteByWaterMeterId(Integer waterMeterId) {
     if (!waterMeterService.exitsById(waterMeterId)) {
-      throw new ApiException(ResultCode.WATER_METER_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.WATER_METER_ERROR, "水表id不存在");
     }
     waterRecordLogRepo.deleteAllByWaterMeterId(waterMeterId);
   }

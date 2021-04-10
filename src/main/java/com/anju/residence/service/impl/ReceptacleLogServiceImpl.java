@@ -112,7 +112,7 @@ public class ReceptacleLogServiceImpl implements ReceptacleLogService {
   @Override
   public void deleteByReceptacleId(Integer receptacleId) {
     if (receptacleId == null) {
-      throw new ApiException(ResultCode.RECEPTACLE_ID_IS_NULL);
+      throw new ApiException(ResultCode.RECEPTACLE_ERROR, "插座id不能为空");
     }
     receptacleLogRepo.deleteAllByReceptacleId(receptacleId);
   }

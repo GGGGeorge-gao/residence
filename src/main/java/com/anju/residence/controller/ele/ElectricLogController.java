@@ -55,7 +55,7 @@ public class ElectricLogController {
   @PostMapping("/add")
   public ResultVO<String> addElectricLog(@RequestBody @Valid EleLogDTO eleLogDTO) {
     log.info("ElectricLogDTO got {}.", eleLogDTO.toString());
-    Device device = deviceService.getById(eleLogDTO.getDeviceId()).orElseThrow(() -> new ApiException(ResultCode.DEVICE_ID_NOT_EXISTS));
+    Device device = deviceService.getById(eleLogDTO.getDeviceId()).orElseThrow(() -> new ApiException(ResultCode.DEVICE_ERROR, "设备id不存在"));
 
     ElectricLog electricLog = eleLogDTO.createElectricLog();
     electricLog.setDevice(device);
@@ -68,9 +68,9 @@ public class ElectricLogController {
   @GetMapping("/realtime/{deviceId}")
   public ResultVO<EleLogDTO> getRealtimeElectricLog(@PathVariable Integer deviceId) {
     if (!deviceService.existsById(deviceId)) {
-      throw new ApiException(ResultCode.DEVICE_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.DEVICE_ERROR, "设备id不存在");
     }
-    ElectricLog electricLog = eleLogService.getRealTimeLogByDeviceId(deviceId).orElseThrow(() -> new ApiException(ResultCode.NOT_REALTIME_ELECTRIC_LOG_EXISTS));
+    ElectricLog electricLog = eleLogService.getRealTimeLogByDeviceId(deviceId).orElseThrow(() -> new ApiException(ResultCode.ELECTRIC_LOG_ERROR, "未发现实时耗电日志"));
 
     return new ResultVO<>(EleLogDTO.build(electricLog));
   }
@@ -79,10 +79,10 @@ public class ElectricLogController {
   @GetMapping("/latest/{deviceId}")
   public ResultVO<EleLogDTO> getLatestElectricLog(@PathVariable Integer deviceId) {
     if (!deviceService.existsById(deviceId)) {
-      throw new ApiException(ResultCode.DEVICE_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.DEVICE_ERROR, "设备id不存在");
     }
 
-    ElectricLog electricLog = eleLogService.getLatestLogByDeviceId(deviceId).orElseThrow(() -> new ApiException(ResultCode.NOT_ELECTRIC_LOG_EXISTS));
+    ElectricLog electricLog = eleLogService.getLatestLogByDeviceId(deviceId).orElseThrow(() -> new ApiException(ResultCode.ELECTRIC_LOG_ERROR, "未发现耗电日志"));
 
     return new ResultVO<>(EleLogDTO.build(electricLog));
   }
@@ -93,10 +93,10 @@ public class ElectricLogController {
   @GetMapping("/hour/{deviceId}")
   public ResultVO<List<EleLogDTO>> listElectricLogBetweenHour(@PathVariable Integer deviceId, @RequestParam(name = "hour") Integer hour) {
     if (hour == null || hour <= 0) {
-      throw new ApiException(ResultCode.ARGUMENT_NEGATIVE_OR_ZERO);
+      throw new ApiException(ResultCode.INVALID_ARGUMENT, "hour参数需为正整数");
     }
     if (!deviceService.existsById(deviceId)) {
-      throw new ApiException(ResultCode.DEVICE_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.DEVICE_ERROR, "设备id不存在");
     }
     List<ElectricLog> electricLogs = eleLogService.listLogByDeviceIdBetweenHour(deviceId, hour);
 

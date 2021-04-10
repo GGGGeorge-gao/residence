@@ -10,6 +10,8 @@ import lombok.Getter;
 @Getter
 public class ApiException extends RuntimeException {
 
+  private static final long serialVersionUID = 8856505962320481165L;
+
   private final int code;
 
   private final String msg;
@@ -19,12 +21,12 @@ public class ApiException extends RuntimeException {
     this.msg = msg;
   }
 
-  public ApiException(ResultCode resultCode) {
-    this(resultCode.getCode(), resultCode.getMsg());
+  public ApiException(ResultCode resultCode, String msg) {
+    this(resultCode.getCode(), msg);
   }
 
-  public ApiException() {
-    this(ResultCode.INVALID_ARGUMENT);
+  public ApiException(ResultCode resultCode) {
+    this(resultCode.getCode(), resultCode.getMsg());
   }
 
   public ApiException(String msg) {

@@ -23,8 +23,8 @@ spring:
     druid:
 
       username: root
-      password: ROOT_root123
-      url: jdbc:mysql://47.93.224.217:3306/anju?serverTimezone=Asia/Shanghai&characterEncoding=utf8
+      password: rootroot    # ROOT_root123
+      url: jdbc:mysql://127.0.0.1:3306/anju?serverTimezone=Asia/Shanghai&characterEncoding=utf8
       driver-class-name: com.mysql.cj.jdbc.Driver
 
       # 初始化大小，最小，最大
@@ -108,9 +108,8 @@ spring:
 
 # swagger文档配置
 swagger:
-#  enable: true
+  #  enable: true
   application-name: ${spring.application.name}
   application-version: 1.0
   application-description: 安居项目接口文档
   try-host: http://localhost:${server.port}
-

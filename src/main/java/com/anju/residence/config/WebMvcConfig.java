@@ -1,6 +1,6 @@
 package com.anju.residence.config;
 
-import com.anju.residence.util.FileUtil;
+import com.anju.residence.params.FileParams;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -14,6 +14,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
-    registry.addResourceHandler(FileUtil.WATER_IMAGE_URL).addResourceLocations(FileUtil.WATER_IMAGE_LOCATION);
+    registry.addResourceHandler(FileParams.WATER_IMAGE_URL).addResourceLocations(FileParams.WATER_IMAGE_LOCATION);
   }
 }

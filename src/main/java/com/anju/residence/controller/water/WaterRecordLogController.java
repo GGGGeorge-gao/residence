@@ -84,7 +84,7 @@ public class WaterRecordLogController {
   @GetMapping("/{recordLogId}")
   public ResultVO<WaterRecordLogDTO> getWaterRecordLog(@PathVariable Integer recordLogId) {
     return new ResultVO<>(WaterRecordLogDTO.build(waterRecordLogService.getById(recordLogId)
-            .orElseThrow(() -> new ApiException(ResultCode.WATER_METER_ID_NOT_EXISTS))));
+            .orElseThrow(() -> new ApiException(ResultCode.WATER_METER_ERROR, "水表id不存在"))));
   }
 
   @OperationLog(type = OperationType.DELETE, description = "删除一条抄表日志")

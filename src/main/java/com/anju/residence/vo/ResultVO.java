@@ -43,6 +43,12 @@ public class ResultVO<T> implements Serializable {
     this.data = data;
   }
 
+  public ResultVO(ResultCode resultCode, String msg) {
+    this.code = resultCode.getCode();
+    this.msg = msg;
+    this.data = null;
+  }
+
   @Override
   public String toString() {
     return "ResultVO{" +

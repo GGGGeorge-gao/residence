@@ -2,14 +2,11 @@ package com.anju.residence.security.filter;
 
 import com.anju.residence.security.handler.AuthFailureHandler;
 import com.anju.residence.security.handler.AuthSuccessHandler;
-import com.anju.residence.security.jwt.JwtProperty;
+import com.anju.residence.params.JwtParams;
 import com.anju.residence.security.model.JwtAuthenticationToken;
-import com.anju.residence.service.UserService;
-import com.anju.residence.service.WxUserService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.util.Assert;
@@ -45,7 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-    String rawToken = request.getHeader(JwtProperty.TOKEN_HEADER);
+    String rawToken = request.getHeader(JwtParams.TOKEN_HEADER);
 
     if (rawToken == null) {
       filterChain.doFilter(request, response);

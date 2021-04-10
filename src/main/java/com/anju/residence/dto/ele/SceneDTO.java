@@ -28,7 +28,7 @@ public class SceneDTO {
   private Integer parentId;
 
   @ApiModelProperty(value = "用户id", name = "userId", required = true)
-  @ExceptionCode(resultCode = ResultCode.USER_ID_IS_NULL)
+  @ExceptionCode(resultCode = ResultCode.USER_ERROR)
   @NotNull(message = "user ID must not be null")
   private Integer userId;
 

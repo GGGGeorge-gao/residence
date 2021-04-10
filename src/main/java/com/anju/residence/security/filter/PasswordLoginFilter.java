@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.security.model.AccountCredentials;
 import com.anju.residence.security.model.UserDetailsImpl;
-import com.anju.residence.security.jwt.JwtProperty;
-import com.anju.residence.security.jwt.JwtTokenUtil;
+import com.anju.residence.params.JwtParams;
+import com.anju.residence.util.JwtTokenUtil;
 import com.anju.residence.manager.UserLogManager;
 import com.anju.residence.service.UserService;
 import com.anju.residence.util.ResponseUtil;
@@ -36,7 +36,7 @@ public class PasswordLoginFilter extends AbstractAuthenticationProcessingFilter 
 
   public PasswordLoginFilter(AuthenticationManager authManager, UserService userDetailsService, UserLogManager userLogManager) {
     // 对匹配的请求进行过滤
-    super(new AntPathRequestMatcher(JwtProperty.PASSWORD_LOGIN_URL, "POST"));
+    super(new AntPathRequestMatcher(JwtParams.PASSWORD_LOGIN_URL, "POST"));
     this.userDetailsService = userDetailsService;
     this.userLogManager = userLogManager;
     setAuthenticationManager(authManager);
@@ -57,7 +57,7 @@ public class PasswordLoginFilter extends AbstractAuthenticationProcessingFilter 
     UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUsername(authResult.getName());
     String jwtToken = JwtTokenUtil.generateToken(userDetails);
 
-    response.setHeader(JwtProperty.TOKEN_HEADER, jwtToken);
+    response.setHeader(JwtParams.TOKEN_HEADER, jwtToken);
 
     // 以json格式返回jwt token
     ResponseUtil.response(response, new ResultVO<>(ResultCode.SUCCESS, "success"));
@@ -66,6 +66,6 @@ public class PasswordLoginFilter extends AbstractAuthenticationProcessingFilter 
 
   @Override
   protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
-    ResponseUtil.response(response, new ResultVO<>(ResultCode.WRONG_USERNAME_OR_PASSWORD, "failed"));
+    ResponseUtil.response(response, new ResultVO<>(ResultCode.WRONG_USERNAME_OR_PASSWORD, "用户名或密码错误"));
   }
 }

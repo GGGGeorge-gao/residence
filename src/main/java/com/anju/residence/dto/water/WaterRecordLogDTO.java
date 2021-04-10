@@ -31,18 +31,19 @@ public class WaterRecordLogDTO {
   private Integer id;
 
   @ApiModelProperty(value = "水表id", name = "waterMeterId", required = true)
-  @ExceptionCode(resultCode = ResultCode.WATER_METER_ID_IS_NULL)
-  @NotNull(message = "waterMeter id must not be null")
+  @ExceptionCode(resultCode = ResultCode.WATER_METER_ERROR)
+  @NotNull(message = "水表id不能为空")
   private Integer waterMeterId;
 
   @ApiModelProperty(value = "抄表时间", name = "time", required = true)
   @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-  @ExceptionCode(resultCode = ResultCode.DATE_IS_NULL)
+  @ExceptionCode(resultCode = ResultCode.INVALID_ARGUMENT)
+  @NotNull(message = "抄表时间不能为空")
   private Date time;
 
   @ApiModelProperty(value = "抄表计数", name = "count", required = true)
-  @ExceptionCode(resultCode = ResultCode.WATER_METER_COUNT_IS_NULL)
-  @NotNull(message = "count must not be null")
+  @ExceptionCode(resultCode = ResultCode.WATER_METER_ERROR)
+  @NotNull(message = "水表读数不能为空")
   private String count;
 
   @ApiModelProperty(value = "其他信息", name = "others")

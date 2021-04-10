@@ -24,23 +24,23 @@ public class ReceptacleDTO {
   private Integer id;
 
   @ApiModelProperty(value = "插座名称", name = "name", required = true)
-  @ExceptionCode(resultCode = ResultCode.ARGUMENT_NULL)
-  @NotNull(message = "receptacle name must not be null")
+  @ExceptionCode(resultCode = ResultCode.INVALID_ARGUMENT)
+  @NotNull(message = "插座名不能为空")
   private String name;
 
   @ApiModelProperty(value = "场景id", name = "sceneId", required = true)
-  @ExceptionCode(resultCode = ResultCode.SCENE_ID_IS_NULL)
-  @NotNull(message = "scene id must not be null")
+  @ExceptionCode(resultCode = ResultCode.SCENE_ERROR)
+  @NotNull(message = "场景id不能为空")
   private Integer sceneId;
 
   @ApiModelProperty(value = "用户id", name = "userId", required = true)
-  @ExceptionCode(resultCode = ResultCode.USER_ID_IS_NULL)
+  @ExceptionCode(resultCode = ResultCode.USER_ERROR)
   @NotNull(message = "user id must not be null")
   private Integer userId;
 
   @ApiModelProperty(value = "插座状态", name = "status", required = true)
-  @ExceptionCode(resultCode = ResultCode.ARGUMENT_NULL)
-  @NotNull(message = "status must not be null")
+  @ExceptionCode(resultCode = ResultCode.INVALID_ARGUMENT)
+  @NotNull(message = "插座状态不能为空")
   private Integer status;
 
   @ApiModelProperty(value = "插孔列表", name = "jacks")

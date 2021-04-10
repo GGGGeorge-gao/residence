@@ -22,6 +22,7 @@ import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -35,8 +36,9 @@ import java.util.Date;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "scene", indexes = {@Index(columnList = "parentId")})
-public class Scene {
+public class Scene implements Serializable {
 
+  private static final long serialVersionUID = 1079750271645665534L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;

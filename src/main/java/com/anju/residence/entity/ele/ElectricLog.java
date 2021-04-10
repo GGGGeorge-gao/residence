@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -28,8 +29,9 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "electric_log", indexes = {@Index(columnList = "time")})
-public class ElectricLog {
+public class ElectricLog implements Serializable {
 
+  private static final long serialVersionUID = 6741333192635271190L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;

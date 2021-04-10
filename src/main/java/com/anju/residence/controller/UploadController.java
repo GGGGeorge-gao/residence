@@ -5,14 +5,14 @@ import com.anju.residence.annotation.OperationLog;
 import com.anju.residence.dao.OcrRepository;
 import com.anju.residence.dto.OcrResult;
 import com.anju.residence.entity.Ocr;
-import com.anju.residence.entity.water.WaterMeter;
 import com.anju.residence.enums.OperationType;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.ApiException;
 import com.anju.residence.service.water.WaterMeterService;
 import com.anju.residence.service.water.WaterRecordLogService;
-import com.anju.residence.util.FileUtil;
+import com.anju.residence.params.FileParams;
 import com.anju.residence.vo.ResultVO;
+import com.anju.residence.vo.WaterMeterVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -61,18 +61,18 @@ public class UploadController {
   public ResultVO<String> uploadImage(@RequestParam(value = "file", required = false) MultipartFile file,
                                       @PathVariable Integer waterMeterId) {
     if (file == null) {
-      throw new ApiException(ResultCode.FILE_IS_NULL);
+      throw new ApiException(ResultCode.FILE_ERROR, "上传的文件为空");
     }
 
-    WaterMeter waterMeter = waterMeterService.getById(waterMeterId).orElseThrow(() -> new ApiException(ResultCode.WATER_METER_ID_NOT_EXISTS));
+    WaterMeterVO waterMeterVO = waterMeterService.getById(waterMeterId).orElseThrow(() -> new ApiException(ResultCode.WATER_METER_ERROR, "水表id不存在"));
 
     String fileName = file.getOriginalFilename();
     if (fileName == null) {
-      throw new ApiException(ResultCode.FILE_NAME_IS_NULL);
+      throw new ApiException(ResultCode.FILE_ERROR, "上传的文件名为空");
     }
     fileName = System.currentTimeMillis() + fileName.substring(fileName.lastIndexOf("."));
 
-    String filePath = FileUtil.WATER_IMAGE_LOCATION + '/' + waterMeterId + "/" + fileName;
+    String filePath = FileParams.WATER_IMAGE_LOCATION + '/' + waterMeterId + "/" + fileName;
     log.info(filePath);
     log.info(fileName);
     File newFile = new File(filePath);
@@ -83,19 +83,19 @@ public class UploadController {
     try {
       file.transferTo(newFile);
     } catch (IOException e) {
-      throw new ApiException(ResultCode.TRANSFER_FAILED);
+      throw new ApiException(ResultCode.FILE_ERROR, "文件传输失败！");
     }
 
     // 请求参数
     Map<String, Object> variables = new HashMap<>(3);
-    variables.put("userID", waterMeter.getUser().getId());
+    variables.put("userID", waterMeterVO.getUserId());
     variables.put("waterMeterId", waterMeterId);
     variables.put("path", filePath);
 
     ResponseEntity<OcrResult> result;
 
     try {
-      result = restTemplate.postForEntity(FileUtil.OCR_URL, null, OcrResult.class, variables);
+      result = restTemplate.postForEntity(FileParams.OCR_URL, null, OcrResult.class, variables);
     } catch (Exception e) {
       Ocr ocr = Ocr.builder().originalPath(filePath).build();
       ocrRepo.save(ocr);

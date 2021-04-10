@@ -2,7 +2,7 @@ package com.anju.residence.security.filter;
 
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.AuthException;
-import com.anju.residence.security.jwt.JwtTokenUtil;
+import com.anju.residence.util.JwtTokenUtil;
 import com.anju.residence.security.model.JwtAuthenticationToken;
 import com.anju.residence.security.model.UserDetailsImpl;
 import com.anju.residence.security.model.WxSession;
@@ -65,10 +65,10 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     // TODO 验证skey(3rd_session)的一致性，对openid和sessionKey进行BCrypt加密，与数据库的进行比对
     String openId = (String) claims.get("open_id");
     String skey = (String) claims.get("skey");
-    String sessionKey = wxUserService.getSessionKeyByOpenId(openId).orElseThrow(() -> new AuthException(ResultCode.NO_SESSION_KEY_EXISTS));
+    String sessionKey = wxUserService.getSessionKeyByOpenId(openId).orElseThrow(() -> new AuthException(ResultCode.WECHAT_ERROR, "该用户没有sessionKey存在"));
 
     if (!passwordEncoder.matches(openId + sessionKey, skey)) {
-      throw new AuthException(ResultCode.INVALID_SKEY);
+      throw new AuthException(ResultCode.WECHAT_ERROR, "无效的skey");
     }
 
     WxSession wxSession = WxSession.builder().openId(openId).sessionKey(sessionKey).skey(skey).build();

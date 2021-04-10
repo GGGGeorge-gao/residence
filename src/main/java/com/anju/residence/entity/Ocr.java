@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * @author cygao
@@ -25,7 +26,9 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Entity
 @Table(name = "ocr")
-public class Ocr {
+public class Ocr implements Serializable {
+
+  private static final long serialVersionUID = -7267561377077459260L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

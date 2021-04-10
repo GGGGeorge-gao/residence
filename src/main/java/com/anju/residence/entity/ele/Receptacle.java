@@ -20,6 +20,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -34,8 +35,9 @@ import java.util.Date;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "receptacle")
-public class Receptacle {
+public class Receptacle implements Serializable {
 
+  private static final long serialVersionUID = 1609374185714788828L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;

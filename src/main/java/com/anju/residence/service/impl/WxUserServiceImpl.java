@@ -50,7 +50,7 @@ public class WxUserServiceImpl implements WxUserService {
   @Transactional(rollbackFor = Exception.class)
   @Override
   public void updateWxUser(WxUserDTO wxUserDTO) {
-    WxUser wxUser = getWxUserByOpenId(wxUserDTO.getOpenId()).orElseThrow(() -> new ApiException(ResultCode.OPEN_ID_NOT_EXISTS));
+    WxUser wxUser = getWxUserByOpenId(wxUserDTO.getOpenId()).orElseThrow(() -> new ApiException(ResultCode.WECHAT_ERROR, "openid 不存在"));
     wxUserDTO.updateWxUser(wxUser);
 
     save(wxUser);
@@ -87,7 +87,7 @@ public class WxUserServiceImpl implements WxUserService {
     WxUser wxUser;
 
     if (existsByOpenid(openId)) {
-      wxUser = getWxUserByOpenId(openId).orElseThrow(() -> new ApiException(ResultCode.OPEN_ID_NOT_EXISTS));
+      wxUser = getWxUserByOpenId(openId).orElseThrow(() -> new ApiException(ResultCode.WECHAT_ERROR, "openid 不存在"));
       wxUserDTO.updateWxUser(wxUser);
     } else {
       wxUser = wxUserDTO.buildWxUser();

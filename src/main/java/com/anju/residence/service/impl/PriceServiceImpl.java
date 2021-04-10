@@ -5,7 +5,7 @@ import com.anju.residence.dto.UserPriceDTO;
 import com.anju.residence.entity.UserPrice;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.ApiException;
-import com.anju.residence.security.jwt.JwtTokenUtil;
+import com.anju.residence.util.JwtTokenUtil;
 import com.anju.residence.service.PriceService;
 import com.anju.residence.service.UserService;
 import org.springframework.stereotype.Service;
@@ -35,7 +35,7 @@ public class PriceServiceImpl implements PriceService {
       throw new ApiException(ResultCode.UNAUTHORIZED_REQUEST);
     }
     if (existsByUserId(userPriceDTO.getUserId())) {
-      throw new ApiException(ResultCode.USER_PRICE_ALREADY_EXISTS);
+      throw new ApiException(ResultCode.USER_ERROR, "该用户价格信息已存在");
     }
     save(userPriceDTO.build());
   }
@@ -45,14 +45,14 @@ public class PriceServiceImpl implements PriceService {
     if (!JwtTokenUtil.checkUserAuthentication(userPriceDTO.getUserId())) {
       throw new ApiException(ResultCode.UNAUTHORIZED_REQUEST);
     }
-    UserPrice price = userPriceRepo.findByUserId(userPriceDTO.getUserId()).orElseThrow(() -> new ApiException(ResultCode.USER_PRICE_DOE_NOT_EXIST));
+    UserPrice price = userPriceRepo.findByUserId(userPriceDTO.getUserId()).orElseThrow(() -> new ApiException(ResultCode.USER_ERROR, "用户价格信息不存在"));
     userPriceDTO.putUserPrice(price);
     save(price);
   }
 
   @Override
   public UserPrice getByUserId(Integer userId) {
-    return userPriceRepo.findByUserId(userId).orElseThrow(() -> new ApiException(ResultCode.USER_PRICE_DOE_NOT_EXIST));
+    return userPriceRepo.findByUserId(userId).orElseThrow(() -> new ApiException(ResultCode.USER_ERROR, "用户价格信息不存在"));
   }
 
   @Override

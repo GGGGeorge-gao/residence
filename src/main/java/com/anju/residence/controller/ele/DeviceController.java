@@ -7,6 +7,7 @@ import com.anju.residence.enums.OperationType;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.ApiException;
 import com.anju.residence.service.ele.DeviceService;
+import com.anju.residence.vo.DeviceVO;
 import com.anju.residence.vo.ResultVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -45,7 +46,7 @@ public class DeviceController {
   @GetMapping("/{deviceId}")
   public ResultVO<Device> getDevice(@PathVariable Integer deviceId) {
 
-    return new ResultVO<>(deviceService.getById(deviceId).orElseThrow(() -> new ApiException(ResultCode.DEVICE_ID_NOT_EXISTS)));
+    return new ResultVO<>(deviceService.getById(deviceId).orElseThrow(() -> new ApiException(ResultCode.DEVICE_ERROR, "设备id不存在")));
   }
 
   @OperationLog(type = OperationType.ADD, description = "添加一个设备")
@@ -78,12 +79,12 @@ public class DeviceController {
     return new ResultVO<>("success");
   }
 
-  @ApiOperation(value = "获取一个用户所有的设备的详细信息")
+  @ApiOperation(value = "获取一个用户所有的设备的信息")
   @GetMapping("/all/{userId}")
-  public ResultVO<List<Device>> listDevice(@PathVariable Integer userId) {
+  public ResultVO<List<DeviceVO>> listDevice(@PathVariable Integer userId) {
 
-    List<Device> devices = deviceService.listDeviceByUserId(userId);
+    List<DeviceVO> deviceVoS = deviceService.listVoByUserId(userId);
 
-    return new ResultVO<>(devices);
+    return new ResultVO<>(deviceVoS);
   }
 }

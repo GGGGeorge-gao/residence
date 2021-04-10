@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * 权限实体类
@@ -25,8 +26,9 @@ import javax.persistence.Table;
 @Entity
 @Builder
 @Table(name = "role")
-public class Role implements GrantedAuthority {
+public class Role implements GrantedAuthority, Serializable {
 
+  private static final long serialVersionUID = 4319959707157472619L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer roleId;

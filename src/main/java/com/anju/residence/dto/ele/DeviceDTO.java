@@ -22,23 +22,23 @@ import javax.validation.constraints.Positive;
 public class DeviceDTO {
 
   @ApiModelProperty(value = "用户id", name = "userId", required = true)
-  @ExceptionCode(resultCode = ResultCode.USER_ID_IS_NULL)
+  @ExceptionCode(resultCode = ResultCode.USER_ERROR)
   @NotNull(message = "user ID must not be null")
   private Integer userId;
 
   @ApiModelProperty(value = "插孔id", name = "jackId", required = true)
-  @ExceptionCode(resultCode = ResultCode.JACK_ID_NEGATIVE)
-  @Positive(message = "jack ID must not be null")
+  @ExceptionCode(resultCode = ResultCode.JACK_ERROR)
+  @NotNull(message = "插孔id不能为空")
   private Integer jackId;
 
   @ApiModelProperty(value = "设备名称", name = "name", required = true)
-  @ExceptionCode(resultCode = ResultCode.JACK_NAME_NOT_VALID)
-  @NotEmpty(message = "name must not be null")
+  @ExceptionCode(resultCode = ResultCode.JACK_ERROR)
+  @NotEmpty(message = "插孔名称不能为空")
   private String name;
 
   @ApiModelProperty(value = "设备类型", name = "type", required = true)
-  @ExceptionCode(resultCode = ResultCode.JACK_TYPE_NOT_VALID)
-  @NotEmpty(message = "name must not be null")
+  @ExceptionCode(resultCode = ResultCode.JACK_ERROR)
+  @NotNull(message = "插孔状态不能为空")
   private String type;
 
   public Device buildDevice() {

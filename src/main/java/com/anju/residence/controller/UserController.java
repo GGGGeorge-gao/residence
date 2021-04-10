@@ -63,7 +63,7 @@ public class UserController {
 
   @GetMapping("/{userId}")
   public ResultVO<User> getUserById(@PathVariable Integer userId) {
-    return new ResultVO<>(userService.getUserById(userId).orElseThrow(() -> new ApiException(ResultCode.USER_ID_NOT_EXISTS)));
+    return new ResultVO<>(userService.getUserById(userId).orElseThrow(() -> new ApiException(ResultCode.USER_ERROR, "用户id不存在")));
   }
 
 

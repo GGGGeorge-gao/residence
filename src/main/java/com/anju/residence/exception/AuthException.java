@@ -9,12 +9,14 @@ import org.springframework.security.core.AuthenticationException;
  **/
 public class AuthException extends AuthenticationException {
 
+  private static final long serialVersionUID = -6524112676786082427L;
+
   private final ResultCode resultCode;
 
-  private String msg;
+  private final String msg;
 
   public AuthException(ResultCode resultCode) {
-    this(resultCode, resultCode.getCode() == 1000 ? "success" : "failed");
+    this(resultCode, null);
   }
 
   public AuthException(ResultCode resultCode, String msg) {

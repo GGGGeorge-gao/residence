@@ -44,7 +44,7 @@ public class SceneController {
   @ApiOperation(value = "根据场景id查询场景信息")
   @GetMapping("/{sceneId}")
   public ResultVO<Scene> getById(@PathVariable Integer sceneId) {
-    return new ResultVO<>(sceneService.getById(sceneId).orElseThrow(() -> new ApiException(ResultCode.SCENE_ID_NOT_EXISTS)));
+    return new ResultVO<>(sceneService.getById(sceneId).orElseThrow(() -> new ApiException(ResultCode.SCENE_ERROR, "场景id不存在")));
   }
 
   @OperationLog(type = OperationType.ADD, description = "添加一个场景")
@@ -84,7 +84,7 @@ public class SceneController {
   @PatchMapping("/parent/{sceneId}")
   public ResultVO<String> updateParentId(@RequestParam Integer parentId, @PathVariable Integer sceneId) {
     if (sceneId.equals(parentId)) {
-      throw new ApiException(ResultCode.INVALID_PARENT_SCENE_ID);
+      throw new ApiException(ResultCode.SCENE_ERROR, "无效的父场景id");
     }
     sceneService.updateParentId(sceneId, parentId);
 

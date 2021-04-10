@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -32,7 +31,7 @@ public class AuthFailureHandler implements AuthenticationFailureHandler {
 
       ResponseUtil.response(response, new ResultVO<>(authException.getResultCode(), authException.getMsg()));
     } else {
-      ResponseUtil.response(response, new ResultVO<>(ResultCode.AUTHENTICATION_FAILURE, e == null ? "failed" : e.getMessage()));
+      ResponseUtil.response(response, new ResultVO<>(ResultCode.AUTH_ERROR, e == null ? "没有权限" : e.getMessage()));
     }
   }
 }

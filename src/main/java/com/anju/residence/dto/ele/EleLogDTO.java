@@ -29,24 +29,24 @@ public class EleLogDTO {
 
   @ApiModelProperty(value = "时间", name = "time", required = true)
   @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-  @ExceptionCode(resultCode = ResultCode.DATE_IS_NULL)
-  @NotNull(message = "time must not be null")
+  @ExceptionCode(resultCode = ResultCode.INVALID_ARGUMENT)
+  @NotNull(message = "时间不能为空")
   private Date time;
 
   @ApiModelProperty(value = "设备id", name = "deviceId", required = true)
-  @ExceptionCode(resultCode = ResultCode.DEVICE_ID_IS_NULL)
-  @NotNull(message = "deviceId must not be null")
+  @ExceptionCode(resultCode = ResultCode.DEVICE_ERROR)
+  @NotNull(message = "设备id不能为空")
   private Integer deviceId;
 
   @ApiModelProperty(value = "功率", name = "power", required = true)
-  @ExceptionCode(resultCode = ResultCode.ARGUMENT_NEGATIVE_OR_NULL)
-  @NotNull(message = "power must not be null")
+  @ExceptionCode(resultCode = ResultCode.INVALID_ARGUMENT)
+  @NotNull(message = "功率应为正整数")
   @PositiveOrZero(message = "power must be positive or zero")
   private Integer power;
 
   @ApiModelProperty(value = "耗电量", name = "consumption", required = true)
-  @ExceptionCode(resultCode = ResultCode.ARGUMENT_NEGATIVE_OR_NULL)
-  @NotNull(message = "consumption must not be null")
+  @ExceptionCode(resultCode = ResultCode.INVALID_ARGUMENT)
+  @NotNull(message = "耗电量应为正整数")
   @PositiveOrZero(message = "consumption must be positive or zero")
   private Integer consumption;
 

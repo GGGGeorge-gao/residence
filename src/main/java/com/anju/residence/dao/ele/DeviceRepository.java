@@ -2,6 +2,7 @@ package com.anju.residence.dao.ele;
 
 import com.anju.residence.entity.ele.Device;
 import com.anju.residence.entity.ele.Jack;
+import com.anju.residence.vo.DeviceVO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +18,9 @@ import java.util.Optional;
 @Repository
 public interface DeviceRepository extends JpaRepository<Device, Integer> {
 
+  @Query(value = "select new com.anju.residence.vo.DeviceVO(d.id, d.user.id, d.jack.id, d.name, d.type, d.status, d.createTime, d.updateTime) from Device as d where d.id = ?1")
+  Optional<DeviceVO> findVoById(Integer deviceId);
+
   /**
    * 查询该用户所有设备ID
    */
@@ -27,10 +31,10 @@ public interface DeviceRepository extends JpaRepository<Device, Integer> {
    * 查询该用户所有设备
    *
    * @param userId 用户id
-   * @return 用户列表
+   * @return 设备vo列表
    */
-  @Query(nativeQuery = true, value = "select * from device as d where d.user_id = ?1")
-  List<Device> findAllDeviceByUserId(Integer userId);
+  @Query(value = "select new com.anju.residence.vo.DeviceVO(d.id, d.user.id, d.jack.id, d.name, d.type, d.status, d.createTime, d.updateTime) from Device as d where d.user.id = ?1")
+  List<DeviceVO> findAllVoByUserId(Integer userId);
 
   /**
    * 查询一个插孔是否有设备

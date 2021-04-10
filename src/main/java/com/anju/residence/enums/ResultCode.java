@@ -1,6 +1,6 @@
 package com.anju.residence.enums;
 
-import com.anju.residence.security.jwt.JwtProperty;
+import com.anju.residence.params.JwtParams;
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 
@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author cygao
@@ -47,175 +46,51 @@ public enum ResultCode {
    */
   SUCCESS(1000, "success"),
 
-  INVALID_ARGUMENT(1001, "Invalid argument"),
+  INVALID_ARGUMENT(1001, "无效参数"),
 
-  ARGUMENT_POSITIVE(1002, "Argument must not be positive"),
 
-  ARGUMENT_POSITIVE_OR_ZERO(1003, "Argument must be negative"),
+  USER_ERROR(1100, "用户类异常"),
 
-  ARGUMENT_NEGATIVE(1004, "Argument must not be negative"),
 
-  ARGUMENT_NEGATIVE_OR_ZERO(1005, "Argument must be positive"),
+  DEVICE_ERROR(1200, "设备类异常"),
 
-  ARGUMENT_ZERO(1006, "Argument must not be zero"),
 
-  ARGUMENT_NULL(1007, "Argument must not be null"),
+  ELECTRIC_LOG_ERROR(1300, "耗电日志类异常"),
 
-  ARGUMENT_NEGATIVE_OR_NULL(1008, "Argument must not be zero and negative"),
 
-  INVALID_DATE(1009, "Date is not valid"),
+  JACK_ERROR(1400, "插孔类异常"),
 
-  DATE_IS_NULL(1010, "Date must not be null"),
 
-  INVALID_CONTENT_TYPE(1016, "Invalid content-type"),
+  RECEPTACLE_ERROR(1500, "插座类异常"),
 
 
-  USER_NOT_FOUND(1100, "User not found"),
+  SCENE_ERROR(1600, "场景类异常"),
 
-  USERNAME_NOT_EXISTS(1110, "Username does not exist"),
 
-  USERNAME_ALREADY_EXISTS(1111, "A user has already registered for this username, please try again with another one"),
+  AUTH_ERROR(4000, "授权异常"),
 
-  USERNAME_NOT_VALID(1112, "Username is not valid"),
+  UNAUTHORIZED_REQUEST(4001, "未授权的请求！"),
 
-  USER_ID_NOT_EXISTS(1120, "User id does not exist"),
+  INSUFFICIENT_AUTHORITY(4002, "权限不足"),
 
-  USER_ID_IS_NULL(1121, "User id must not be null user is not null"),
+  TOKEN_ERROR(4003, "token异常"),
 
-  USER_PASSWORD_IS_NULL(1130, "User password must not be null"),
+  WRONG_USERNAME_OR_PASSWORD(4004, "Wrong username or password"),
 
-  USER_EMAIL_NOT_VALID(1140, "User email is not valid"),
 
-  USER_PRICE_ALREADY_EXISTS(1150, "This user's price list already exists"),
+  WATER_METER_ERROR(5000, "水表类异常"),
 
-  USER_PRICE_DOE_NOT_EXIST(1151, "This user's price list does not exists"),
 
+  WATER_RECORD_LOG_ERROR(5100, "water record log does not exits"),
 
-  DEVICE_ID_NOT_EXISTS(1200, "Device id does not exist"),
 
-  DEVICE_ID_IS_NULL(1201, "Device id must not be null"),
+  WECHAT_ERROR(6000, "微信异常"),
 
-  DEVICE_USER_MISMATCH(1202, "This device does not belong to the user"),
 
-  DEVICE_STATUS_IS_NULL(1203, "Device status must not be null"),
+  FILE_ERROR(8000, "文件上传异常"),
 
 
-  NOT_ELECTRIC_LOG_EXISTS(1300, "Not any electric log found"),
-
-  NOT_REALTIME_ELECTRIC_LOG_EXISTS(1301, "Not realtime electric log exists"),
-
-
-  JACK_ID_NOT_EXISTS(1400, "Jack id does not exist"),
-
-  JACK_USER_MISMATCH(1401, "This jack does not belong to the user"),
-
-  JACK_RECEPTACLE_MISMATCH(1402, "This jack does not belong to the receptacle"),
-
-  JACK_ID_IS_NULL(1403, "Jack id must not be null"),
-
-  JACK_NAME_NOT_VALID(1404, "Jack name is not valid"),
-
-  JACK_TYPE_NOT_VALID(1405, "Jack type is not valid"),
-
-  JACK_ID_NEGATIVE(1406, "Jack id must be positive"),
-
-  JACK_STATUS_IS_NULL(1407, "Jack status must not be null"),
-
-
-  RECEPTACLE_ID_NOT_EXISTS(1500, "Receptacle id does not exist"),
-
-  RECEPTACLE_ID_IS_NULL(1501, "Receptacle id must not be null"),
-
-  INVALID_RECEPTACLE_ID(1502, "Receptacle id is not valid"),
-
-
-  SCENE_ID_NOT_EXISTS(1600, "Scene id does not exist"),
-
-  SCENE_ID_IS_NULL(1601, "Scene id must not be null"),
-
-  SCENE_NAME_ALREADY_EXISTS(1602, "This user already has a scene with the same name, please try again with a different name"),
-
-  SCENE_USER_MISMATCH(1603, "This scene does not belong to the user"),
-
-  INVALID_PARENT_SCENE_ID(1604, "Scene id is not valid"),
-
-
-  RECEPTACLE_LOG_ID_NULL(1700, "Receptacle log id must not be null"),
-
-
-
-  UNAUTHORIZED_REQUEST(4000, "Unauthorized request"),
-
-  INSUFFICIENT_AUTHORITY(4001, "Insufficient authority"),
-
-  INVALID_TOKEN_SIGNATURE(4002, "Invalid jwt signature"),
-
-  EXPIRED_TOKEN(4003, "The token is expired"),
-
-  INVALID_TOKEN_FORMAT(4005, "Wrong format of the token"),
-
-  INVALID_TOKEN_START_WITH(4004, "The token should start with '" + JwtProperty.TOKEN_START_WITH + "'"),
-
-  WRONG_USERNAME_OR_PASSWORD(4005, "Wrong username or password"),
-
-  AUTHENTICATION_FAILURE(4007, "Authentication failure"),
-
-
-  WATER_METER_ID_IS_NULL(5001, "Water meter id must not be null"),
-
-  WATER_METER_COUNT_IS_NULL(5002, "Water meter count must not be null"),
-
-  WATER_METER_NAME_IS_NULL(5003, "Water meter name must not be null"),
-
-  WATER_METER_USER_ID_IS_NULL(5004, "Water meter user id must not be null"),
-
-  WATER_METER_ID_NOT_EXISTS(5005, "Water meter does not exist"),
-
-  WATER_METER_STATUS_IS_NULL(5006, "Water meter status must not be null"),
-
-  WATER_METER_COLLECT_INTERVAL_IS_NULL(5007, "The collection interval cannot be null"),
-
-
-  WATER_RECORD_LOG_ID_NOT_EXISTS(5100, "water record log does not exits"),
-
-
-  NO_SESSION_KEY_EXISTS(6000, "该用户没有sessionKey存在"),
-
-  INVALID_SKEY(6001, "无效的skey"),
-
-  JS_CODE_NO_EXISTS(6002, "请在请求中添加code参数"),
-
-  LOGIN_FAIL(6003, "登录失败"),
-
-  CONNECTION_ERROR(6004, "连接出现问题"),
-
-  BUSY_WECHAT_SERVER(6005, "微信服务器繁忙"),
-
-  INVALID_JS_CODE(6006, "无效的js_code"),
-
-  REQUEST_TOO_FREQUENT(6007, "请求过于频繁"),
-
-  OPEN_ID_IS_NULL(6008, "open id不能为空"),
-
-  NICKNAME_IS_NULL(6009, "nickname 不能为空"),
-
-  OPEN_ID_ALREADY_EXISTS(6010, "该openid已经存在"),
-
-  OPEN_ID_NOT_EXISTS(6011, "openid 不存在"),
-
-  NO_WX_SESSION_EXISTS(6012, "token中无微信用户信息"),
-
-  INVALID_WECHAT_SIGNATURE(6013, "签名校验失败"),
-
-
-  FILE_IS_NULL(8000, "上传的文件为空"),
-
-  FILE_NAME_IS_NULL(8001, "上传的文件名为空"),
-
-  TRANSFER_FAILED(8002, "传输失败！"),
-
-
-  OCR_ERROR(8100, "模型异常"),
+  OCR_ERROR(8100, "OCR模型异常"),
 
 
   UNKNOWN_ERROR(9999, "Unknown error");

@@ -63,7 +63,7 @@ public class DeviceLogServiceImpl implements DeviceLogService {
   @Override
   public List<DeviceLog> listLogByDeviceIdBetween(Integer deviceId, Date from, Date to) {
     if (!existsById(deviceId)) {
-      throw new ApiException(ResultCode.DEVICE_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.DEVICE_ERROR, "设备id不存在");
     }
     return deviceLogRepo.findAllByDeviceIdAndTime(deviceId, DateUtil.getFirstSecondDate(from), DateUtil.getLastSecondDate(to));
   }
@@ -71,7 +71,7 @@ public class DeviceLogServiceImpl implements DeviceLogService {
   @Override
   public List<DeviceLog> listLogByUserIdBetween(Integer userId, Date from, Date to) {
     if (!userService.existsById(userId)) {
-      throw new ApiException(ResultCode.USER_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.USER_ERROR, "用户id不存在");
     }
 
     return deviceLogRepo.findAllByUserAndTimeBetween(userId, from, to);

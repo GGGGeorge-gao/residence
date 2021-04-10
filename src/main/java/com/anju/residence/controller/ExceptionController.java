@@ -1,4 +1,4 @@
-package com.anju.residence.exception.handler;
+package com.anju.residence.controller;
 
 import com.anju.residence.annotation.ExceptionCode;
 import com.anju.residence.enums.ResultCode;
@@ -18,18 +18,18 @@ import java.lang.reflect.Field;
  **/
 @Slf4j
 @RestControllerAdvice(basePackages = {"com.anju.residence.controller"})
-public class ApiControllerAdvice {
+public class ExceptionController {
 
   @ExceptionHandler(ApiException.class)
-  public ResultVO<String> apiExceptionHandler(ApiException e) {
+  public ResultVO<Object> apiExceptionHandler(ApiException e) {
     log.warn("ExceptionCode: {}, ExceptionMessage: {}.", e.getCode(), e.getMsg());
-    return new ResultVO<>(e.getCode(), "failed", e.getMsg());
+    return new ResultVO<>(e.getCode(), e.getMsg(), null);
   }
 
   @ExceptionHandler(UsernameNotFoundException.class)
   public ResultVO<String> usernameNotFoundExceptionHandler(UsernameNotFoundException e) {
     log.warn("UsernameNotFoundException: {}", e.getMessage());
-    return new ResultVO<>(ResultCode.USERNAME_NOT_EXISTS, "用户名不存在");
+    return new ResultVO<>(ResultCode.USER_ERROR, "用户名不存在");
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -44,23 +44,16 @@ public class ApiControllerAdvice {
     Field field = parameterType.getDeclaredField(fieldName);
 
     // 获取异常属性的自定义注解
-    ExceptionCode annotation = field.getAnnotation(ExceptionCode.class);
+    ExceptionCode exceptionCode = field.getAnnotation(ExceptionCode.class);
 
     // 如果有注解则返回注解的响应信息
-    if (annotation != null) {
-      log.warn("ExceptionCode: {}, ExceptionMessage: {}.", annotation.resultCode().getCode(), annotation.resultCode().getMsg());
-      return new ResultVO<>(annotation.resultCode().getCode(), annotation.resultCode().getMsg(), defaultMessage);
+    if (exceptionCode != null) {
+      log.warn("ExceptionCode: {}, ExceptionMessage: {}.", exceptionCode.resultCode().getCode(), exceptionCode.resultCode().getMsg());
+      return new ResultVO<>(exceptionCode.resultCode(), defaultMessage == null ? exceptionCode.resultCode().getMsg() : defaultMessage);
     }
 
     log.warn("No exceptionCode get: {} {}", fieldName, defaultMessage);
     log.info(ResultCode.INVALID_ARGUMENT.toString());
     return new ResultVO<>(ResultCode.INVALID_ARGUMENT, defaultMessage);
   }
-
-//  @ExceptionHandler(MethodArgumentNotValidException.class)
-//  public ResultVO<String> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
-//    ObjectError objectError = e.getBindingResult().getAllErrors().get(0);
-//
-//    return new ResultVO<>(ResultCode.INVALID_ARGUMENT, objectError.getDefaultMessage());
-//  }
 }

@@ -97,16 +97,16 @@ public class ReceptacleServiceImpl implements ReceptacleService {
   @Override
   public void addReceptacle(ReceptacleDTO receptacleDTO) {
     if (CollectionUtils.isEmpty(receptacleDTO.getJacks())) {
-      throw new ApiException(ResultCode.ARGUMENT_NULL);
+      throw new ApiException(ResultCode.INVALID_ARGUMENT, "无插孔");
     }
     if (!userService.existsById(receptacleDTO.getUserId())) {
-      throw new ApiException(ResultCode.USER_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.USER_ERROR, "用户id不存在");
     }
     if (!sceneService.matchSceneAndUser(receptacleDTO.getSceneId(), receptacleDTO.getUserId())) {
-      throw new ApiException(ResultCode.SCENE_USER_MISMATCH);
+      throw new ApiException(ResultCode.SCENE_ERROR, "场景不属于该用户");
     }
     Receptacle receptacle = ReceptacleDTO.buildReceptacle(receptacleDTO);
-    receptacle.setUser(userService.getUserById(receptacleDTO.getUserId()).orElseThrow(() -> new ApiException(ResultCode.USER_ID_NOT_EXISTS)));
+    receptacle.setUser(userService.getUserById(receptacleDTO.getUserId()).orElseThrow(() -> new ApiException(ResultCode.USER_ERROR, "用户id不存在")));
     receptacle.setScene(sceneService.getById(receptacleDTO.getSceneId()).orElse(null));
 
     receptacle = receptacleRepo.save(receptacle);
@@ -117,12 +117,12 @@ public class ReceptacleServiceImpl implements ReceptacleService {
   @Override
   public void putReceptacle(ReceptacleDTO receptacleDTO, Integer receptacleId) {
     if (!userService.existsById(receptacleDTO.getUserId())) {
-      throw new ApiException(ResultCode.USER_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.USER_ERROR, "用户id不存在");
     }
     if (receptacleDTO.getSceneId() != null && !sceneService.matchSceneAndUser(receptacleDTO.getSceneId(), receptacleDTO.getUserId())) {
-      throw new ApiException(ResultCode.SCENE_USER_MISMATCH);
+      throw new ApiException(ResultCode.SCENE_ERROR, "场景不属于该用户");
     }
-    Receptacle receptacle = getById(receptacleId).orElseThrow(() -> new ApiException(ResultCode.RECEPTACLE_ID_NOT_EXISTS));
+    Receptacle receptacle = getById(receptacleId).orElseThrow(() -> new ApiException(ResultCode.RECEPTACLE_ERROR, "插座id不存在"));
     receptacleDTO.putReceptacle(receptacle);
 
     save(receptacle);
@@ -132,7 +132,7 @@ public class ReceptacleServiceImpl implements ReceptacleService {
   @Override
   public void deleteReceptacle(Integer receptacleId) {
     if (!existsById(receptacleId)) {
-      throw new ApiException(ResultCode.RECEPTACLE_ID_NOT_EXISTS);
+      throw new ApiException(ResultCode.RECEPTACLE_ERROR, "插座id不存在");
     }
     receptacleLogService.deleteByReceptacleId(receptacleId);
     jackService.listIdByReceptacle(receptacleId).forEach(jackService::deleteJack);
