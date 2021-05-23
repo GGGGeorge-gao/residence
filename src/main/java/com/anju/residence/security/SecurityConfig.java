@@ -77,18 +77,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     this.userLogManager = userLogManager;
     this.passwordEncoder = passwordEncoder;
     this.jwtAuthenticationDeniedHandler = jwtAuthenticationDeniedHandler;
-
   }
 
   @Autowired
   public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
     auth.userDetailsService(userService).passwordEncoder(passwordEncoder);
-
-    DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-    authenticationProvider.setPasswordEncoder(passwordEncoder);
-    authenticationProvider.setUserDetailsService(userService);
-
-    auth.authenticationProvider(authenticationProvider);
   }
 
   @Override
@@ -103,17 +96,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
     anonymousUrls.forEach(s -> log.info("可以匿名访问的url: {}", s));
 
-    http
-            // 禁用csrf
-            .csrf().disable()
+    http.csrf().disable()
             .formLogin().disable()
             .logout().disable()
-
-            // 防止iframe 造成跨域请求
-//            .headers()
-//            .frameOptions()
-//            .disable()
-//            .and()
 
             // 授权异常处理类
             .exceptionHandling()
@@ -132,8 +117,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             // 允许匿名及登录用户访问
             .antMatchers("/api/auth/**", "/error/**").permitAll()
             .antMatchers(HttpMethod.OPTIONS, "/**").anonymous()
-
-//            .antMatchers(HttpMethod.POST, "/**").permitAll()
 
             // 放行swagger
             .antMatchers(SWAGGER_WHITE_LIST).permitAll()

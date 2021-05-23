@@ -27,6 +27,14 @@ public interface DeviceRepository extends JpaRepository<Device, Integer> {
   @Query(nativeQuery = true, value = "select d.id from device as d where d.user_id = ?1")
   List<Integer> findAllDeviceIdByUserId(Integer userId);
 
+  @Query(nativeQuery = true, value = "select j.receptacle_id from jack as j where j.id = ?1")
+  Integer getReceptacleIdByJackId(Integer jackId);
+
+  @Query(nativeQuery = true, value = "select r.scene_id from receptacle as r where r.id = ?1")
+  int getSceneIdByReceptacleId(Integer id);
+
+  @Query(nativeQuery = true, value = "select s.name from scene as s where s.id = ?1")
+  String getSceneNameBySceneId(Integer id);
   /**
    * 查询该用户所有设备
    *

@@ -17,14 +17,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
@@ -84,7 +78,7 @@ public class WxUserController {
   }
 
   @ApiOperation(value = "获取用户信息,需在请求header中带上token")
-  @PreAuthorize("hasRole('wx_user')")
+//  @PreAuthorize("hasRole('wx_user')")
   @GetMapping("/info")
   public ResultVO<WxUser> fetch() {
     return new ResultVO<>(wxUserService.getWxUserByToken().orElseThrow(() -> new ApiException(ResultCode.WECHAT_ERROR, "openid 不存在")));

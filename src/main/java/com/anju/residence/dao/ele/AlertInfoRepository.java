@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author cygao
  * @date 2020/11/28 14:35
@@ -25,5 +27,7 @@ public interface AlertInfoRepository extends JpaRepository<AlertInfo, Integer> {
   @Query(nativeQuery = true, value = "delete from alert_info as ai where ai.device_id = ?1")
   void deleteAllByDeviceId(int deviceId);
 
+  @Query(nativeQuery = true, value = "select * from alert_info as ai where ai.device_id = ?1")
+  List<AlertInfo> getAllByDeviceId(int deviceId);
 
 }

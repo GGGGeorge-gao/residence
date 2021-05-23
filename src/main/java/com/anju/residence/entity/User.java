@@ -57,7 +57,6 @@ public class User implements Serializable {
   @ExceptionCode(resultCode = ResultCode.USER_ERROR)
   private String username;
 
-  @NotNull(message = "密码不能为空")
   @ExceptionCode(resultCode = ResultCode.USER_ERROR)
   private String password;
 

@@ -1,7 +1,9 @@
 package com.anju.residence.service.impl;
 
 import com.anju.residence.dao.WxUserRepository;
+import com.anju.residence.dto.UserDTO;
 import com.anju.residence.dto.wx.WxUserDTO;
+import com.anju.residence.entity.Role;
 import com.anju.residence.entity.User;
 import com.anju.residence.entity.WxUser;
 import com.anju.residence.enums.ResultCode;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 
@@ -28,6 +31,7 @@ public class WxUserServiceImpl implements WxUserService {
   private final WxUserRepository wxUserRepo;
 
   private final UserService userService;
+
 
   @Autowired
   public WxUserServiceImpl(WxUserRepository wxUserRepository, UserService userService) {
@@ -92,8 +96,14 @@ public class WxUserServiceImpl implements WxUserService {
     } else {
       wxUser = wxUserDTO.buildWxUser();
       wxUser.setOpenId(wxSession.getOpenId());
-    }
+      UserDTO userDTO = new UserDTO();
+      userDTO.setUsername(openId.substring(0,15));
+      userDTO.setPassword(openId.substring(0,15));
 
+      userService.addUser(userDTO);
+      User user = userService.getUserByName(openId.substring(0,15)).get();
+      wxUser.setUser(user);
+    }
     wxUser.setSkey(wxSession.getSkey());
     wxUser.setSessionKey(wxSession.getSessionKey());
     return save(wxUser);

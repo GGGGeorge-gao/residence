@@ -55,7 +55,7 @@ public class SceneServiceImpl implements SceneService {
     if (!userService.existsById(sceneDTO.getUserId())) {
       throw new ApiException(ResultCode.USER_ERROR, "用户id不存在");
     }
-    if (sceneRepo.findIdByUserIdAndName(sceneDTO.getId(), sceneDTO.getName()).isPresent()) {
+    if (sceneRepo.findIdByUserIdAndName(sceneDTO.getUserId(), sceneDTO.getName()).isPresent()) {
       throw new ApiException(ResultCode.SCENE_ERROR, "该用户已经拥有相同名称的场景");
     }
     Scene newScene = SceneDTO.buildScene(sceneDTO);

@@ -53,6 +53,7 @@ public class WxUser implements Serializable {
 
   private String nickName;
 
+
   @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
   @JoinColumn(updatable = false, unique = true)
   private User user;

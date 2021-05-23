@@ -1,8 +1,11 @@
 package com.anju.residence.service.impl;
 
+import com.anju.residence.dao.ele.AlertInfoRepository;
 import com.anju.residence.dao.ele.DeviceRepository;
+import com.anju.residence.dao.ele.ElectricLogRepository;
 import com.anju.residence.dto.ele.DeviceDTO;
 import com.anju.residence.entity.ele.Device;
+import com.anju.residence.entity.ele.ElectricLog;
 import com.anju.residence.entity.ele.Jack;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.ApiException;
@@ -14,6 +17,7 @@ import com.anju.residence.service.ele.ElectricLogService;
 import com.anju.residence.service.ele.JackService;
 import com.anju.residence.service.ele.TaskService;
 import com.anju.residence.service.UserService;
+import com.anju.residence.vo.DeviceListItemVO;
 import com.anju.residence.vo.DeviceVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,13 +46,18 @@ public class DeviceServiceImpl implements DeviceService {
   private DeviceLogService deviceLogService;
   private ElectricLogService eleLogService;
   private BehaviorLogService behaviorLogService;
+  private final ElectricLogRepository electricLogRepo;
+  private final AlertInfoRepository alertInfoRepo;
 
   @Autowired
-  public DeviceServiceImpl(DeviceRepository deviceRepo, AlertInfoService alertInfoService, TaskService taskService, UserService userService) {
+  public DeviceServiceImpl(DeviceRepository deviceRepo, AlertInfoService alertInfoService,
+                           TaskService taskService, UserService userService, ElectricLogRepository electricLogRepo, AlertInfoRepository alertInfoRepo) {
     this.deviceRepo = deviceRepo;
     this.alertInfoService = alertInfoService;
     this.taskService = taskService;
     this.userService = userService;
+    this.electricLogRepo = electricLogRepo;
+    this.alertInfoRepo = alertInfoRepo;
   }
 
   @Autowired
@@ -77,11 +86,33 @@ public class DeviceServiceImpl implements DeviceService {
   }
 
   @Override
-  public List<DeviceVO> listVoByUserId(Integer userId) {
+  public List<DeviceListItemVO> listVoByUserId(Integer userId) {
     if (userId == null) {
       throw new ApiException(ResultCode.USER_ERROR, "用户id为空");
     }
-    return userId < 0 ? new ArrayList<>() : deviceRepo.findAllVoByUserId(userId);
+    List<DeviceListItemVO> deviceListItemVOS = new ArrayList<>();
+    List<DeviceVO> allVoByUserId = deviceRepo.findAllVoByUserId(userId);
+    allVoByUserId.forEach(e -> {
+      Integer receptacleId = deviceRepo.getReceptacleIdByJackId(e.getJackId());
+      int sceneId = deviceRepo.getSceneIdByReceptacleId(receptacleId);
+      ElectricLog electricLog = electricLogRepo.findLatestLogByDeviceId(e.getId()).get();
+      String sceneName = deviceRepo.getSceneNameBySceneId(sceneId);
+      int alertCount = alertInfoRepo.getAllByDeviceId(e.getId()).size();
+      DeviceListItemVO vo = new DeviceListItemVO();
+      vo.setDeviceId(e.getId());
+      vo.setDeviceName(e.getName());
+      vo.setJackId(e.getJackId());
+      vo.setSceneName(sceneName);
+      vo.setAlertCount(alertCount);
+      vo.setRealTimePower(electricLog.getPower());
+      vo.setJackId(e.getJackId());
+      vo.setStatus(e.getStatus());
+      vo.setType(e.getType());
+      vo.setCreateTime(e.getCreateTime());
+      vo.setUpdateTime(e.getUpdateTime());
+      deviceListItemVOS.add(vo);
+    });
+    return deviceListItemVOS;
   }
 
   @Override

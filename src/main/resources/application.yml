@@ -19,12 +19,10 @@ spring:
     name: residence
 
   datasource:
-
     druid:
-
       username: root
-      password: rootroot    # ROOT_root123
-      url: jdbc:mysql://127.0.0.1:3306/anju?serverTimezone=Asia/Shanghai&characterEncoding=utf8
+      password: ROOT_root123    # ROOT_root123
+      url: jdbc:mysql://47.93.224.217/anju?serverTimezone=Asia/Shanghai&characterEncoding=utf8
       driver-class-name: com.mysql.cj.jdbc.Driver
 
       # 初始化大小，最小，最大
@@ -83,7 +81,7 @@ spring:
     open-in-view: false
 
   redis:
-    host: 47.93.224.217
+    host: 159.75.12.178
     port: 6379
     timeout: 1000
     database: 1

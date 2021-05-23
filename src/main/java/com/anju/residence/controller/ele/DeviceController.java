@@ -7,6 +7,7 @@ import com.anju.residence.enums.OperationType;
 import com.anju.residence.enums.ResultCode;
 import com.anju.residence.exception.ApiException;
 import com.anju.residence.service.ele.DeviceService;
+import com.anju.residence.vo.DeviceListItemVO;
 import com.anju.residence.vo.DeviceVO;
 import com.anju.residence.vo.ResultVO;
 import io.swagger.annotations.Api;
@@ -81,10 +82,12 @@ public class DeviceController {
 
   @ApiOperation(value = "获取一个用户所有的设备的信息")
   @GetMapping("/all/{userId}")
-  public ResultVO<List<DeviceVO>> listDevice(@PathVariable Integer userId) {
+  public ResultVO<List<DeviceListItemVO>> listDevice(@PathVariable Integer userId) {
 
-    List<DeviceVO> deviceVoS = deviceService.listVoByUserId(userId);
+    List<DeviceListItemVO> deviceVoS = deviceService.listVoByUserId(userId);
 
     return new ResultVO<>(deviceVoS);
   }
+
+
 }
